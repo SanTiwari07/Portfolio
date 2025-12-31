@@ -65,7 +65,7 @@ const BuildInPublic: React.FC = () => {
                   <span className="text-sm px-3 py-1 rounded-full bg-white/5 text-gray-400 mono">{card.handle}</span>
                 </div>
                 <p className="text-gray-400 text-lg leading-relaxed italic">
-                  "{card.purpose}"
+                  {card.purpose}
                 </p>
               </div>
 
