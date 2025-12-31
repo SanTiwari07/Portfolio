@@ -60,7 +60,7 @@ const BuildInPublic: React.FC = () => {
               </div>
 
               <div>
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex flex-col items-start gap-2 mb-4">
                   <h4 className="text-3xl font-bold text-white">{card.platform}</h4>
                   <span className="text-sm px-3 py-1 rounded-full bg-white/5 text-gray-400 mono">{card.handle}</span>
                 </div>
