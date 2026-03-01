@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative pt-16 sm:pt-0">
       {/* Background ambient glow element */}
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] -z-10 animate-pulse"></div>
 
