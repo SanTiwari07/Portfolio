@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
+import Achievements from './components/Achievements';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import BuildInPublic from './components/BuildInPublic';
@@ -15,7 +16,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'skills', 'projects', 'build', 'platforms', 'journey', 'contact'];
+      const sections = ['hero', 'about', 'achievements', 'skills', 'projects', 'build', 'platforms', 'journey', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -45,6 +46,10 @@ const App: React.FC = () => {
 
         <section id="about" className="py-16 md:py-24 border-t border-white/5">
           <About />
+        </section>
+
+        <section id="achievements" className="py-16 md:py-24 border-t border-white/5">
+          <Achievements />
         </section>
 
         <section id="skills" className="py-16 md:py-24 border-t border-white/5">
