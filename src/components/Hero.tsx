@@ -24,10 +24,6 @@ const Hero: React.FC = () => {
       {/* Background ambient glow element */}
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] -z-10 animate-pulse"></div>
 
-      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-400 text-[11px] font-bold mono uppercase tracking-widest mb-10 border border-blue-500/20 whitespace-nowrap">
-        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shrink-0"></span>
-        Currently Building
-      </div>
 
       <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1] mb-8 md:mb-10 tracking-tighter">
         I’m Sanskar Tiwari <br />
