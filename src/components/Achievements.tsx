@@ -11,7 +11,7 @@ const Achievements: React.FC = () => {
                     </span>
                 </h2>
                 <p className="mono text-sm text-gray-400">
-                    "Turning ideas into real-world AI solutions."
+                    Turning ideas into real-world AI solutions.
                 </p>
             </div>
 
