@@ -6,42 +6,42 @@ export const PROJECTS: Project[] = [
   {
     id: '1',
     name: 'KrishiSetu',
-    problem: 'An AI-powered agriculture platform designed to support farmers with decision-making, sustainability insights, and intelligent system workflows.',
+    problem: 'A platform I built to help Indian farmers make better decisions. It uses AI to provide real-time sustainability insights and automates their daily workflows.',
     stack: ['AI', 'System Architecture', 'Impact'],
     githubUrl: 'https://github.com/SanTiwari07/KrishiSetu'
   },
   {
     id: '2',
     name: 'KrishiSaarthi',
-    problem: 'A smart agricultural assistant that combines machine learning and system logic to help farmers with crop-related insights and guidance.',
+    problem: 'A smart assistant created to guide farmers through everyday crop issues. It uses machine learning to offer practical, actionable advice exactly when it\'s needed most.',
     stack: ['ML', 'Applied Intelligence', 'Social Impact'],
     githubUrl: 'https://github.com/SanTiwari07/KrishiSaarthi'
   },
   {
     id: '3',
     name: 'Smart Traffic Flow Analyzer',
-    problem: 'A system that analyzes traffic patterns to optimize signal timing and improve urban mobility using data-driven logic.',
+    problem: 'Nobody likes waiting at red lights when the cross street is empty. I built this vision-based system to analyze traffic density in real-time and dynamically adjust signal timings.',
     stack: ['Computer Vision', 'ML', 'Systems Thinking'],
     githubUrl: 'https://github.com/SanTiwari07/Smart-Traffic-Flow-Analyzer'
   },
   {
     id: '4',
     name: 'UniFit Health',
-    problem: 'An AI-powered student wellness platform that integrates fitness, hydration, nutrition, and recovery into a single intelligent system.',
+    problem: 'I wanted to build something that helps students stay healthy despite crazy schedules. This platform brings fitness tracking, hydration reminders, and nutrition into one AI-driven app.',
     stack: ['AI Systems', 'Product Thinking'],
     githubUrl: 'https://github.com/SanTiwari07/UniFit-Health'
   },
   {
     id: '5',
     name: 'OOP Mini Project',
-    problem: 'A foundational object-oriented programming project demonstrating core OOP principles through practical problem-solving.',
+    problem: 'A hands-on project I built to really nail down the fundamentals of Object-Oriented Programming. It focuses on solving practical problems using clean software design principles.',
     stack: ['OOP', 'Software Fundamentals'],
     githubUrl: 'https://github.com/SanTiwari07/OOP-mini-project'
   },
   {
     id: '6',
     name: 'IIDTL Project',
-    problem: 'A hardware–software integrated project developed for IIDTL, focusing on applied electronics, sensors, and system-level implementation.',
+    problem: 'A hardware-meets-software project where I got my hands dirty with real sensors and electronics. It showcases how embedded systems can be applied to solve physical, real-world problems.',
     stack: ['Electronics', 'Embedded Systems'],
     githubUrl: 'https://github.com/SanTiwari07/IIDTL-Project'
   }
@@ -100,13 +100,13 @@ export const JOURNEY_ITEMS: LearningItem[] = [
     description: 'Building real-world systems by connecting sensors, microcontrollers, and software logic into reliable solutions.'
   },
   {
-    title: 'Computer Vision & Applied Machine Learning',
+    title: 'Machine Learning & LLMs',
     status: 'Exploring',
-    description: 'Working with image-based models and data pipelines to analyze scenarios like traffic, agriculture, and human activity.'
+    description: 'Diving deeper into the architecture of Large Language Models and advanced Machine Learning techniques. Exploring model fine-tuning, RAG (Retrieval-Augmented Generation), and deploying scalable AI pipelines to solve complex data problems.'
   },
   {
-    title: 'AI Systems & LLM-Based Applications',
+    title: 'Expanding KrishiSahAI',
     status: 'Growth Goal',
-    description: 'Aiming to design practical applications using large language models for automation, insights, and decision support.'
+    description: 'Scaling the KrishiSahAI platform from a hackathon-winning prototype to a production-ready enterprise solution. Focusing on integrating robust multilingual voice interfaces, expanding disease detection capabilities, and maximizing real-world impact for farmers.'
   }
 ];

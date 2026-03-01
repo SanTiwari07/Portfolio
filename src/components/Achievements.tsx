@@ -99,7 +99,7 @@ const Achievements: React.FC = () => {
                             </li>
                             <li className="flex gap-4 items-start">
                                 <span className="text-blue-500 mt-0.5 text-lg leading-none">▹</span>
-                                <span className="leading-relaxed">Created the AI Disease Detector ("Crop Doctor") using Deep Learning (MobileNetV2/ResNet).</span>
+                                <span className="leading-relaxed">Created the AI Disease Detector (Crop Doctor) using Deep Learning (MobileNetV2/ResNet).</span>
                             </li>
                             <li className="flex gap-4 items-start">
                                 <span className="text-blue-500 mt-0.5 text-lg leading-none">▹</span>

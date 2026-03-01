@@ -47,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
         <a
           href="#hero"
           onClick={(e) => scrollToSection(e, 'hero')}
-          className={`font-bold mono tracking-tighter hover:text-blue-300 transition-colors duration-200 text-xl ${activeSection === 'hero' ? 'text-blue-200' : 'text-white'}`}
+          className={`font-bold mono tracking-tight hover:text-blue-300 transition-colors duration-200 text-2xl md:text-3xl ${activeSection === 'hero' ? 'text-blue-200' : 'text-white'}`}
         >
           Home
         </a>
