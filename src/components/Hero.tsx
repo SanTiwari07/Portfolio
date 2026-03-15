@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -83,23 +82,31 @@ const Hero: React.FC = () => {
   useEffect(() => {
     if (!hasSensorPermission) return;
 
+    // Use motion values directly to avoid dependency updates
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta === null || e.gamma === null) return;
 
+      // beta: -180 to 180 (front/back), gamma: -90 to 90 (left/right)
+      // Wider mapping for more natural tilt range
       const beta = e.beta; 
       const gamma = e.gamma; 
 
-      const targetX = Math.max(0, Math.min(100, ((gamma + 30) / 60) * 100));
-      const targetY = Math.max(0, Math.min(100, ((beta - 30) / 60) * 100));
+      // Center around common holding angles: gamma center = 0, beta center = 45-60
+      const targetX = Math.max(0, Math.min(100, ((gamma + 40) / 80) * 100));
+      const targetY = Math.max(0, Math.min(100, ((beta - 20) / 70) * 100));
 
       mouseX.set(targetX);
       mouseY.set(targetY);
-      if (!isHovered) setIsHovered(true);
+      
+      // Ensure hover is active when sensing
+      if (!hoverValue.get()) {
+        setIsHovered(true);
+      }
     };
 
     window.addEventListener('deviceorientation', handleOrientation);
     return () => window.removeEventListener('deviceorientation', handleOrientation);
-  }, [hasSensorPermission, mouseX, mouseY, isHovered]);
+  }, [hasSensorPermission, mouseX, mouseY, hoverValue]);
 
   const maskCx = useTransform(maskX, (v) => v + "%");
   const maskCy = useTransform(maskY, (v) => v + "%");
@@ -252,14 +259,6 @@ const Hero: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div 
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-40 pointer-events-none"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <ArrowDown size={24} className="text-primary" />
-      </motion.div>
     </motion.div>
   );
 };

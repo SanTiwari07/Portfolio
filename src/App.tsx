@@ -79,7 +79,7 @@ const App: React.FC = () => {
               <Journey />
             </section>
 
-            <section id="contact" className="scroll-mt-32">
+            <section id="contact" className="scroll-mt-[100px]">
               <Contact />
             </section>
           </div>

@@ -7,7 +7,7 @@ const Contact: React.FC = () => {
   const isInView = useInView(ref, { once: true, margin: '-20%' });
 
   return (
-    <div ref={ref} className="w-full flex flex-col items-center justify-center min-h-[50vh] relative py-20 px-4 bg-gray-50 border-2 border-gray-200 shadow-[8px_8px_0_rgba(0,0,0,0.05)]">
+    <div ref={ref} className="w-full flex flex-col items-center justify-center min-h-[50vh] relative pt-4 pb-20 px-4 bg-gray-50 border-2 border-gray-200 shadow-[8px_8px_0_rgba(0,0,0,0.05)]">
       
       {/* Background glowing blob for text (Light version) */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/20 rounded-full blur-[100px] pointer-events-none -z-10 mix-blend-multiply" />

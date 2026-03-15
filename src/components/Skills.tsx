@@ -45,21 +45,21 @@ const Skills: React.FC = () => {
         {skillCategories.map((category, idx) => (
           <motion.div
             key={idx}
-            className="group p-8 bg-white border border-gray-100 rounded-3xl hover:border-primary/30 transition-all duration-500 hover:shadow-2xl"
+            className="group p-10 bg-white border border-gray-100 rounded-3xl hover:border-primary/30 transition-all duration-500 hover:shadow-2xl"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
           >
-            <h3 className="text-xl font-bold font-heading text-gray-950 uppercase mb-8 flex items-center gap-3">
-              <div className="w-2.5 h-2.5 bg-primary group-hover:scale-150 transition-transform" />
+            <h3 className="text-2xl font-bold font-heading text-gray-950 uppercase mb-8 flex items-center gap-4">
+              <div className="w-3 h-3 bg-primary group-hover:scale-150 transition-transform" />
               {category.title}
             </h3>
             
             <ul className="space-y-4">
               {category.skills.map((skill, sIdx) => (
                 <li key={sIdx} className="flex items-center gap-4 text-gray-400 group-hover:text-gray-950 transition-colors duration-300 font-medium">
-                   <div className="h-[1px] w-4 bg-gray-100 group-hover:bg-primary transition-colors" />
-                   <span className="font-mono text-sm tracking-wide uppercase italic">{skill}</span>
+                   <div className="h-[1px] w-6 bg-gray-100 group-hover:bg-primary transition-colors" />
+                   <span className="font-mono text-lg tracking-wide uppercase italic">{skill}</span>
                 </li>
               ))}
             </ul>
