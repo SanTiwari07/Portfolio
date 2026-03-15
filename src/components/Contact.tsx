@@ -34,7 +34,7 @@ const Contact: React.FC = () => {
 
         <div className="pt-12 flex justify-center">
           <a 
-            href="mailto:contact@sanskar.tiwari"
+            href="mailto:sanskartiwari.smt2@gmail.com"
             className="group relative inline-flex items-center gap-4 px-10 py-5 bg-white border-2 border-gray-900 overflow-hidden transition-all duration-300 hover:shadow-[8px_8px_0_rgba(33,150,243,1)] hover:-translate-y-1 block"
           >
             <div className="absolute inset-x-0 bottom-0 h-0 bg-primary transition-all duration-300 ease-out group-hover:h-full z-0" />

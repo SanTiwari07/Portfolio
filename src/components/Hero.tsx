@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 
@@ -55,16 +55,71 @@ const Hero: React.FC = () => {
     setIsHovered(false);
   };
 
-  // Convert normalized values to percentage strings for SVG compatibility
+  // Mobile Orientation Logic
+  const [hasSensorPermission, setHasSensorPermission] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+  }, []);
+
+  const requestSensorPermission = async () => {
+    // @ts-ignore - DeviceOrientationEvent.requestPermission is specific to iOS/WebKit
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      try {
+        // @ts-ignore
+        const permission = await DeviceOrientationEvent.requestPermission();
+        if (permission === 'granted') {
+          setHasSensorPermission(true);
+        }
+      } catch (err) {
+        console.error("Sensor permission denied:", err);
+      }
+    } else {
+      setHasSensorPermission(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasSensorPermission) return;
+
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.beta === null || e.gamma === null) return;
+
+      const beta = e.beta; 
+      const gamma = e.gamma; 
+
+      const targetX = Math.max(0, Math.min(100, ((gamma + 30) / 60) * 100));
+      const targetY = Math.max(0, Math.min(100, ((beta - 30) / 60) * 100));
+
+      mouseX.set(targetX);
+      mouseY.set(targetY);
+      if (!isHovered) setIsHovered(true);
+    };
+
+    window.addEventListener('deviceorientation', handleOrientation);
+    return () => window.removeEventListener('deviceorientation', handleOrientation);
+  }, [hasSensorPermission, mouseX, mouseY, isHovered]);
+
   const maskCx = useTransform(maskX, (v) => v + "%");
   const maskCy = useTransform(maskY, (v) => v + "%");
 
   return (
     <motion.div 
       ref={containerRef}
-      className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-white cursor-none"
+      className={`relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-white ${isMobile ? '' : 'cursor-none'}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onTouchMove={(e) => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const touch = e.touches[0];
+        const x = ((touch.clientX - rect.left) / rect.width) * 100;
+        const y = ((touch.clientY - rect.top) / rect.height) * 100;
+        mouseX.set(x);
+        mouseY.set(y);
+        if (!isHovered) setIsHovered(true);
+      }}
     >
       <motion.div className="absolute inset-0 z-[-1]" style={{ y: yBg }}>
         {/* Typo Background can go here if we want it to shift */}
@@ -183,6 +238,16 @@ const Hero: React.FC = () => {
             >
               Enter Experience
             </a>
+
+            {isMobile && !hasSensorPermission && (
+              <button 
+                onClick={requestSensorPermission}
+                className="ml-4 px-4 py-3 bg-primary text-white text-[10px] font-black font-heading tracking-[0.2em] uppercase hover:bg-gray-950 transition-all duration-300 shadow-lg inline-flex items-center gap-2"
+              >
+                <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                Sync Sensors
+              </button>
+            )}
           </div>
         </div>
       </motion.div>
