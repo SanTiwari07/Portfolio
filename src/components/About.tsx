@@ -29,11 +29,11 @@ const About: React.FC = () => {
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative w-full"
     >
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
@@ -42,26 +42,26 @@ const About: React.FC = () => {
         {/* Left Column: Visual & Header */}
         <div className="lg:col-span-5 space-y-12">
           <motion.div variants={itemVariants} className="space-y-4">
-             <div className="flex items-center gap-4">
-                <div className="h-[2px] w-8 bg-primary" />
-                <span className="text-xs font-mono font-bold tracking-[0.4em] text-gray-400 uppercase">About Me</span>
-             </div>
-             <h2 className="text-5xl md:text-6xl font-black font-heading text-gray-950 tracking-tighter leading-none uppercase italic">
-                Driven by curiosity, <br />
-                <span className="text-primary italic">guided by data.</span>
-             </h2>
+            <div className="flex items-center gap-4">
+              <div className="h-[2px] w-8 bg-primary" />
+              <span className="text-xs font-mono font-bold tracking-[0.4em] text-gray-400 uppercase">About Me</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-black font-heading text-gray-950 tracking-tighter leading-none uppercase italic">
+              Driven by curiosity, <br />
+              <span className="text-primary italic">guided by data.</span>
+            </h2>
           </motion.div>
 
           {/* Impact Stats */}
           <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-             <div className="p-6 md:p-8 bg-gray-50 border border-gray-100 rounded-2xl hover:border-primary/30 transition-all duration-500">
-                <div className="text-2xl md:text-4xl font-black text-gray-950 mb-1">9.38</div>
-                <div className="text-[10px] font-mono font-bold text-primary uppercase tracking-widest">CGPA (Current)</div>
-             </div>
-             <div className="p-6 md:p-8 bg-gray-50 border border-gray-100 rounded-2xl hover:border-primary/30 transition-all duration-500">
-                <div className="text-2xl md:text-4xl font-black text-gray-950 mb-1">12+</div>
-                <div className="text-[10px] font-mono font-bold text-primary uppercase tracking-widest">Active Projects</div>
-             </div>
+            <div className="p-6 md:p-8 bg-gray-50 border border-gray-100 rounded-2xl hover:border-primary/30 transition-all duration-500">
+              <div className="text-2xl md:text-4xl font-black text-gray-950 mb-1">9.38</div>
+              <div className="text-[10px] font-mono font-bold text-primary uppercase tracking-widest">CGPA (Current)</div>
+            </div>
+            <div className="p-6 md:p-8 bg-gray-50 border border-gray-100 rounded-2xl hover:border-primary/30 transition-all duration-500">
+              <div className="text-2xl md:text-4xl font-black text-gray-950 mb-1">12+</div>
+              <div className="text-[10px] font-mono font-bold text-primary uppercase tracking-widest">Active Projects</div>
+            </div>
           </motion.div>
         </div>
 
@@ -78,11 +78,11 @@ const About: React.FC = () => {
           <motion.div variants={itemVariants} className="h-[1px] w-full bg-gray-100" />
 
           <motion.p variants={itemVariants} className="text-xl text-gray-500 leading-relaxed italic">
-            "I build and improve systems by connecting hardware, software, and machine learning into practical projects. Along the way, I document what I learn and share my process openly."
+            I build and improve systems by connecting hardware, software, and machine learning into practical projects. Along the way, I document what I learn and share my process openly.
           </motion.p>
-          
+
           <motion.div variants={itemVariants} className="flex items-center gap-4">
-             <span className="text-xs font-mono font-bold text-gray-400 uppercase tracking-widest">Building in Public // Learning from Feedback</span>
+            <span className="text-xs font-mono font-bold text-gray-400 uppercase tracking-widest">Building in Public // Learning from Feedback</span>
           </motion.div>
         </div>
       </motion.div>
