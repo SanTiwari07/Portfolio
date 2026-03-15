@@ -1,27 +1,69 @@
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
-import React from 'react';
-import { SKILL_CATEGORIES } from '../constants.tsx';
+const skillCategories = [
+  {
+    title: "Programming",
+    skills: ["Python", "Java", "C", "C++"]
+  },
+  {
+    title: "Web Development",
+    skills: ["HTML", "CSS", "React", "Node.js"]
+  },
+  {
+    title: "Machine Learning / AI",
+    skills: ["PyTorch", "Scikit-Learn", "Computer Vision", "LLM"]
+  },
+  {
+    title: "Tools & Platforms",
+    skills: ["AWS", "GitHub", "Git", "Linux"]
+  }
+];
 
 const Skills: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-20%' });
+
   return (
-    <div>
-      <h2 className="text-base font-bold mono text-blue-500 uppercase tracking-widest mb-12">02. Toolkit</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
-        {SKILL_CATEGORIES.map((category, idx) => (
-          <div key={idx} className="group">
-            <h3 className="text-white text-xl font-bold mb-8 flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+    <div ref={ref} className="w-full">
+      <motion.div 
+        className="mb-20 space-y-4"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex items-center gap-4">
+          <div className="h-[2px] w-8 bg-primary" />
+          <span className="text-xs font-mono font-bold tracking-[0.4em] text-gray-400 uppercase">Toolkit</span>
+        </div>
+        <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-gray-950 uppercase italic leading-none">
+          Technical <span className="text-primary italic">Arsenal</span>
+        </h2>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {skillCategories.map((category, idx) => (
+          <motion.div
+            key={idx}
+            className="group p-8 bg-white border border-gray-100 rounded-3xl hover:border-primary/30 transition-all duration-500 hover:shadow-2xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.5, delay: idx * 0.1 }}
+          >
+            <h3 className="text-xl font-bold font-heading text-gray-950 uppercase mb-8 flex items-center gap-3">
+              <div className="w-2.5 h-2.5 bg-primary group-hover:scale-150 transition-transform" />
               {category.title}
             </h3>
+            
             <ul className="space-y-4">
               {category.skills.map((skill, sIdx) => (
-                <li key={sIdx} className="flex items-center gap-4 text-gray-500 group-hover:text-gray-300 transition-colors duration-300">
-                   <div className="h-[1px] w-6 bg-white/10"></div>
-                   <span className="mono text-base">{skill}</span>
+                <li key={sIdx} className="flex items-center gap-4 text-gray-400 group-hover:text-gray-950 transition-colors duration-300 font-medium">
+                   <div className="h-[1px] w-4 bg-gray-100 group-hover:bg-primary transition-colors" />
+                   <span className="font-mono text-sm tracking-wide uppercase italic">{skill}</span>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

@@ -1,31 +1,75 @@
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
-import React from 'react';
-import { JOURNEY_ITEMS } from '../constants.tsx';
+const journeyItems = [
+  {
+    title: 'Embedded Systems & Integration',
+    status: 'Learning',
+    description: 'Building real-world systems by connecting sensors, microcontrollers, and software logic into reliable solutions.'
+  },
+  {
+    title: 'Machine Learning & LLMs',
+    status: 'Exploring',
+    description: 'Diving deeper into the architecture of Large Language Models and advanced Machine Learning techniques. Exploring fine-tuning and RAG.'
+  },
+  {
+    title: 'Expanding KrishiSahAI',
+    status: 'Growth Goal',
+    description: 'Scaling the hackathon prototype to a production solution. Focusing on multilingual voice interfaces and disease detection.'
+  }
+];
 
 const Journey: React.FC = () => {
-  return (
-    <div>
-      <h2 className="text-sm md:text-base font-bold mono text-blue-500 uppercase tracking-widest mb-8 md:mb-12">06. Continuous Growth</h2>
-      <div className="max-w-4xl space-y-12 md:space-y-16">
-        {JOURNEY_ITEMS.map((item, idx) => (
-          <div key={idx} className="relative pl-6 md:pl-10 group">
-            {/* Timeline Line */}
-            <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-white/10 group-last:bg-transparent"></div>
-            <div className="absolute left-[-4px] md:left-[-5px] top-2.5 w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-blue-500 neon-glow"></div>
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-10%' });
 
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
-              <h4 className="text-2xl font-bold text-white">{item.title}</h4>
-              <span className={`px-3 py-1 rounded text-xs mono uppercase font-bold ${item.status === 'Learning' ? 'bg-blue-500/20 text-blue-400' :
-                  item.status === 'Exploring' ? 'bg-emerald-500/20 text-emerald-400' :
-                    'bg-orange-500/20 text-orange-400'
-                }`}>
+  return (
+    <div ref={ref} className="w-full">
+      <motion.div 
+        className="mb-20 space-y-4"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex items-center gap-4">
+          <div className="h-[2px] w-8 bg-primary" />
+          <span className="text-xs font-mono font-bold tracking-[0.4em] text-gray-400 uppercase">Momentum</span>
+        </div>
+        <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-gray-950 uppercase italic leading-none">
+          Continuous <span className="text-primary italic">Growth</span>
+        </h2>
+      </motion.div>
+
+      <div className="max-w-4xl space-y-16">
+        {journeyItems.map((item, idx) => (
+          <motion.div 
+            key={idx} 
+            className="relative pl-12 group"
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+            transition={{ duration: 0.6, delay: idx * 0.2 }}
+          >
+            {/* Timeline Line */}
+            <div className="absolute left-0 top-0 bottom-[-64px] w-[1px] bg-gray-100 group-last:bg-transparent" />
+            <div className="absolute left-[-5px] top-4 w-2.5 h-2.5 rounded-full bg-primary group-hover:scale-150 transition-all shadow-[0_0_10px_rgba(33,150,243,0.3)]" />
+
+            <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-6">
+              <h4 className="text-3xl font-black font-heading text-gray-950 uppercase tracking-tighter">
+                {item.title}
+              </h4>
+              <span className={`px-4 py-1.5 rounded-full text-[10px] font-mono font-black uppercase tracking-widest italic border ${
+                item.status === 'Learning' ? 'bg-primary/5 border-primary/20 text-primary' :
+                item.status === 'Exploring' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-600' :
+                'bg-orange-500/5 border-orange-500/20 text-orange-600'
+              }`}>
                 {item.status}
               </span>
             </div>
-            <p className="text-gray-500 text-lg leading-relaxed italic max-w-2xl">
+            
+            <p className="text-xl text-gray-500 leading-relaxed font-medium max-w-2xl italic">
               {item.description}
             </p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

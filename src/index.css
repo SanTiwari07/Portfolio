@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2196F3;
+  --color-secondary: #4A90E2;
+  --color-highlight: #90CAF9;
+  --color-background: #F4F3F1;
+  --color-bg-secondary: #FFFFFF;
+  --color-card: #FFFFFF;
+  --color-text-primary: #111112;
+  --color-text-secondary: #7F8177;
+  
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  html {
+    scrollbar-width: none; /* Firefox */
+  }
+  html::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  /* Soft divider */
+  .divider {
+    border-color: rgba(0,0,0,0.05);
+  }
+
+  /* Glow accents for light theme */
+  .glow-border {
+    box-shadow: 0 0 20px rgba(33,150,243,0.15);
+  }
+}

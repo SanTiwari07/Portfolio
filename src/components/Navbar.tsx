@@ -1,119 +1,148 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
+import clsx from 'clsx';
 
 interface NavbarProps {
   activeSection: string;
 }
 
+const navItems = [
+  { name: 'About', href: '#about' },
+  { name: 'Achievements', href: '#achievements' },
+  { name: 'Toolkit', href: '#skills' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Build In Public', href: '#build' },
+  { name: 'Presence', href: '#platforms' },
+  { name: 'Contact', href: '#contact' }
+];
+
 const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { label: 'About Me', id: 'about' },
-    { label: 'Achievements', id: 'achievements' },
-    { label: 'Toolkit', id: 'skills' },
-    { label: 'Projects', id: 'projects' },
-    { label: 'Social Media', id: 'build' },
-    { label: 'Presence', id: 'platforms' },
-    { label: 'Contact', id: 'contact' },
-  ];
-
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    setIsMobileMenuOpen(false);
-
-    if (id === 'hero') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.history.pushState(null, '', `#`);
-      return;
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
-
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      window.history.pushState(null, '', `#${id}`);
-    }
-  };
+  }, [mobileMenuOpen]);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${isScrolled
-        ? 'bg-black/80 backdrop-blur-md border-white/5 shadow-2xl py-3'
-        : 'bg-black/50 backdrop-blur-md border-transparent py-5'
-        }`}
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 flex justify-between items-center">
-        <a
-          href="#hero"
-          onClick={(e) => scrollToSection(e, 'hero')}
-          className={`font-bold mono tracking-tight hover:text-blue-300 transition-colors duration-200 text-2xl md:text-3xl ${activeSection === 'hero' ? 'text-blue-200' : 'text-white'}`}
-        >
-          Home
-        </a>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {navItems.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              onClick={(e) => scrollToSection(e, item.id)}
-              className={`transition-colors duration-200 hover:text-blue-300 tracking-wide ${activeSection === item.id || (activeSection === 'hero' && item.id === 'home')
-                ? 'text-blue-200'
-                : 'text-gray-400'
-                }`}
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-
-        {/* Mobile Hamburger Icon */}
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-gray-400 hover:text-white focus:outline-none"
+    <>
+      <motion.nav
+        className={clsx(
+          "fixed top-0 left-0 right-0 z-[100] transition-all duration-500",
+          isScrolled ? "py-4 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-[0_10px_30px_rgba(0,0,0,0.05)]" : "py-6 bg-transparent"
+        )}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 flex items-center justify-between">
+          
+          {/* Logo */}
+          <a 
+            href="#hero" 
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="relative group flex items-center gap-2"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+            <span className="font-heading font-black text-2xl tracking-tighter text-gray-950 uppercase">HOME</span>
+            <div className="w-2.5 h-2.5 bg-primary group-hover:scale-150 group-hover:shadow-[0_0_10px_rgba(33,150,243,0.5)] transition-all duration-300" />
+          </a>
+
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-8">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.replace('#', '');
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="relative text-sm font-bold tracking-wide transition-colors duration-300 hover:text-primary group py-2 uppercase font-heading"
+                >
+                  <span className={clsx(
+                    "relative z-10 transition-colors duration-300",
+                    isActive ? "text-gray-950" : "text-gray-500"
+                  )}>
+                    {item.name}
+                  </span>
+                  
+                  {/* Hover Underline */}
+                  <span className="absolute bottom-1 left-0 w-0 h-[3px] bg-primary group-hover:w-full transition-all duration-300 ease-out opacity-0 group-hover:opacity-100" />
+                  
+                  {/* Active Indicator */}
+                  {isActive && (
+                    <motion.span 
+                      layoutId="activeNav"
+                      className="absolute bottom-1 left-0 w-full h-[3px] bg-primary"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Mobile Toggle */}
+          <button 
+            className="lg:hidden p-2 text-gray-600 hover:text-primary transition-colors cursor-none"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <Menu size={28} />
           </button>
         </div>
-      </div>
+      </motion.nav>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/5 shadow-2xl border-t">
-          <div className="px-4 pt-2 pb-6 flex flex-col space-y-4">
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                onClick={(e) => scrollToSection(e, item.id)}
-                className={`transition-colors duration-200 hover:text-blue-300 tracking-wide block py-2 ${activeSection === item.id
-                  ? 'text-blue-200'
-                  : 'text-gray-400'
-                  }`}
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-    </nav>
+      {/* Mobile Fullscreen Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[200] bg-white/95 backdrop-blur-2xl flex flex-col items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <button 
+              className="absolute top-6 right-6 p-4 text-gray-500 hover:text-gray-900 transition-colors cursor-none"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <X size={40} />
+            </button>
+
+            <div className="flex flex-col items-center gap-8 w-full max-w-sm px-6">
+              {navItems.map((item, idx) => (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-4xl font-heading font-black text-gray-800 hover:text-primary transition-colors relative group uppercase tracking-tighter"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + idx * 0.05 }}
+                >
+                  {item.name}
+                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[4px] bg-primary group-hover:w-full transition-all duration-300" />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
