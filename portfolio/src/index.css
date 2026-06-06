@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400;1,14..32,500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #7A1E2C;
+  --color-primary-hover: #8f2333;
+  --color-accent: #F4C300;
+  --color-secondary: #666666;
+  --color-background: #FFFFFF;
+  --color-text-primary: #000000;
+  --color-text-secondary: #666666;
+
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+@layer base {
+  html {
+    scrollbar-width: none;
+    background-color: #FFFFFF;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* CURSOR */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: #7A1E2C;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid #7A1E2C;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+.cursor-dot.hovering {
+  width: 12px;
+  height: 12px;
+  background: #F4C300;
+}
+
+.cursor-ring.hovering {
+  width: 60px;
+  height: 60px;
+  border-color: #F4C300;
+}
+
+/* MAGNETIC BUTTON */
+.magnetic-btn {
+  display: inline-block;
+  cursor: none;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* MARQUEE */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* BLUEPRINT GRID */
+.blueprint-grid {
+  background-image: 
+    linear-gradient(rgba(122, 30, 44, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 30, 44, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* GRADIENT TEXT */
+.text-gradient-red {
+  background: linear-gradient(135deg, #7A1E2C, #c0392b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* GLOW */
+.glow-red {
+  box-shadow: 0 0 20px rgba(122, 30, 44, 0.4), 0 0 60px rgba(122, 30, 44, 0.15);
+}
+
+.glow-yellow {
+  box-shadow: 0 0 20px rgba(244, 195, 0, 0.4), 0 0 60px rgba(244, 195, 0, 0.15);
+}
+
+/* CANVAS */
+canvas {
+  touch-action: none;
+}
+
+/* SELECTION */
+::selection {
+  background: #7A1E2C;
+  color: #FFFFFF;
+}
+
+/* COUNTER */
+.counter-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* FLOAT ANIMATIONS */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(-4px); }
+  50% { transform: translateY(8px); }
+}
+
+.float-anim {
+  animation: float 4s ease-in-out infinite;
+}
+
+.float-anim-delayed {
+  animation: float-delayed 5s ease-in-out infinite;
+}
+
+/* COCKPIT OVERLAY */
+.cockpit-bg {
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.5) 0%,
+    rgba(0,0,0,0.65) 50%,
+    rgba(0,0,0,0.8) 100%
+  );
+}
+
+/* REAR LIGHT GLOW */
+@keyframes rearGlow {
+  0%, 100% { opacity: 0.4; filter: blur(20px); }
+  50% { opacity: 0.7; filter: blur(30px); }
+}
+
+.rear-glow {
+  animation: rearGlow 3s ease-in-out infinite;
+}
+
+/* PULSE DOT */
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+.pulse-dot {
+  animation: pulseDot 1.5s ease-in-out infinite;
+}

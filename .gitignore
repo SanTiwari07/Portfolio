@@ -1,26 +1,40 @@
-# Logs
-logs
+# ─────────────────────────────────────────────────────
+# Sanskar Portfolio v3 — .gitignore
+# ─────────────────────────────────────────────────────
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.env.local
+
+# Node / React
+portfolio/node_modules/
+portfolio/dist/
+portfolio/.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+build/
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Large media — tracked in assets/ only, not duplicated
+portfolio/public/assets/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-
+# Temp / scratch
+*.tmp
+*.bak

@@ -1,0 +1,6 @@
+# Python dependencies for Sanskar Portfolio v3
+# Activate venv first: .venv\Scripts\activate
+
+requests==2.32.3
+Pillow==10.4.0
+python-dotenv==1.0.1
