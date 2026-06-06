@@ -1,28 +1,17 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-import tech1 from '../../../Techfiesta/tech (3).jpg?url';
-import tech2 from '../../../Techfiesta/tech (2).jpg?url';
-import tech3 from '../../../Techfiesta/tech (3).jpg?url';
-import pune1 from '../../../Pune Agri/pune (2).jpg?url';
-import pune2 from '../../../Pune Agri/pune (2).jpg?url';
-import pune3 from '../../../Pune Agri/pune (3).jpg?url';
-import vois1 from '../../../vois/vois (1).jpg?url';
-import vois2 from '../../../vois/vois (2).jpg?url';
-import vois3 from '../../../vois/vois (3).jpg?url';
-import vois4 from '../../../vois/vois (4).jpg?url';
-
 const allImages = [
-  { src: tech1, alt: 'TechFiesta 2026 - Gold Award', event: 'TechFiesta' },
-  { src: tech2, alt: 'TechFiesta 2026 - Ceremony', event: 'TechFiesta' },
-  { src: tech3, alt: 'TechFiesta 2026 - Team', event: 'TechFiesta' },
-  { src: pune1, alt: 'Pune Agri Hackathon - Award', event: 'Pune Agri' },
-  { src: pune2, alt: 'Pune Agri Hackathon - Ceremony', event: 'Pune Agri' },
-  { src: pune3, alt: 'Pune Agri Hackathon - Team', event: 'Pune Agri' },
-  { src: vois1, alt: 'VOIS Innovation Marathon', event: 'VOIS' },
-  { src: vois2, alt: 'VOIS Innovation Marathon - Award', event: 'VOIS' },
-  { src: vois3, alt: 'VOIS Innovation Marathon - Ceremony', event: 'VOIS' },
-  { src: vois4, alt: 'VOIS Innovation Marathon - Team', event: 'VOIS' },
+  { src: '/assets/awards/Techfiesta/tech (3).jpg', alt: 'TechFiesta 2026 - Gold Award', event: 'TechFiesta' },
+  { src: '/assets/awards/Techfiesta/tech (2).jpg', alt: 'TechFiesta 2026 - Ceremony', event: 'TechFiesta' },
+  { src: '/assets/awards/Techfiesta/tech (3).jpg', alt: 'TechFiesta 2026 - Team', event: 'TechFiesta' },
+  { src: '/assets/awards/Pune Agri/pune (2).jpg', alt: 'Pune Agri Hackathon - Award', event: 'Pune Agri' },
+  { src: '/assets/awards/Pune Agri/pune (2).jpg', alt: 'Pune Agri Hackathon - Ceremony', event: 'Pune Agri' },
+  { src: '/assets/awards/Pune Agri/pune (3).jpg', alt: 'Pune Agri Hackathon - Group', event: 'Pune Agri' },
+  { src: '/assets/awards/vois/vois (1).jpg', alt: 'VOIS Innovation - Presenting', event: 'VOIS Marathon' },
+  { src: '/assets/awards/vois/vois (2).jpg', alt: 'VOIS Innovation - Trophy', event: 'VOIS Marathon' },
+  { src: '/assets/awards/vois/vois (3).jpg', alt: 'VOIS Innovation - Team', event: 'VOIS Marathon' },
+  { src: '/assets/awards/vois/vois (4).jpg', alt: 'VOIS Innovation - Winner', event: 'VOIS Marathon' }
 ];
 
 const detailedAwards = [
@@ -30,7 +19,7 @@ const detailedAwards = [
     subtitle: 'VOIS INNOVATION MARATHON 2.0 BY VODAFONE IDEA',
     title: 'KrishiSaarthi',
     description: 'AI & Blockchain Powered Agricultural Intelligence Platform',
-    image: vois1,
+    image: '/assets/awards/vois/vois (1).jpg',
     bullets: [
       { icon: '🏆', text: 'Top 3 among 630+ teams' },
       { icon: '💰', text: '₹2,00,000 Cash Prize' },
@@ -42,7 +31,7 @@ const detailedAwards = [
     subtitle: "TECHFIESTA '26 INTERNATIONAL HACKATHON",
     title: 'KrishiSahAI',
     description: 'AI Farmer Advisory Platform',
-    image: tech1,
+    image: '/assets/awards/Techfiesta/tech (3).jpg',
     bullets: [
       { icon: '🏆', text: '1st Rank - Agriculture Domain' },
       { icon: '💰', text: '₹50,000 Grand Prize' },
@@ -55,7 +44,7 @@ const detailedAwards = [
     subtitle: 'PUNE AGRI INTERNATIONAL HACKATHON',
     title: 'Krishi Prabandh',
     description: 'Upgrade to current government Existing website',
-    image: pune1,
+    image: '/assets/awards/Pune Agri/pune (2).jpg',
     bullets: [
       { icon: '🏆', text: 'National Runner-Up' },
       { icon: '💰', text: '₹15 Lakhs from government for development' },
