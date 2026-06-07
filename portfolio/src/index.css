@@ -15,6 +15,12 @@
 
   --font-heading: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+
+  --spacing-section-y: 8rem;
+  --spacing-comp-y: 4rem;
+  --spacing-layout-x: clamp(1.5rem, 5vw, 4rem);
+  --spacing-grid: 1.5rem;
 }
 
 :root {
@@ -34,13 +40,13 @@
   --primary: #E32636;
   --primary-hover: #FF3B4C;
   --accent: #F4C300;
-  --secondary: #A0A0A0;
-  --background: #050505;
-  --card: #0F0F0F;
+  --secondary: #888888;
+  --background: #030303;
+  --card: #0A0A0A;
   --text-primary: #F5F5F5;
-  --text-secondary: #A0A0A0;
-  --border-light: #1A1A1A;
-  --grid-color: rgba(30, 41, 59, 0.3);
+  --text-secondary: #888888;
+  --border-light: rgba(255, 255, 255, 0.05);
+  --grid-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Global Transition for Theme Switching */
@@ -221,4 +227,107 @@ canvas {
 
 .pulse-dot {
   animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+/* RECOVERY UI */
+.recovery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.recovery-container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem 3rem;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  max-width: 450px;
+}
+
+.recovery-container h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.recovery-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.recovery-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.recovery-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.recovery-btn.primary {
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+}
+
+.recovery-btn.primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.recovery-btn.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.recovery-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.recovery-btn .key {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }

@@ -1,116 +1,97 @@
-# Sanskar Tiwari — Portfolio v3
+# Sanskar Tiwari — Portfolio v3 & Interactive WebGL Experience
 
-> **AI Systems Builder · Computer Vision Engineer · Software Engineer Intern**
+An immersive, high-performance web portfolio featuring a full 3D WebGL driving experience built with React Three Fiber, React Three Cannon, and Vite.
 
-Premium cinematic engineering portfolio built with React Three Fiber, GSAP, Framer Motion, and Lenis scroll.
+## 🚀 Features
+
+- **Standardized Architecture**: Scalable, maintainable folder structure separating sections, UI components, and game logic.
+- **Immersive 3D Experience**: Driveable 3D vehicle utilizing physics engines directly in the browser.
+- **Premium Aesthetics**: High-end visual design with meticulous typography and micro-interactions.
+- **Performance Optimized**: Assets compressed to WebP, Draco compressed 3D models, and lazy-loaded components.
+- **Live Leaderboards**: Integration with Supabase to track game scores and lap times.
+
+## 🛠 Tech Stack
+
+- **Framework**: React 18 & Vite
+- **3D Rendering**: Three.js, React Three Fiber (@react-three/fiber), Drei (@react-three/drei)
+- **Physics**: React Three Cannon (@react-three/cannon)
+- **Styling**: TailwindCSS & Framer Motion
+- **State Management**: Zustand
+- **Backend / Auth**: Supabase
+
+## 📁 Folder Structure
+
+```text
+src/
+├── app/                  # App routing and root layout
+├── components/           # Reusable components
+│   ├── ui/               # Base UI elements (buttons, loaders, cursors)
+│   ├── layout/           # Navbar, layout wrappers
+│   ├── animations/       # Shared animation primitives
+│   └── shared/           # Common components
+├── sections/             # Page sections (Hero, About, Projects, Contact)
+├── game/                 # Complex 3D game logic and UI
+│   ├── models/           # 3D models loader components
+│   ├── controls/         # Keyboard/Touch controls
+│   ├── effects/          # Post-processing and particle effects
+│   └── ui/               # Game specific overlay UI
+├── hooks/                # Custom React hooks
+├── context/              # React Context providers (ThemeContext)
+├── utils/                # Helper functions
+├── types/                # TypeScript interfaces
+├── stores/               # Zustand global state (gameStore)
+├── assets/               # Local assets imported via JS
+├── styles/               # Global CSS
+└── lib/                  # Third-party integrations
+```
+
+## ⚙️ Installation & Setup
+
+1. **Clone the repository**
+2. **Navigate to the portfolio directory:**
+   ```bash
+   cd portfolio
+   ```
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+4. **Environment Variables:**
+   Copy `.env.example` to `.env` and fill in your Supabase credentials if you want the leaderboard to work.
+   ```bash
+   cp .env.example .env
+   ```
+5. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+## 🌐 Deployment (Vercel)
+
+This project is fully configured for deployment on Vercel.
+
+1. Connect your GitHub repository to Vercel.
+2. Set the **Framework Preset** to `Vite`.
+3. Set the **Root Directory** to `portfolio`.
+4. Add your Environment Variables (`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`) in the Vercel dashboard.
+5. Deploy!
+
+### Build Command
+```bash
+npm run build
+```
+
+### Output Directory
+```bash
+dist
+```
+
+## 🎨 Performance Notes
+
+- We use **Suspense** to lazy-load the `<GamePage />` only when requested.
+- All high-resolution `.jpg` and `.png` textures have been converted to `.webp` format for faster loading times.
+- Avoid importing unused 3D models. Ensure any new `.glb` files are optimized using `gltf-pipeline` or Draco compression before adding them to `public/models/`.
 
 ---
 
-## Project Structure
-
-```
-Sanskar Portfolio v3/
-├── assets/                  # Source media assets
-│   ├── car/                 # Porsche 911 Turbo S images + GLB model
-│   └── awards/              # Hackathon award photographs
-│       ├── techfiesta/
-│       ├── pune-agri/
-│       └── vois/
-│
-├── portfolio/               # React frontend application
-│   ├── src/
-│   │   ├── components/      # All section components
-│   │   ├── App.tsx
-│   │   ├── index.css
-│   │   └── index.tsx
-│   ├── public/
-│   │   └── assets/          # Assets served by Vite (copied from root assets/)
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── tsconfig.json
-│
-├── docs/                    # Content documentation
-│   ├── Portfolio_Content.md
-│   ├── LinkedIn_Data.md
-│   ├── Achievement_Data.md
-│   └── Project_Data.md
-│
-├── scripts/                 # Setup and utility scripts
-│   ├── setup.bat            # One-click: install + copy assets + launch dev
-│   ├── install_deps.bat     # Install npm dependencies only
-│   └── copy_assets.bat      # Copy assets from assets/ to portfolio/public/assets/
-│
-├── .venv/                   # Python virtual environment
-├── requirements.txt         # Python dependencies
-├── .gitignore
-└── README.md
-```
-
----
-
-## Quick Start
-
-### 1. Setup (first time)
-
-```bat
-scripts\setup.bat
-```
-
-This will:
-- Run `npm install` in the `portfolio/` directory
-- Copy all assets from `assets/` to `portfolio/public/assets/`
-- Start the dev server at `http://localhost:3000`
-
-### 2. Development
-
-```bat
-cd portfolio
-npm run dev
-```
-
-### 3. Python Environment
-
-```bat
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-```
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 18 + TypeScript |
-| 3D | React Three Fiber + Drei + Three.js |
-| Animation | GSAP + ScrollTrigger + Framer Motion |
-| Scroll | Lenis |
-| Styling | TailwindCSS v4 |
-| Build | Vite 6 |
-
----
-
-## Sections
-
-| # | Section | Key Feature |
-|---|---------|-------------|
-| 01 | **Hero** | 3D GLB Porsche model, mouse-reactive camera |
-| 02 | **Performance** | Animated counters, parallax car image |
-| 03 | **Mission** | MindstriX internship editorial |
-| 04 | **Tech Ecosystem** | Floating icon clusters with hover tooltips |
-| 05 | **Control Center** | Cockpit dashboard with project hotspots |
-| 06 | **Race Record** | Infinite award image marquee |
-| 07 | **Track History** | Editorial milestone timeline |
-| 08 | **Live Systems** | GitHub dashboard |
-| 09 | **Journey Continues** | Cinematic rear-car finale + contact |
-
----
-
-## Contact
-
-**Sanskar Tiwari**  
-Electronics & Telecom · PICT, Pune  
-Software Engineer Intern · MindstriX Technologies  
-[sanskartiwari.smt2@gmail.com](mailto:sanskartiwari.smt2@gmail.com)  
-[LinkedIn](https://www.linkedin.com/in/sanskar-tiwari-b781a9315/) · [GitHub](https://github.com/SanTiwari07)
+*Designed and engineered by Sanskar Tiwari.*
