@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import { motion, useInView, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import portraitUrl from '../../../old portfolio/Hero Image/Main Image (1).png?url';
-import backgroundUrl from '../../../old portfolio/Hero Image/Second Image (1).png?url';
+import portraitUrl from "../../../Hero Image/Main Image (1).png?url";
+import backgroundUrl from "../../../Hero Image/Second Image (1).png?url";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,10 +34,10 @@ function StatBlock({ value, label, sublabel }: StatProps) {
   }, [isInView, numericValue, count]);
 
   return (
-    <div ref={ref} className="group relative py-10 border-l border-gray-100 pl-8">
-      <div className="absolute left-0 top-0 h-0 w-[2px] bg-[#7A1E2C] group-hover:h-full transition-all duration-700 ease-out" />
+    <div ref={ref} className="group relative py-10 border-l border-border-light pl-8 transition-colors duration-700">
+      <div className="absolute left-0 top-0 h-0 w-[2px] bg-primary group-hover:h-full transition-all duration-700 ease-out" />
       <motion.div
-        className="text-[clamp(48px,6vw,80px)] font-black tracking-[-0.03em] text-black leading-none counter-number"
+        className="text-[clamp(48px,6vw,80px)] font-black tracking-[-0.03em] text-text-primary leading-none counter-number transition-colors duration-700"
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -45,7 +45,7 @@ function StatBlock({ value, label, sublabel }: StatProps) {
         {isInView ? <motion.span>{displayCount}</motion.span> : '0'}
       </motion.div>
       <motion.p
-        className="text-xs tracking-[0.35em] uppercase text-gray-500 mt-2 font-medium"
+        className="text-xs tracking-[0.35em] uppercase text-text-secondary mt-2 font-medium transition-colors duration-700"
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ delay: 0.3, duration: 0.6 }}
@@ -54,7 +54,7 @@ function StatBlock({ value, label, sublabel }: StatProps) {
       </motion.p>
       {sublabel && (
         <motion.p
-          className="text-[10px] tracking-[0.2em] uppercase text-[#7A1E2C] mt-1"
+          className="text-[10px] tracking-[0.2em] uppercase text-primary mt-1 transition-colors duration-700"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5, duration: 0.6 }}
@@ -72,10 +72,10 @@ function FloatingBadge({ title, top, left, right, bottom, delay }: any) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.8 }}
-      className="absolute z-30 bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_15px_35px_rgba(0,0,0,0.1)] px-5 py-3 rounded-full hidden md:block"
+      className="absolute z-30 bg-card/70 backdrop-blur-xl border border-border-light/40 shadow-[0_15px_35px_rgba(0,0,0,0.1)] px-5 py-3 rounded-full hidden md:block transition-colors duration-700"
       style={{ top, left, right, bottom }}
     >
-      <span className="text-[10px] md:text-xs font-black text-black tracking-widest uppercase">{title}</span>
+      <span className="text-[10px] md:text-xs font-black text-text-primary tracking-widest uppercase transition-colors duration-700">{title}</span>
     </motion.div>
   );
 }
@@ -145,34 +145,14 @@ function InteractivePortrait() {
           style={{ x: shadowX }}
         />
 
-        {/* The Base Portrait (Image 1) */}
-        <motion.img 
-          src={portraitUrl} 
-          alt="Sanskar Tiwari" 
-          className="relative z-10 w-full h-full object-contain object-center drop-shadow-2xl pointer-events-none" 
-          style={{
-            x: translateX,
-            y: translateY,
-          }}
-        />
-
-        {/* The Revealed Portrait (Image 2) with Cursor Masking */}
-        <motion.div
-          className="absolute inset-0 z-20 pointer-events-none hidden md:block"
-          style={{
-            x: translateX,
-            y: translateY,
-            maskImage: maskImage,
-            WebkitMaskImage: maskImage,
-          }}
-        >
-          {/* Full color reveal image */}
+        {/* Main Portrait */}
+        <div className="absolute inset-0 z-20 transition-transform duration-700 group-hover:scale-105">
           <img 
-            src={backgroundUrl} 
-            alt="Sanskar Tiwari Alternate" 
-            className="w-full h-full object-contain object-center pointer-events-none" 
+            src={portraitUrl} 
+            alt="Sanskar Tiwari" 
+            className="w-full h-full object-cover rounded-2xl shadow-2xl"
           />
-        </motion.div>
+        </div>
 
         {/* Floating Badges */}
         <FloatingBadge title="9.38 CGPA" top="20%" left="0%" delay={0.2} />
@@ -189,7 +169,7 @@ const PerformanceSpecs: React.FC = () => {
   const isInView = useInView(sectionRef, { once: true, margin: '-10%' });
 
   return (
-    <section ref={sectionRef} id="specs" className="relative w-full overflow-hidden bg-[#FAFAFA]">
+    <section ref={sectionRef} id="specs" className="relative w-full overflow-hidden bg-background transition-colors duration-700">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
           className="flex items-center gap-4 mb-16"
@@ -197,15 +177,15 @@ const PerformanceSpecs: React.FC = () => {
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <div className="w-8 h-[1px] bg-[#7A1E2C]" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-gray-400 font-medium">02 / Performance</span>
+          <div className="w-8 h-[1px] bg-primary transition-colors duration-700" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-text-secondary font-medium transition-colors duration-700">02 / Performance</span>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
           <div className="w-full">
             <div className="overflow-hidden mb-4">
               <motion.h2
-                className="text-[clamp(40px,5vw,90px)] font-black tracking-[-0.03em] text-black leading-[0.9] uppercase break-words"
+                className="text-[clamp(40px,5vw,90px)] font-black tracking-[-0.03em] text-text-primary leading-[0.9] uppercase break-words transition-colors duration-700"
                 initial={{ y: '100%' }}
                 animate={isInView ? { y: 0 } : {}}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -215,7 +195,7 @@ const PerformanceSpecs: React.FC = () => {
             </div>
             <div className="overflow-hidden mb-12">
               <motion.h2
-                className="text-[clamp(40px,5vw,90px)] font-black tracking-[-0.03em] text-[#7A1E2C] leading-[0.9] uppercase break-words"
+                className="text-[clamp(40px,5vw,90px)] font-black tracking-[-0.03em] text-primary leading-[0.9] uppercase break-words transition-colors duration-700"
                 initial={{ y: '100%' }}
                 animate={isInView ? { y: 0 } : {}}
                 transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -225,7 +205,7 @@ const PerformanceSpecs: React.FC = () => {
             </div>
 
             <motion.p
-              className="text-base text-gray-500 max-w-md leading-relaxed mb-16"
+              className="text-base text-text-secondary max-w-md leading-relaxed mb-16 transition-colors duration-700"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4, duration: 0.7 }}
@@ -237,11 +217,11 @@ const PerformanceSpecs: React.FC = () => {
               <StatBlock value="9.38" label="CGPA" sublabel="ENTC · PICT" />
               <StatBlock value="12+" label="Systems Built" />
               <StatBlock value="4+" label="Hackathon Podiums" />
-              <div className="group relative py-10 border-l border-gray-100 pl-8">
-                <div className="absolute left-0 top-0 h-0 w-[2px] bg-[#7A1E2C] group-hover:h-full transition-all duration-700 ease-out" />
-                <div className="text-xs tracking-[0.3em] uppercase text-gray-400 mb-2">Current Role</div>
-                <div className="text-lg font-black text-black uppercase tracking-tight leading-tight">Software<br />Engineer Intern</div>
-                <div className="text-[10px] tracking-[0.3em] uppercase text-[#7A1E2C] mt-2">MindstriX Technologies</div>
+              <div className="group relative py-10 border-l border-border-light pl-8 transition-colors duration-700">
+                <div className="absolute left-0 top-0 h-0 w-[2px] bg-primary group-hover:h-full transition-all duration-700 ease-out" />
+                <div className="text-xs tracking-[0.3em] uppercase text-text-secondary mb-2 transition-colors duration-700">Current Role</div>
+                <div className="text-lg font-black text-text-primary uppercase tracking-tight leading-tight transition-colors duration-700">Software<br />Engineer Intern</div>
+                <div className="text-[10px] tracking-[0.3em] uppercase text-primary mt-2 transition-colors duration-700">MindstriX Technologies</div>
               </div>
             </div>
           </div>

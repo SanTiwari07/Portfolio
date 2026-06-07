@@ -13,7 +13,7 @@ const CurrentMission: React.FC = () => {
   ];
 
   return (
-    <section ref={ref} id="mission" className="relative w-full bg-black overflow-hidden">
+    <section ref={ref} id="mission" className="relative w-full bg-background overflow-hidden transition-colors duration-700">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
           className="flex items-center gap-4 mb-20"
@@ -21,15 +21,15 @@ const CurrentMission: React.FC = () => {
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <div className="w-8 h-[1px] bg-[#7A1E2C]" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-gray-500 font-medium">03 / Current Mission</span>
+          <div className="w-8 h-[1px] bg-primary transition-colors duration-700" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-text-secondary font-medium transition-colors duration-700">03 / Current Mission</span>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
           <div className="lg:col-span-5">
             <div className="overflow-hidden mb-4">
               <motion.h2
-                className="text-[clamp(44px,5.5vw,80px)] font-black tracking-[-0.03em] text-white leading-[0.9] uppercase"
+                className="text-[clamp(44px,5.5vw,80px)] font-black tracking-[-0.03em] text-text-primary leading-[0.9] uppercase transition-colors duration-700"
                 initial={{ y: '100%' }}
                 animate={isInView ? { y: 0 } : {}}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -39,7 +39,7 @@ const CurrentMission: React.FC = () => {
             </div>
             <div className="overflow-hidden mb-10">
               <motion.h2
-                className="text-[clamp(44px,5.5vw,80px)] font-black tracking-[-0.03em] text-[#F4C300] leading-[0.9] uppercase"
+                className="text-[clamp(44px,5.5vw,80px)] font-black tracking-[-0.03em] text-accent leading-[0.9] uppercase transition-colors duration-700"
                 initial={{ y: '100%' }}
                 animate={isInView ? { y: 0 } : {}}
                 transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -55,13 +55,13 @@ const CurrentMission: React.FC = () => {
               transition={{ delay: 0.4, duration: 0.7 }}
             >
               <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#7A1E2C] pulse-dot" />
-                <span className="text-[10px] tracking-[0.4em] uppercase text-[#7A1E2C]">Active · 2026 → Present</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-primary pulse-dot transition-colors duration-700" />
+                <span className="text-[10px] tracking-[0.4em] uppercase text-primary transition-colors duration-700">Active · 2026 → Present</span>
               </div>
-              <div className="text-2xl font-black text-white uppercase tracking-tight">
+              <div className="text-2xl font-black text-text-primary uppercase tracking-tight transition-colors duration-700">
                 Software Engineer Intern
               </div>
-              <div className="text-sm text-gray-400 tracking-[0.2em] uppercase font-medium">
+              <div className="text-sm text-text-secondary tracking-[0.2em] uppercase font-medium transition-colors duration-700">
                 MindstriX Technologies LLP
               </div>
             </motion.div>
@@ -72,29 +72,29 @@ const CurrentMission: React.FC = () => {
               {missions.map((item, idx) => (
                 <motion.div
                   key={idx}
-                  className="group border-b border-white/10 py-8 flex items-start justify-between gap-8 hover:border-[#7A1E2C]/40 transition-colors duration-300"
+                  className="group border-b border-border-light py-8 flex items-start justify-between gap-8 hover:border-primary/40 transition-colors duration-300"
                   initial={{ opacity: 0, y: 30 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.2 + idx * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div className="flex items-start gap-6 flex-1">
-                    <span className="text-[10px] text-gray-600 tracking-[0.2em] mt-1 tabular-nums">
+                    <span className="text-[10px] text-text-secondary tracking-[0.2em] mt-1 tabular-nums transition-colors duration-700">
                       {String(idx + 1).padStart(2, '0')}
                     </span>
                     <div>
-                      <h3 className="text-xl font-black uppercase tracking-tight text-white group-hover:text-[#F4C300] transition-colors duration-300 mb-2">
+                      <h3 className="text-xl font-black uppercase tracking-tight text-text-primary group-hover:text-accent transition-colors duration-300 mb-2">
                         {item.label}
                       </h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                      <p className="text-sm text-text-secondary leading-relaxed transition-colors duration-700">{item.desc}</p>
                     </div>
                   </div>
-                  <div className="w-6 h-[1px] bg-white/20 group-hover:w-12 group-hover:bg-[#7A1E2C] transition-all duration-400 mt-3 flex-shrink-0" />
+                  <div className="w-6 h-[1px] bg-border-light group-hover:w-12 group-hover:bg-primary transition-all duration-400 mt-3 flex-shrink-0" />
                 </motion.div>
               ))}
             </div>
 
             <motion.p
-              className="text-xs text-gray-600 tracking-[0.3em] uppercase mt-10"
+              className="text-xs text-text-secondary tracking-[0.3em] uppercase mt-10 transition-colors duration-700"
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.8, duration: 0.6 }}

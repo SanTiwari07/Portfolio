@@ -83,8 +83,8 @@ function ModelLoader() {
   return (
     <div className="absolute inset-0 flex items-center justify-center">
       <div className="text-center">
-        <div className="w-16 h-16 border border-[#7A1E2C] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-xs text-gray-400 tracking-[0.3em] uppercase">Loading Model</p>
+        <div className="w-16 h-16 border border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-xs text-text-secondary tracking-[0.3em] uppercase">Loading Model</p>
       </div>
     </div>
   );
@@ -116,7 +116,7 @@ function AnimatedTitle() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -32, opacity: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="text-sm md:text-base tracking-[0.3em] uppercase text-[#7A1E2C] font-semibold"
+        className="text-sm md:text-base tracking-[0.3em] uppercase text-primary font-semibold"
       >
         {titles[index]}
       </motion.div>
@@ -133,10 +133,10 @@ function ScrollIndicator() {
       animate={{ opacity: 1 }}
       transition={{ delay: 2.8, duration: 0.8 }}
     >
-      <span className="text-[10px] tracking-[0.4em] uppercase text-gray-400">Scroll</span>
-      <div className="w-[1px] h-12 bg-gray-200 overflow-hidden">
+      <span className="text-[10px] tracking-[0.4em] uppercase text-text-secondary">Scroll</span>
+      <div className="w-[1px] h-12 bg-border-light overflow-hidden">
         <motion.div
-          className="w-full bg-[#7A1E2C]"
+          className="w-full bg-primary"
           style={{ height: '100%' }}
           animate={{ y: ['-100%', '100%'] }}
           transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
@@ -160,7 +160,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
       return (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <p className="text-xs text-gray-400 tracking-[0.3em] uppercase">3D Model Unavailable</p>
+            <p className="text-xs text-text-secondary tracking-[0.3em] uppercase">3D Model Unavailable</p>
           </div>
         </div>
       );
@@ -204,7 +204,7 @@ const Hero: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-screen overflow-hidden bg-white cursor-none"
+      className="relative w-full h-screen overflow-hidden bg-background cursor-none transition-colors duration-700"
       onMouseMove={handleMouseMove}
     >
       {/* Background grid */}
@@ -225,7 +225,7 @@ const Hero: React.FC = () => {
             </Suspense>
           </ErrorBoundary>
         </div>
-        <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none z-20" />
+        <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-20 transition-colors duration-700" />
       </div>
 
       {/* Text Content */}
@@ -236,17 +236,17 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="overflow-hidden mb-1">
-            <h1 className="hero-line-1 text-[clamp(52px,7vw,110px)] font-black leading-[0.9] tracking-[-0.03em] text-black uppercase">
+            <h1 className="hero-line-1 text-[clamp(52px,7vw,110px)] font-black leading-[0.9] tracking-[-0.03em] text-text-primary uppercase transition-colors duration-700">
               SANSKAR
             </h1>
           </div>
           <div className="overflow-hidden mb-6">
-            <h1 className="hero-line-2 text-[clamp(52px,7vw,110px)] font-black leading-[0.9] tracking-[-0.03em] text-black uppercase">
+            <h1 className="hero-line-2 text-[clamp(52px,7vw,110px)] font-black leading-[0.9] tracking-[-0.03em] text-text-primary uppercase transition-colors duration-700">
               TIWARI
             </h1>
           </div>
 
-          <p className="hero-subtitle text-sm md:text-base text-gray-500 leading-relaxed max-w-[400px] mb-8">
+          <p className="hero-subtitle text-sm md:text-base text-text-secondary leading-relaxed max-w-[400px] mb-8 transition-colors duration-700">
             Building intelligent systems across AI,
             Computer Vision, and Embedded Systems
             for the physical world.
@@ -256,7 +256,7 @@ const Hero: React.FC = () => {
             {['ENTC @ PICT', 'Intern @ MindstriX', 'Hackathon Winner'].map((tag) => (
               <span
                 key={tag}
-                className="px-3 py-1.5 border border-gray-200 text-[10px] tracking-[0.25em] uppercase text-gray-500 font-medium"
+                className="px-3 py-1.5 border border-border-light text-[10px] tracking-[0.25em] uppercase text-text-secondary font-medium transition-colors duration-700"
               >
                 {tag}
               </span>
@@ -266,21 +266,21 @@ const Hero: React.FC = () => {
           <div className="flex items-center gap-5">
             <a
               href="#projects"
-              className="hero-cta group relative px-8 py-4 bg-black text-white text-xs tracking-[0.25em] uppercase font-semibold overflow-hidden"
+              className="hero-cta group relative px-8 py-4 bg-text-primary text-background text-xs tracking-[0.25em] uppercase font-semibold overflow-hidden transition-colors duration-700"
               data-cursor="hover"
             >
-              <span className="absolute inset-0 bg-[#7A1E2C] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+              <span className="absolute inset-0 bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
               <span className="relative z-10">View Projects</span>
             </a>
             <a
               href="https://drive.google.com/file/d/your-resume-id/view"
               target="_blank"
               rel="noopener noreferrer"
-              className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-black"
+              className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary transition-colors duration-700"
               data-cursor="hover"
             >
               Resume
-              <span className="w-8 h-[1px] bg-black group-hover:w-14 group-hover:bg-[#7A1E2C] transition-all duration-400" />
+              <span className="w-8 h-[1px] bg-text-primary group-hover:w-14 group-hover:bg-primary transition-all duration-400" />
             </a>
           </div>
         </motion.div>
@@ -294,8 +294,8 @@ const Hero: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 3, duration: 0.6 }}
       >
-        <div className="w-4 h-[1px] bg-gray-300" />
-        <span className="text-[9px] tracking-[0.4em] uppercase text-gray-400">01 / 08</span>
+        <div className="w-4 h-[1px] bg-border-light transition-colors duration-700" />
+        <span className="text-[9px] tracking-[0.4em] uppercase text-text-secondary transition-colors duration-700">01 / 08</span>
       </motion.div>
 
       <motion.div
@@ -304,8 +304,8 @@ const Hero: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5 }}
       >
-        <div className="w-1.5 h-1.5 rounded-full bg-[#7A1E2C] pulse-dot" />
-        <span className="text-[9px] tracking-[0.3em] uppercase text-gray-400">Engineering</span>
+        <div className="w-1.5 h-1.5 rounded-full bg-primary pulse-dot transition-colors duration-700" />
+        <span className="text-[9px] tracking-[0.3em] uppercase text-text-secondary transition-colors duration-700">Engineering</span>
       </motion.div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ReactLenis } from 'lenis/react';
 import { AnimatePresence } from 'framer-motion';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Core
 import Loader from './components/Loader';
@@ -45,43 +46,45 @@ const App: React.FC = () => {
   }, [loaderDone]);
 
   return (
-    <>
-      <CustomCursor />
+    <ThemeProvider>
+      <>
+        <CustomCursor />
 
-      <AnimatePresence>
-        {!loaderDone && (
-          <Loader onComplete={() => setLoaderDone(true)} />
+        <AnimatePresence>
+          {!loaderDone && (
+            <Loader onComplete={() => setLoaderDone(true)} />
+          )}
+        </AnimatePresence>
+
+        {loaderDone && (
+          <ReactLenis
+            root
+            options={{
+              lerp: 0.08,
+              duration: 1.4,
+              smoothWheel: true,
+            }}
+          >
+            <div className="relative bg-background min-h-screen selection:bg-primary selection:text-card transition-colors duration-700">
+              <Navbar activeSection={activeSection} />
+
+              <main>
+                <section id="hero" className="w-full h-screen relative">
+                  <Hero />
+                </section>
+                <About />
+                <CurrentMission />
+                <Skills />
+                <Achievements />
+                <Journey />
+                <BuildInPublic />
+                <Contact />
+              </main>
+            </div>
+          </ReactLenis>
         )}
-      </AnimatePresence>
-
-      {loaderDone && (
-        <ReactLenis
-          root
-          options={{
-            lerp: 0.08,
-            duration: 1.4,
-            smoothWheel: true,
-          }}
-        >
-          <div className="relative bg-white min-h-screen selection:bg-[#7A1E2C] selection:text-white">
-            <Navbar activeSection={activeSection} />
-
-            <main>
-              <section id="hero" className="w-full h-screen relative">
-                <Hero />
-              </section>
-              <About />
-              <CurrentMission />
-              <Skills />
-              <Achievements />
-              <Journey />
-              <BuildInPublic />
-              <Contact />
-            </main>
-          </div>
-        </ReactLenis>
-      )}
-    </>
+      </>
+    </ThemeProvider>
   );
 };
 

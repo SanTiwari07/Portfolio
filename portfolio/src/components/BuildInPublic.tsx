@@ -132,14 +132,14 @@ const LiveSystems: React.FC = () => {
   ];
 
   return (
-    <section ref={ref} id="github" className="relative w-full overflow-hidden bg-white py-28 md:py-40">
+    <section ref={ref} id="github" className="relative w-full overflow-hidden bg-background py-28 md:py-40 transition-colors duration-700">
       <div className="absolute right-0 top-0 bottom-0 w-[35%] pointer-events-none hidden lg:block z-0">
         <img
           src="/assets/car/911 Turbo S side view.jpg"
           alt="911 Turbo S Side"
           className="w-full h-full object-cover opacity-[0.06]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent transition-colors duration-700" />
       </div>
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
@@ -149,13 +149,13 @@ const LiveSystems: React.FC = () => {
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <div className="w-8 h-[1px] bg-[#7A1E2C]" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-gray-400 font-medium">07 / Live Systems</span>
+          <div className="w-8 h-[1px] bg-primary transition-colors duration-700" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-text-secondary font-medium transition-colors duration-700">07 / Live Systems</span>
         </motion.div>
 
         <div className="overflow-hidden mb-4">
           <motion.h2
-            className="text-[clamp(44px,6vw,96px)] font-black tracking-[-0.03em] text-black leading-[0.9] uppercase"
+            className="text-[clamp(44px,6vw,96px)] font-black tracking-[-0.03em] text-text-primary leading-[0.9] uppercase transition-colors duration-700"
             initial={{ y: '100%' }}
             animate={isInView ? { y: 0 } : {}}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -164,7 +164,7 @@ const LiveSystems: React.FC = () => {
           </motion.h2>
         </div>
         <motion.p
-          className="text-gray-500 text-base max-w-md mb-16"
+          className="text-text-secondary text-base max-w-md mb-16 transition-colors duration-700"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.7 }}
@@ -174,30 +174,30 @@ const LiveSystems: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-5 space-y-12">
-            <div className="grid grid-cols-3 gap-0 border border-gray-100">
+            <div className="grid grid-cols-3 gap-0 border border-border-light transition-colors duration-700">
               {dynamicMetrics.map((m, i) => (
                 <motion.div
                   key={i}
-                  className="p-6 text-center border-r border-gray-100 last:border-r-0"
+                  className="p-6 text-center border-r border-border-light last:border-r-0 transition-colors duration-700"
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.2 + i * 0.1 }}
                 >
-                  <div className="text-3xl font-black text-black tracking-tight mb-1">{m.value}</div>
-                  <div className="text-[9px] tracking-[0.3em] uppercase text-gray-400">{m.label}</div>
+                  <div className="text-3xl font-black text-text-primary tracking-tight mb-1 transition-colors duration-700">{m.value}</div>
+                  <div className="text-[9px] tracking-[0.3em] uppercase text-text-secondary transition-colors duration-700">{m.label}</div>
                 </motion.div>
               ))}
             </div>
 
             <motion.div
-              className="p-8 border border-gray-100"
+              className="p-8 border border-border-light transition-colors duration-700"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#7A1E2C] pulse-dot" />
-                <span className="text-[10px] tracking-[0.4em] uppercase text-gray-400 font-medium">Contribution Activity</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-primary pulse-dot transition-colors duration-700" />
+                <span className="text-[10px] tracking-[0.4em] uppercase text-text-secondary font-medium transition-colors duration-700">Contribution Activity</span>
               </div>
               {isInView && <ContributionGraph />}
 
@@ -207,7 +207,7 @@ const LiveSystems: React.FC = () => {
               href={`https://github.com/${GITHUB_USER}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-4 text-xs tracking-[0.25em] uppercase font-semibold text-black hover:text-[#7A1E2C] transition-colors"
+              className="group inline-flex items-center gap-4 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary hover:text-primary transition-colors duration-700"
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ delay: 0.6 }}
@@ -228,7 +228,7 @@ const LiveSystems: React.FC = () => {
                 href={repo.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-start justify-between gap-8 border-b border-gray-100 py-8 hover:border-[#7A1E2C]/30 transition-colors duration-300"
+                className="group flex items-start justify-between gap-8 border-b border-border-light py-8 hover:border-primary/30 transition-colors duration-700"
                 initial={{ opacity: 0, x: 30 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.2 + i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -236,7 +236,7 @@ const LiveSystems: React.FC = () => {
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-base font-black uppercase tracking-tight text-black group-hover:text-[#7A1E2C] transition-colors">
+                    <h3 className="text-base font-black uppercase tracking-tight text-text-primary group-hover:text-primary transition-colors duration-700">
                       {repo.name}
                     </h3>
                     <span
@@ -246,23 +246,23 @@ const LiveSystems: React.FC = () => {
                       {repo.lang}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 leading-relaxed mb-3">{repo.description}</p>
+                  <p className="text-xs text-text-secondary leading-relaxed mb-3 transition-colors duration-700">{repo.description}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {repo.topics.map((t) => (
-                      <span key={t} className="text-[8px] tracking-[0.2em] uppercase px-2 py-0.5 border border-gray-100 text-gray-400">
+                      <span key={t} className="text-[8px] tracking-[0.2em] uppercase px-2 py-0.5 border border-border-light text-text-secondary transition-colors duration-700">
                         {t}
                       </span>
                     ))}
                   </div>
                 </div>
                 <div className="flex-shrink-0 flex flex-col items-end gap-2">
-                  <div className="flex items-center gap-1 text-gray-400">
+                  <div className="flex items-center gap-1 text-text-secondary transition-colors duration-700">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
                     <span className="text-xs font-mono">{repo.stars}</span>
                   </div>
-                  <div className="w-6 h-[1px] bg-gray-200 group-hover:w-10 group-hover:bg-[#7A1E2C] transition-all duration-400" />
+                  <div className="w-6 h-[1px] bg-border-light group-hover:w-10 group-hover:bg-primary transition-all duration-400" />
                 </div>
               </motion.a>
             ))}

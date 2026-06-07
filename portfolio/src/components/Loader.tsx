@@ -50,10 +50,10 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center transition-colors duration-700"
     >
       <div className="overflow-hidden mb-6">
-        <h1 className="text-[clamp(60px,12vw,160px)] font-black leading-none tracking-[-0.04em] text-black flex">
+        <h1 className="text-[clamp(60px,12vw,160px)] font-black leading-none tracking-[-0.04em] text-text-primary flex transition-colors duration-700">
           {name.map((char, i) => (
             <span
               key={i}
@@ -69,14 +69,14 @@ const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
         </h1>
       </div>
 
-      <p className="loader-tagline text-[clamp(10px,1.2vw,16px)] tracking-[0.5em] text-[#666] uppercase font-medium mb-12">
+      <p className="loader-tagline text-[clamp(10px,1.2vw,16px)] tracking-[0.5em] text-text-secondary uppercase font-medium mb-12 transition-colors duration-700">
         Engineered for Performance
       </p>
 
-      <div className="w-[min(280px,60vw)] h-[1px] bg-gray-200 overflow-hidden">
+      <div className="w-[min(280px,60vw)] h-[1px] bg-border-light overflow-hidden transition-colors duration-700">
         <div
           ref={lineRef}
-          className="w-full h-full bg-[#7A1E2C] origin-left"
+          className="w-full h-full bg-primary origin-left transition-colors duration-700"
           style={{ scaleX: 0 }}
         />
       </div>

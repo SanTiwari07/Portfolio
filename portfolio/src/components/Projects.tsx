@@ -137,7 +137,7 @@ const ControlCenter: React.FC = () => {
                <TrafficVisual />
                <div className="flex gap-2 mt-4 flex-wrap">
                  {['YOLOv8', 'OpenCV', 'Python', 'ESP32'].map(tech => (
-                   <span key={tech} className="text-[8px] bg-white/5 text-gray-400 px-2 py-1 rounded border border-white/10 uppercase tracking-wider">{tech}</span>
+                   <span key={tech} className="text-[8px] bg-text-primary/5 text-text-secondary px-2 py-1 rounded border border-text-primary/10 uppercase tracking-wider">{tech}</span>
                  ))}
                </div>
             </div>

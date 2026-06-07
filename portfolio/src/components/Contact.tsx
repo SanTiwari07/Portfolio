@@ -84,16 +84,16 @@ const JourneyContinues: React.FC = () => {
           />
         </motion.div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/40 transition-colors duration-700" />
 
         <div className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none">
           <div
-            className="absolute bottom-[15%] left-[30%] w-24 h-6 rear-glow rounded-full"
-            style={{ background: '#7A1E2C', filter: 'blur(20px)' }}
+            className="absolute bottom-[15%] left-[30%] w-24 h-6 rear-glow rounded-full transition-colors duration-700"
+            style={{ background: 'var(--primary)', filter: 'blur(20px)' }}
           />
           <div
-            className="absolute bottom-[15%] right-[30%] w-24 h-6 rear-glow rounded-full"
-            style={{ background: '#7A1E2C', filter: 'blur(20px)', animationDelay: '0.5s' }}
+            className="absolute bottom-[15%] right-[30%] w-24 h-6 rear-glow rounded-full transition-colors duration-700"
+            style={{ background: 'var(--primary)', filter: 'blur(20px)', animationDelay: '0.5s' }}
           />
         </div>
       </div>
@@ -105,14 +105,14 @@ const JourneyContinues: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.2 }}
         >
-          <div className="w-8 h-[1px] bg-[#7A1E2C]" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-white/30 font-medium">08 / The Journey</span>
-          <div className="w-8 h-[1px] bg-[#7A1E2C]" />
+          <div className="w-8 h-[1px] bg-primary transition-colors duration-700" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-text-secondary font-medium transition-colors duration-700">08 / The Journey</span>
+          <div className="w-8 h-[1px] bg-primary transition-colors duration-700" />
         </motion.div>
 
         <div className="overflow-hidden mb-6">
           <motion.h2
-            className="text-[clamp(44px,7vw,110px)] font-black tracking-[-0.04em] text-white leading-[0.85] uppercase"
+            className="text-[clamp(44px,7vw,110px)] font-black tracking-[-0.04em] text-text-primary leading-[0.85] uppercase transition-colors duration-700"
             initial={{ y: '100%' }}
             animate={isInView ? { y: 0 } : {}}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
@@ -122,7 +122,7 @@ const JourneyContinues: React.FC = () => {
         </div>
         <div className="overflow-hidden mb-16">
           <motion.h2
-            className="text-[clamp(44px,7vw,110px)] font-black tracking-[-0.04em] text-[#7A1E2C] leading-[0.85] uppercase"
+            className="text-[clamp(44px,7vw,110px)] font-black tracking-[-0.04em] text-primary leading-[0.85] uppercase transition-colors duration-700"
             initial={{ y: '100%' }}
             animate={isInView ? { y: 0 } : {}}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
@@ -132,7 +132,7 @@ const JourneyContinues: React.FC = () => {
         </div>
 
         <motion.p
-          className="text-base md:text-lg text-white/60 max-w-2xl leading-relaxed mb-6"
+          className="text-base md:text-lg text-text-secondary max-w-2xl leading-relaxed mb-6 transition-colors duration-700"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.5, duration: 0.8 }}
@@ -140,7 +140,7 @@ const JourneyContinues: React.FC = () => {
           Whether it's AI, Computer Vision, Embedded Systems, or a bold new idea,
         </motion.p>
         <motion.p
-          className="text-base md:text-lg text-white/60 max-w-2xl leading-relaxed mb-4"
+          className="text-base md:text-lg text-text-secondary max-w-2xl leading-relaxed mb-4 transition-colors duration-700"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.6, duration: 0.8 }}
@@ -149,7 +149,7 @@ const JourneyContinues: React.FC = () => {
         </motion.p>
 
         <motion.p
-          className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight mb-16"
+          className="text-2xl md:text-3xl font-black text-text-primary uppercase tracking-tight mb-16 transition-colors duration-700"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.7, duration: 0.8 }}
@@ -164,16 +164,16 @@ const JourneyContinues: React.FC = () => {
               href={link.href}
               target={link.href.startsWith('http') ? '_blank' : undefined}
               rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="group flex flex-col items-center gap-3 p-6 border border-white/10 hover:border-[#7A1E2C] hover:bg-[#7A1E2C]/10 transition-all duration-400"
+              className="group flex flex-col items-center gap-3 p-6 border border-border-light hover:border-primary hover:bg-primary/10 transition-all duration-400"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.7 + i * 0.08, duration: 0.6 }}
               data-cursor="hover"
             >
-              <div className="text-white/50 group-hover:text-[#F4C300] transition-colors duration-300">
+              <div className="text-text-secondary group-hover:text-primary transition-colors duration-300">
                 {link.icon}
               </div>
-              <span className="text-[10px] tracking-[0.3em] uppercase font-semibold text-white/70 group-hover:text-white transition-colors">
+              <span className="text-[10px] tracking-[0.3em] uppercase font-semibold text-text-secondary group-hover:text-text-primary transition-colors">
                 {link.label}
               </span>
             </motion.a>
@@ -186,11 +186,11 @@ const JourneyContinues: React.FC = () => {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 1.1 }}
         >
-          <div className="w-24 h-[1px] bg-white/10 mx-auto mb-6" />
-          <p className="text-[10px] tracking-[0.4em] uppercase text-white/30 font-medium">
+          <div className="w-24 h-[1px] bg-border-light mx-auto mb-6 transition-colors duration-700" />
+          <p className="text-[10px] tracking-[0.4em] uppercase text-text-secondary font-medium transition-colors duration-700">
             Designed and engineered by Sanskar Tiwari · 2026
           </p>
-          <p className="text-[9px] tracking-[0.2em] text-white/20 mt-2">
+          <p className="text-[9px] tracking-[0.2em] text-text-secondary mt-2 transition-colors duration-700">
             PICT · Electronics & Telecom · Pune
           </p>
         </motion.div>

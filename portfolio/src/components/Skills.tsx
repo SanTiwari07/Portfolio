@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
+import { FlaskConical, Cpu } from 'lucide-react';
 
 const techClusters = [
   {
@@ -29,7 +31,7 @@ const techClusters = [
     items: [
       { name: 'ESP32', usedIn: ['IPDS', 'SmartPot'], icon: 'espressif', color: '#E7352C' },
       { name: 'Arduino', usedIn: ['Embedded Projects', 'Sensors'], icon: 'arduino', color: '#00979D' },
-      { name: 'Sensors', usedIn: ['Hardware Interfacing'], icon: 'adafruit', color: '#000000' },
+      { name: 'Sensors', usedIn: ['Hardware Interfacing'], icon: 'lucide:Cpu', color: '#000000' },
       { name: 'Embedded C++', usedIn: ['Embedded Systems', 'Performance'], icon: 'cplusplus', color: '#00599C' },
     ],
   },
@@ -54,6 +56,12 @@ interface TechItemProps {
 
 function TechItem({ name, icon, usedIn, color, delay }: TechItemProps) {
   const [hovered, setHovered] = useState(false);
+  const { actualTheme } = useTheme();
+  
+  const displayColor = (color === '#000000' && actualTheme === 'dark') ? '#F5F5F5' : color;
+  
+  const isLucide = icon.startsWith('lucide:');
+  const LucideIcon = isLucide && icon === 'lucide:FlaskConical' ? FlaskConical : (isLucide && icon === 'lucide:Cpu' ? Cpu : null);
 
   return (
     <motion.div
@@ -75,15 +83,25 @@ function TechItem({ name, icon, usedIn, color, delay }: TechItemProps) {
           className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center transition-all duration-300"
           style={{
             filter: hovered 
-              ? `drop-shadow(0 10px 20px ${color}40) grayscale(0%) opacity(100%)` 
-              : 'grayscale(100%) opacity(40%)',
+              ? `drop-shadow(0 10px 20px ${displayColor}40)` 
+              : 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))',
+            color: displayColor
           }}
         >
-          <img 
-            src={`https://cdn.simpleicons.org/${icon}/${color.replace('#', '')}`} 
-            alt={`${name} Official Logo`} 
-            className="w-full h-full object-contain"
-          />
+          {isLucide && LucideIcon ? (
+            <LucideIcon size={56} strokeWidth={1.5} className="relative z-10 transition-colors duration-300" />
+          ) : (
+            <>
+              {icon === 'javascript' && actualTheme === 'light' && (
+                <div className="absolute inset-[2px] bg-black rounded-sm z-0" />
+              )}
+              <img 
+                src={`https://cdn.simpleicons.org/${icon}/${displayColor.replace('#', '')}`} 
+                alt={`${name} Official Logo`} 
+                className="relative z-10 w-full h-full object-contain"
+              />
+            </>
+          )}
         </div>
         
         {hovered && (
@@ -93,8 +111,8 @@ function TechItem({ name, icon, usedIn, color, delay }: TechItemProps) {
             className="absolute top-full mt-4 left-1/2 -translate-x-1/2 flex flex-col items-center z-50 pointer-events-none"
           >
             <div 
-              className="bg-black text-white px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold tracking-widest uppercase whitespace-nowrap shadow-2xl"
-              style={{ borderTop: `2px solid ${color}` }}
+              className="bg-text-primary text-background px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold tracking-widest uppercase whitespace-nowrap shadow-2xl transition-colors duration-700"
+              style={{ borderTop: `2px solid ${displayColor}` }}
             >
               {name}
             </div>
@@ -110,8 +128,8 @@ const TechEcosystem: React.FC = () => {
   const isInView = useInView(ref, { once: true, margin: '-10%' });
 
   return (
-    <section ref={ref} id="skills" className="relative w-full bg-white overflow-hidden">
-      <div className="absolute inset-0 blueprint-grid opacity-40 pointer-events-none" />
+    <section ref={ref} id="skills" className="relative w-full bg-background overflow-hidden transition-colors duration-700">
+      <div className="absolute inset-0 blueprint-grid opacity-40 pointer-events-none transition-colors duration-700" />
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-32 md:py-40 flex flex-col items-center text-center">
         <motion.div
@@ -120,15 +138,15 @@ const TechEcosystem: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <div className="w-8 h-[1px] bg-[#7A1E2C]" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-gray-400 font-medium">04 / Ecosystem</span>
-          <div className="w-8 h-[1px] bg-[#7A1E2C]" />
+          <div className="w-8 h-[1px] bg-primary transition-colors duration-700" />
+          <span className="text-[10px] tracking-[0.5em] uppercase text-text-secondary font-medium transition-colors duration-700">04 / Ecosystem</span>
+          <div className="w-8 h-[1px] bg-primary transition-colors duration-700" />
         </motion.div>
 
         <div className="mb-24 flex flex-col items-center">
           <div className="overflow-hidden mb-4">
             <motion.h2
-              className="text-[clamp(40px,5vw,80px)] font-black tracking-[-0.03em] text-black leading-[0.9] uppercase"
+              className="text-[clamp(40px,5vw,80px)] font-black tracking-[-0.03em] text-text-primary leading-[0.9] uppercase transition-colors duration-700"
               initial={{ y: '100%' }}
               animate={isInView ? { y: 0 } : {}}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -137,7 +155,7 @@ const TechEcosystem: React.FC = () => {
             </motion.h2>
           </div>
           <motion.p
-            className="text-gray-500 text-sm md:text-base max-w-lg mt-4 leading-relaxed"
+            className="text-text-secondary text-sm md:text-base max-w-lg mt-4 leading-relaxed transition-colors duration-700"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3, duration: 0.7 }}
@@ -156,11 +174,11 @@ const TechEcosystem: React.FC = () => {
               className="flex flex-col items-center w-full"
             >
               <div className="flex items-center justify-center gap-4 mb-12">
-                <div className="w-[1px] h-4 bg-gray-300" />
-                <h3 className="text-xs md:text-sm tracking-[0.4em] uppercase font-bold" style={{ color: '#000' }}>
+                <div className="w-[1px] h-4 bg-border-light transition-colors duration-700" />
+                <h3 className="text-xs md:text-sm tracking-[0.4em] uppercase font-bold text-text-primary transition-colors duration-700">
                   {cluster.category}
                 </h3>
-                <div className="w-[1px] h-4 bg-gray-300" />
+                <div className="w-[1px] h-4 bg-border-light transition-colors duration-700" />
               </div>
 
               <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 max-w-4xl">

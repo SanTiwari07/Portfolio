@@ -2,30 +2,64 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #7A1E2C;
-  --color-primary-hover: #8f2333;
-  --color-accent: #F4C300;
-  --color-secondary: #666666;
-  --color-background: #FFFFFF;
-  --color-text-primary: #000000;
-  --color-text-secondary: #666666;
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-secondary: var(--secondary);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border-light: var(--border-light);
+  --color-grid: var(--grid-color);
 
   --font-heading: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
 
+:root {
+  --primary: #7A1E2C;
+  --primary-hover: #8f2333;
+  --accent: #F4C300;
+  --secondary: #666666;
+  --background: #FAFAFA;
+  --card: #FFFFFF;
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --border-light: #E5E5E5;
+  --grid-color: rgba(122, 30, 44, 0.04);
+}
+
+[data-theme="dark"] {
+  --primary: #E32636;
+  --primary-hover: #FF3B4C;
+  --accent: #F4C300;
+  --secondary: #A0A0A0;
+  --background: #050505;
+  --card: #0F0F0F;
+  --text-primary: #F5F5F5;
+  --text-secondary: #A0A0A0;
+  --border-light: #1A1A1A;
+  --grid-color: rgba(30, 41, 59, 0.3);
+}
+
+/* Global Transition for Theme Switching */
+*, *::before, *::after {
+  transition: background-color 700ms ease, color 700ms ease, border-color 700ms ease, box-shadow 700ms ease, fill 700ms ease, stroke 700ms ease;
+}
+
 @layer base {
   html {
     scrollbar-width: none;
-    background-color: #FFFFFF;
+    background-color: var(--background);
   }
   html::-webkit-scrollbar {
     display: none;
   }
 
   body {
-    background-color: #FFFFFF;
-    color: #000000;
+    background-color: var(--background);
+    color: var(--text-primary);
     font-family: var(--font-body);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -41,7 +75,7 @@
 .cursor-dot {
   width: 8px;
   height: 8px;
-  background: #7A1E2C;
+  background: var(--primary);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
@@ -53,7 +87,7 @@
 .cursor-ring {
   width: 36px;
   height: 36px;
-  border: 1.5px solid #7A1E2C;
+  border: 1.5px solid var(--primary);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
@@ -65,13 +99,13 @@
 .cursor-dot.hovering {
   width: 12px;
   height: 12px;
-  background: #F4C300;
+  background: var(--accent);
 }
 
 .cursor-ring.hovering {
   width: 60px;
   height: 60px;
-  border-color: #F4C300;
+  border-color: var(--accent);
 }
 
 /* MAGNETIC BUTTON */
@@ -101,14 +135,14 @@
 /* BLUEPRINT GRID */
 .blueprint-grid {
   background-image: 
-    linear-gradient(rgba(122, 30, 44, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(122, 30, 44, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
 /* GRADIENT TEXT */
 .text-gradient-red {
-  background: linear-gradient(135deg, #7A1E2C, #c0392b);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -130,8 +164,8 @@ canvas {
 
 /* SELECTION */
 ::selection {
-  background: #7A1E2C;
-  color: #FFFFFF;
+  background: var(--primary);
+  color: var(--card);
 }
 
 /* COUNTER */
