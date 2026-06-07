@@ -31,5 +31,5 @@ export const AccelerateAudio = () => {
   }, [])
 
   // PATCHED: /sounds/ → /game/sounds/
-  return <PositionalAudio ref={ref} url="/game/sounds/accelerate.mp3" loop distance={30} />
+  return <PositionalAudio ref={ref} url="/sounds/game/accelerate.mp3" loop distance={30} />
 }

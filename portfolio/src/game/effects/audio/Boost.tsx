@@ -29,5 +29,5 @@ export const BoostAudio = () => {
   }, [boost, sound])
 
   // PATCHED: /sounds/ → /game/sounds/
-  return <PositionalAudio ref={ref} url="/game/sounds/boost.mp3" distance={5} />
+  return <PositionalAudio ref={ref} url="/sounds/game/boost.mp3" distance={5} />
 }

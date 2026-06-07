@@ -112,8 +112,8 @@ export const Chassis = forwardRef<Group, PropsWithChildren<BoxProps>>(({ args = 
         </Suspense>
       </group>
       {children}
-      {/* PATCHED: /sounds/ → /game/sounds/ */}
-      <PositionalAudio ref={crashAudio} url="/game/sounds/crash.mp3" loop={false} distance={5} />
+      {/* PATCHED: /sounds/ → /sounds/game/ */}
+      <PositionalAudio ref={crashAudio} url="/sounds/game/crash.mp3" loop={false} distance={5} />
     </group>
   )
 })

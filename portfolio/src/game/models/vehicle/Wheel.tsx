@@ -20,7 +20,7 @@ interface WheelProps extends CylinderProps {
 export const Wheel = forwardRef<Group, WheelProps>(({ leftSide, ...props }, ref) => {
   const { radius } = useStore((state) => state.wheelInfo)
   // PATCHED: /models/ → /game/models/
-  const { nodes, materials } = useGLTF('/game/models/wheel-draco.glb') as WheelGLTF
+  const { nodes, materials } = useGLTF('/models/game/wheel-draco.glb') as WheelGLTF
   const scale = radius / 0.34
   useCompoundBody(
     () => ({

@@ -49,7 +49,7 @@ function RoadCollider({ geometry }: { geometry: import('three').BufferGeometry }
 export function Track(): JSX.Element {
   const level = useStore((state) => state.level)
   // PATCHED: /models/ → /game/models/
-  const { nodes: n, materials: m } = useGLTF('/game/models/track-draco.glb') as TrackGLTF
+  const { nodes: n, materials: m } = useGLTF('/models/game/track-draco.glb') as TrackGLTF
   const config = { receiveShadow: true, castShadow: true, 'material-roughness': 1 }
   const birds = useRef<Group>(null!)
   const clouds = useRef<Group>(null!)
@@ -61,6 +61,18 @@ export function Track(): JSX.Element {
   })
 
   const ToggledPositionalAudio = useToggle(PositionalAudio, ['ready', 'sound'])
+
+  function WaterAudio() {
+    const ref = useRef<import('three').PositionalAudio>(null)
+    const [ready, sound] = useStore((s) => [s.ready, s.sound])
+    
+    useLayoutEffect(() => {
+      if (ref.current) ref.current.setVolume(0.1)
+    }, [ready, sound])
+
+    if (!ready || !sound) return null
+    return <PositionalAudio ref={ref} url="/sounds/game/water.mp3" loop autoplay distance={2} />
+  }
 
   return (
     <group dispose={null}>
@@ -74,8 +86,8 @@ export function Track(): JSX.Element {
         <mesh geometry={n.terrain.geometry} material={n.terrain.material} {...config} />
         <mesh geometry={n.water.geometry}>
           <MeshDistortMaterial speed={4} map={m.ColorPaletteWater.map} roughness={0} side={DoubleSide} />
-          {/* PATCHED: /sounds/ → /game/sounds/ */}
-          <ToggledPositionalAudio url="/game/sounds/water.mp3" loop autoplay distance={2} />
+          {/* PATCHED: /sounds/ → /sounds/game/ */}
+          <WaterAudio />
         </mesh>
       </group>
       <group ref={birds}>

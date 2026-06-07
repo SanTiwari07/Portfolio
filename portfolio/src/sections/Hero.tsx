@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import * as THREE from 'three';
 
-import resumeUrl from '/assets/resume/resume.pdf?url';
+
 import { Parallax } from '../components/animations/Parallax';
 import { MagneticButton } from '../components/animations/MagneticButton';
 import { preloadGame } from '../App';
@@ -294,13 +294,7 @@ const Hero: React.FC = () => {
               </a>
             </MagneticButton>
             <MagneticButton>
-              <a
-                href={resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary transition-colors duration-700"
-                data-cursor="hover"
-              >
+              <a href="/assets/resume/resume.pdf" target="_blank" rel="noopener noreferrer" className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary transition-colors duration-700" data-cursor="hover">
                 Resume
                 <span className="w-8 h-[1px] bg-text-primary group-hover:w-14 group-hover:bg-primary transition-all duration-400" />
               </a>

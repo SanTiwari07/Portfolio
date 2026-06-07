@@ -20,5 +20,5 @@ export const HonkAudio = () => {
   }, [honk, sound])
 
   // PATCHED: /sounds/ → /game/sounds/
-  return <PositionalAudio ref={ref} url="/game/sounds/honk.mp3" distance={10} />
+  return <PositionalAudio ref={ref} url="/sounds/game/honk.mp3" distance={10} />
 }

@@ -26,5 +26,5 @@ export const BrakeAudio = () => {
   }, [brake, sound])
 
   // PATCHED: /sounds/ → /game/sounds/
-  return <PositionalAudio ref={ref} url="/game/sounds/tire-brake.mp3" distance={10} />
+  return <PositionalAudio ref={ref} url="/sounds/game/tire-brake.mp3" distance={10} />
 }

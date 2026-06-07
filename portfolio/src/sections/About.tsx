@@ -4,8 +4,7 @@ import { VelocityScroll } from '../components/animations/VelocityScroll';
 import { RevealText } from '../components/animations/RevealText';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import portraitUrl from '/images/hero/portrait.png';
-import backgroundUrl from '/images/hero/background.png';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -153,7 +152,7 @@ function InteractivePortrait() {
         {/* Base Layer: Image 1 (Professional Portrait) */}
         <div className="absolute inset-0 z-10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-border-light/20 bg-background">
           <img 
-            src={portraitUrl} 
+            src="/images/hero/portrait.png" 
             alt="Sanskar Tiwari - Professional" 
             className="w-full h-full object-cover"
           />
@@ -162,7 +161,7 @@ function InteractivePortrait() {
         {/* Mobile Static Blend (Disabled on Desktop) */}
         <div className="absolute inset-0 z-20 rounded-[2rem] overflow-hidden md:hidden opacity-40 mix-blend-overlay pointer-events-none">
           <img 
-            src={backgroundUrl} 
+            src="/images/hero/background.png" 
             alt="Sanskar Tiwari - Blend" 
             className="w-full h-full object-cover"
           />
@@ -174,7 +173,7 @@ function InteractivePortrait() {
           style={{ WebkitMaskImage: maskImage, maskImage }}
         >
           <img 
-            src={backgroundUrl} 
+            src="/images/hero/background.png" 
             alt="Sanskar Tiwari - Alternative" 
             className="w-full h-full object-cover"
           />

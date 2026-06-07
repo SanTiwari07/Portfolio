@@ -31,5 +31,5 @@ export const EngineAudio = () => {
   }, [])
 
   // PATCHED: /sounds/ → /game/sounds/
-  return <PositionalAudio autoplay ref={ref} url="/game/sounds/engine.mp3" loop distance={30} />
+  return <PositionalAudio autoplay ref={ref} url="/sounds/game/engine.mp3" loop distance={30} />
 }
