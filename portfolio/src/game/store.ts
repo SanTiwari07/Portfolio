@@ -211,6 +211,8 @@ const useStoreImpl = create<IState>((set: SetState<IState>, get: GetState<IState
       }
     },
     onStart: () => {
+      const { start } = get()
+      if (start !== 0) return // already racing, ignore re-trigger
       set({ 
         finished: 0, 
         start: Date.now(),

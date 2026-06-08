@@ -1,4 +1,4 @@
-import { MathUtils, Vector3 } from 'three'
+import { MathUtils, Vector3, Euler, Quaternion } from 'three'
 import { useLayoutEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useRaycastVehicle } from '@react-three/cannon'
@@ -90,20 +90,29 @@ export function Vehicle({ angularVelocity, children, position, rotation }: Vehic
     for (i = 2; i < 4; i++) api.setBrake(controls.brake ? (controls.forward ? maxBrake / 1.5 : maxBrake) : 0, i)
 
     if (!editor) {
-      // Fixed static camera offset behind the car: [0, 2.5, -8]
       if (camera === 'DEFAULT') {
+        // Position: stay behind and above car in local space
         v.set(0, 2.5, -8)
+        defaultCamera.position.lerp(v, delta * 5)
+
+        // Rotation: counteract parent chassis pitch/roll every frame.
+        // Camera is a child of chassis, so setting local rotation.z = 0 doesn't
+        // help — parent rotation is inherited first. Instead we compute the
+        // desired WORLD quaternion (yaw only, no pitch/roll) and convert it
+        // into the local quaternion the camera needs.
+        const euler = new Euler().setFromQuaternion(chassisBody.current.quaternion, 'YXZ')
+        const worldCamQuat = new Quaternion().setFromEuler(new Euler(0, euler.y + Math.PI, 0, 'YXZ'))
+        const localCamQuat = chassisBody.current.quaternion.clone().invert().multiply(worldCamQuat)
+        defaultCamera.quaternion.slerp(localCamQuat, delta * 8)
+      } else {
+        v.set(0, 100, 0)
+        defaultCamera.position.lerp(v, delta)
+        defaultCamera.rotation.z = lerp(defaultCamera.rotation.z, Math.PI, delta)
       }
-      defaultCamera.position.lerp(v, delta)
-      defaultCamera.rotation.z = lerp(
-        defaultCamera.rotation.z,
-        camera !== 'BIRD_EYE' ? 0 : Math.PI,
-        delta,
-      )
     }
 
     // Fixed steady chassis visual alignment
-    chassisBody.current!.children[0].rotation.z = MathUtils.lerp(chassisBody.current!.children[0].rotation.z, (-steeringValue * speed) / 200, delta * 4)
+    chassisBody.current!.children[0].rotation.z = MathUtils.lerp(chassisBody.current!.children[0].rotation.z, MathUtils.clamp((-steeringValue * speed) / 200, -0.3, 0.3), delta * 4)
 
     // Recovery Detection
     if (chassisBody.current) {
@@ -112,9 +121,8 @@ export function Vehicle({ angularVelocity, children, position, rotation }: Vehic
         return
       }
 
-      const rx = Math.abs(chassisBody.current.rotation.x)
-      const rz = Math.abs(chassisBody.current.rotation.z)
-      const isFlipped = rx > 2.09 || rz > 2.09 // 120 degrees
+      v.set(0, 1, 0).applyQuaternion(chassisBody.current.quaternion)
+      const isFlipped = v.y < 0.5
 
       if (isFlipped) flipTimer += delta
       else flipTimer = 0
@@ -125,8 +133,25 @@ export function Vehicle({ angularVelocity, children, position, rotation }: Vehic
       currentRecoveryState = getState().recoveryState
       nextRecoveryState = 'none'
 
-      if (flipTimer > 2) nextRecoveryState = 'flip'
-      else if (stuckTimer > 8) nextRecoveryState = 'stuck'
+      if (flipTimer > 2) {
+        const { x, y, z } = chassisBody.current.position
+        chassisApi?.position.set(x, y + 1.5, z)
+        chassisApi?.quaternion.set(0, 0, 0, 1)
+        chassisApi?.velocity.set(0, 0, 0)
+        chassisApi?.angularVelocity.set(0, 0, 0)
+        flipTimer = 0
+      } else if (stuckTimer > 8) {
+        const { x, y, z } = chassisBody.current.position
+        
+        v.set(0, 0, 1).applyQuaternion(chassisBody.current.quaternion)
+        v.normalize().multiplyScalar(5)
+        
+        chassisApi?.position.set(x, y + 1.5, z)
+        chassisApi?.quaternion.set(0, 0, 0, 1)
+        chassisApi?.velocity.set(v.x, v.y, v.z)
+        chassisApi?.angularVelocity.set(0, 0, 0)
+        stuckTimer = 0
+      }
 
       if (nextRecoveryState !== currentRecoveryState) {
         getState().set({ recoveryState: nextRecoveryState as RecoveryState })
