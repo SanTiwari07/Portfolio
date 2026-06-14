@@ -216,8 +216,8 @@ const Hero: React.FC = () => {
         <div className="w-full h-full blueprint-grid" aria-hidden="true" />
       </Parallax>
 
-      {/* 3D Canvas — hidden on very small screens, reduced on mobile */}
-      <div className="absolute inset-0 z-10" aria-hidden="true">
+      {/* 3D Canvas — hidden on mobile */}
+      <div className="absolute inset-0 z-10 hidden md:block" aria-hidden="true">
         <div className="absolute right-0 top-0 w-full md:w-[65%] h-full">
           <ErrorBoundary>
             <Suspense fallback={<ModelLoader />}>
@@ -327,7 +327,7 @@ const Hero: React.FC = () => {
         id="dream-car-btn"
         onClick={() => { window.dispatchEvent(new CustomEvent('navigate', { detail: '/dream-car' })); }}
         onMouseEnter={() => preloadGame()}
-        className="absolute bottom-10 right-8 md:right-16 z-30 px-6 py-3 border border-border-light bg-text-primary text-background text-[10px] tracking-[0.25em] uppercase font-semibold transition-all duration-300 hover:bg-primary hover:border-primary cursor-pointer focus-visible:outline-2 focus-visible:outline-primary"
+        className="hidden md:block absolute bottom-10 right-8 md:right-16 z-30 px-6 py-3 border border-border-light bg-text-primary text-background text-[10px] tracking-[0.25em] uppercase font-semibold transition-all duration-300 hover:bg-primary hover:border-primary cursor-pointer focus-visible:outline-2 focus-visible:outline-primary"
         data-cursor="hover"
         aria-label="Experience my dream car — opens 3D driving game"
       >
