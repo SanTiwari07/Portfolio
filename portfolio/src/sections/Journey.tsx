@@ -28,10 +28,10 @@ const Journey: React.FC = () => {
   const mobilePath = "M 10 0 L 10 100";
 
   return (
-    <section id="journey" className="relative w-full bg-background transition-colors duration-700">
-      
+    <section id="journey" className="relative w-full bg-background">
+
       {/* Background SVG Track */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-30 md:opacity-50">
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-30 md:opacity-50" aria-hidden="true">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
           <defs>
             <linearGradient id="trackGradient" x1="0" y1="0" x2="0" y2="1">
@@ -39,15 +39,16 @@ const Journey: React.FC = () => {
               <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.2" />
             </linearGradient>
           </defs>
-          <path d={isMobile ? mobilePath : desktopPath} stroke="var(--border-light)" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" className="transition-colors duration-700" />
+          <path d={isMobile ? mobilePath : desktopPath} stroke="var(--border-light)" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
           <motion.path d={isMobile ? mobilePath : desktopPath} stroke="url(#trackGradient)" strokeWidth="4" fill="none" vectorEffect="non-scaling-stroke" style={{ pathLength: scrollYProgress }} />
         </svg>
       </div>
 
-      {/* The Animated Racing Car */}
-      <motion.div 
-        className="absolute z-30 w-10 h-10 -ml-5 -mt-5 flex items-center justify-center bg-card border-2 border-text-primary rounded-full shadow-2xl text-text-primary pointer-events-none transition-colors duration-700"
+      {/* The Animated Racing Car Indicator */}
+      <motion.div
+        className="absolute z-30 w-10 h-10 -ml-5 -mt-5 flex items-center justify-center bg-card border-2 border-text-primary rounded-full shadow-2xl text-text-primary pointer-events-none"
         style={{ top: carY, left: isMobile ? '10%' : '50%' }}
+        aria-hidden="true"
       >
         <Zap size={18} fill="currentColor" />
       </motion.div>
@@ -177,7 +178,7 @@ const Journey: React.FC = () => {
             <h3 className="text-5xl md:text-7xl font-black uppercase mb-2 tracking-tight text-text-primary transition-colors duration-700">SHIPPED</h3>
             <p className="text-xl md:text-2xl text-text-secondary font-medium mb-10 border-b border-border-light pb-8 w-full transition-colors duration-700">International Recognition</p>
             <div className="flex flex-col gap-4 w-full md:items-end">
-               <div className="flex items-center gap-4 md:flex-row-reverse p-4 bg-yellow-50/50 dark:bg-yellow-900/20 rounded-xl border border-yellow-100 dark:border-yellow-900/30"><span className="text-yellow-700 dark:text-yellow-500"><Globe size={24} /></span><span className="font-bold text-yellow-900 dark:text-yellow-200 text-right">TechFiesta International Winner</span></div>
+               <div className="flex items-center gap-4 md:flex-row-reverse p-4 bg-background border border-border-light rounded-xl"><span className="text-yellow-600"><Globe size={24} /></span><span className="font-bold text-text-primary text-right">TechFiesta International Winner 🏆</span></div>
                <div className="flex items-center gap-4 md:flex-row-reverse p-4 bg-background rounded-xl border border-border-light transition-colors duration-700"><span className="text-green-600"><Leaf size={24} /></span><span className="font-bold text-text-primary text-right transition-colors duration-700">Agriculture AI Solution</span></div>
             </div>
           </div>

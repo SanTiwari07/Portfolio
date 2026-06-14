@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Background -->
+  <rect width="64" height="64" rx="16" fill="#7A1E2C"/>
+  <!-- "ST" monogram -->
+  <!-- S stroke -->
+  <text x="8" y="46" font-family="Georgia, serif" font-size="42" font-weight="900" fill="#FAFAFA" letter-spacing="-2">ST</text>
+  <!-- Accent dot -->
+  <circle cx="56" cy="12" r="5" fill="#F4C300"/>
+</svg>

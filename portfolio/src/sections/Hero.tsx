@@ -5,7 +5,6 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import * as THREE from 'three';
 
-
 import { Parallax } from '../components/animations/Parallax';
 import { MagneticButton } from '../components/animations/MagneticButton';
 import { preloadGame } from '../App';
@@ -21,18 +20,15 @@ function PorscheModel({ mouseX, mouseY }: { mouseX: ReturnType<typeof useSpring>
   // Base 3/4 angle
   const baseAngleY = -0.8;
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!groupRef.current) return;
-    
-    // Increased Car Rotation for stronger 3D feel
+
     const targetRotX = (mouseY.get() - 0.5) * 0.15;
     const targetRotY = baseAngleY + (mouseX.get() - 0.5) * 0.35;
-    
-    // Smooth interpolation
+
     groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.08);
     groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.08);
 
-    // Subtle suspension compression effect based on mouse Y
     const suspensionY = -0.6 - (mouseY.get() - 0.5) * 0.02;
     groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, suspensionY, 0.08);
   });
@@ -48,10 +44,9 @@ function PorscheModel({ mouseX, mouseY }: { mouseX: ReturnType<typeof useSpring>
 function CameraRig({ mouseX, mouseY }: { mouseX: ReturnType<typeof useSpring>; mouseY: ReturnType<typeof useSpring> }) {
   const { camera } = useThree();
   useFrame(() => {
-    // 80% Camera Movement
     const targetCamX = (mouseX.get() - 0.5) * 2.0;
     const targetCamY = 0.4 + (mouseY.get() - 0.5) * 1.0;
-    
+
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetCamX, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetCamY, 0.04);
     camera.lookAt(0, 0, 0);
@@ -75,21 +70,12 @@ function Scene({ mouseX, mouseY }: { mouseX: ReturnType<typeof useSpring>; mouse
   return (
     <>
       <CameraRig mouseX={mouseX} mouseY={mouseY} />
-      {/* Studio Lighting */}
       <ambientLight intensity={0.4} />
       <directionalLight position={[5, 8, 5]} intensity={1.5} color="#ffffff" castShadow />
       <directionalLight position={[-5, 4, -5]} intensity={0.5} color="#a0a0a0" />
-      
-      {/* Cinematic Mouse-following Spotlight */}
       <DynamicSpotlight mouseX={mouseX} />
-      
-      {/* Grounded Car */}
       <PorscheModel mouseX={mouseX} mouseY={mouseY} />
-      
-      {/* Realistic Floor Contact Shadow */}
       <ContactShadows position={[0, -0.62, 0]} opacity={0.7} scale={6} blur={2.5} far={4} resolution={1024} color="#000000" />
-      
-      {/* Premium Reflections */}
       <Environment preset="studio" />
     </>
   );
@@ -98,9 +84,9 @@ function Scene({ mouseX, mouseY }: { mouseX: ReturnType<typeof useSpring>; mouse
 // ─── Loading fallback ─────────────────────────────────────────────
 function ModelLoader() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
+    <div className="absolute inset-0 flex items-center justify-center" aria-label="Loading 3D car model">
       <div className="text-center">
-        <div className="w-16 h-16 border border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <div className="w-16 h-16 border border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" aria-hidden="true" />
         <p className="text-xs text-text-secondary tracking-[0.3em] uppercase">Loading Model</p>
       </div>
     </div>
@@ -126,7 +112,7 @@ function AnimatedTitle() {
   }, []);
 
   return (
-    <div className="h-8 overflow-hidden relative">
+    <div className="h-8 overflow-hidden relative" aria-live="polite" aria-atomic="true">
       <motion.div
         key={index}
         initial={{ y: 32, opacity: 0 }}
@@ -149,6 +135,7 @@ function ScrollIndicator() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 2.8, duration: 0.8 }}
+      aria-hidden="true"
     >
       <span className="text-[10px] tracking-[0.4em] uppercase text-text-secondary">Scroll</span>
       <div className="w-[1px] h-12 bg-border-light overflow-hidden">
@@ -204,14 +191,14 @@ const Hero: React.FC = () => {
   };
 
   useEffect(() => {
-    let ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 1.7 });
       tl.from('.hero-line-1', { yPercent: 110, duration: 1, ease: 'power4.out' })
         .from('.hero-line-2', { yPercent: 110, duration: 1, ease: 'power4.out' }, '-=0.7')
         .from('.hero-subtitle', { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, '-=0.4')
         .from('.hero-tags', { opacity: 0, y: 16, duration: 0.6, ease: 'power2.out' }, '-=0.3')
         .from('.hero-cta', { opacity: 0, y: 16, stagger: 0.1, duration: 0.6, ease: 'power2.out' }, '-=0.2');
-    }, containerRef.current);
+    }, containerRef.current ?? undefined);
     return () => ctx.revert();
   }, []);
 
@@ -226,11 +213,11 @@ const Hero: React.FC = () => {
     >
       {/* Background grid */}
       <Parallax speed={0.5} className="absolute inset-0 opacity-40 pointer-events-none z-0">
-        <div className="w-full h-full blueprint-grid" />
+        <div className="w-full h-full blueprint-grid" aria-hidden="true" />
       </Parallax>
 
-      {/* 3D Canvas */}
-      <div className="absolute inset-0 z-10">
+      {/* 3D Canvas — hidden on very small screens, reduced on mobile */}
+      <div className="absolute inset-0 z-10" aria-hidden="true">
         <div className="absolute right-0 top-0 w-full md:w-[65%] h-full">
           <ErrorBoundary>
             <Suspense fallback={<ModelLoader />}>
@@ -244,7 +231,7 @@ const Hero: React.FC = () => {
             </Suspense>
           </ErrorBoundary>
         </div>
-        <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-20 transition-colors duration-700" />
+        <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-20" />
       </div>
 
       {/* Text Content */}
@@ -254,16 +241,19 @@ const Hero: React.FC = () => {
             <AnimatedTitle />
           </div>
 
-          <div className="overflow-hidden mb-1">
-            <h1 className="hero-line-1 text-[clamp(52px,7vw,110px)] font-display leading-[0.9] tracking-tighter text-text-primary uppercase transition-colors duration-700">
-              SANSKAR
-            </h1>
-          </div>
-          <div className="overflow-hidden mb-6">
-            <h1 className="hero-line-2 text-[clamp(52px,7vw,110px)] font-display leading-[0.9] tracking-tighter text-text-primary uppercase transition-colors duration-700">
-              TIWARI
-            </h1>
-          </div>
+          {/* Single h1 containing both name lines — fixes duplicate h1 accessibility issue */}
+          <h1 className="text-text-primary uppercase tracking-tighter leading-[0.9] transition-colors duration-700">
+            <div className="overflow-hidden mb-1">
+              <span className="hero-line-1 block text-[clamp(40px,7vw,110px)] font-display">
+                SANSKAR
+              </span>
+            </div>
+            <div className="overflow-hidden mb-6">
+              <span className="hero-line-2 block text-[clamp(40px,7vw,110px)] font-display">
+                TIWARI
+              </span>
+            </div>
+          </h1>
 
           <p className="hero-subtitle text-sm md:text-base text-text-secondary leading-relaxed max-w-[400px] mb-8 transition-colors duration-700">
             Building intelligent systems across AI,
@@ -282,21 +272,27 @@ const Hero: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center gap-5">
             <MagneticButton>
               <a
                 href="#github"
                 className="hero-cta group relative px-8 py-4 bg-text-primary text-background text-xs tracking-[0.25em] uppercase font-semibold overflow-hidden transition-colors duration-700 block"
                 data-cursor="hover"
               >
-                <span className="absolute inset-0 bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                <span className="absolute inset-0 bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" aria-hidden="true" />
                 <span className="relative z-10">View Work</span>
               </a>
             </MagneticButton>
             <MagneticButton>
-              <a href="/assets/resume/resume.pdf" target="_blank" rel="noopener noreferrer" className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary transition-colors duration-700" data-cursor="hover">
+              <a
+                href="/assets/resume/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary transition-colors duration-700"
+                data-cursor="hover"
+              >
                 Resume
-                <span className="w-8 h-[1px] bg-text-primary group-hover:w-14 group-hover:bg-primary transition-all duration-400" />
+                <span className="w-8 h-[1px] bg-text-primary group-hover:w-14 group-hover:bg-primary transition-all duration-300" aria-hidden="true" />
               </a>
             </MagneticButton>
           </div>
@@ -310,9 +306,10 @@ const Hero: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3, duration: 0.6 }}
+        aria-hidden="true"
       >
-        <div className="w-4 h-[1px] bg-border-light transition-colors duration-700" />
-        <span className="text-[9px] tracking-[0.4em] uppercase text-text-secondary transition-colors duration-700">01 / 08</span>
+        <div className="w-4 h-[1px] bg-border-light" />
+        <span className="text-[9px] tracking-[0.4em] uppercase text-text-secondary">01 / 08</span>
       </motion.div>
 
       <motion.div
@@ -320,17 +317,19 @@ const Hero: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5 }}
+        aria-hidden="true"
       >
-        <div className="w-1.5 h-1.5 rounded-full bg-primary pulse-dot transition-colors duration-700" />
-        <span className="text-[9px] tracking-[0.3em] uppercase text-text-secondary transition-colors duration-700">Engineering</span>
+        <div className="w-1.5 h-1.5 rounded-full bg-primary pulse-dot" />
+        <span className="text-[9px] tracking-[0.3em] uppercase text-text-secondary">Engineering</span>
       </motion.div>
 
       <button
         id="dream-car-btn"
-        onClick={() => { window.dispatchEvent(new CustomEvent('navigate', { detail: '/dream-car' })) }}
+        onClick={() => { window.dispatchEvent(new CustomEvent('navigate', { detail: '/dream-car' })); }}
         onMouseEnter={() => preloadGame()}
-        className="absolute bottom-10 right-8 md:right-16 z-30 px-6 py-3 border border-white/20 bg-black text-white text-[10px] tracking-[0.25em] uppercase font-semibold transition-all duration-300 hover:bg-white hover:text-black hover:border-white cursor-pointer"
+        className="absolute bottom-10 right-8 md:right-16 z-30 px-6 py-3 border border-border-light bg-text-primary text-background text-[10px] tracking-[0.25em] uppercase font-semibold transition-all duration-300 hover:bg-primary hover:border-primary cursor-pointer focus-visible:outline-2 focus-visible:outline-primary"
         data-cursor="hover"
+        aria-label="Experience my dream car — opens 3D driving game"
       >
         Experience My Dream Car
       </button>

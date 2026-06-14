@@ -4,8 +4,21 @@ const CustomCursor: React.FC = () => {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    // Detect touch devices — don't render cursor on mobile/tablet
+    const checkTouch = () => {
+      setIsTouch(window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+    };
+    checkTouch();
+    window.addEventListener('resize', checkTouch);
+    return () => window.removeEventListener('resize', checkTouch);
+  }, []);
+
+  useEffect(() => {
+    if (isTouch) return;
+
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let ringX = mouseX;
@@ -20,16 +33,16 @@ const CustomCursor: React.FC = () => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const animate = () => {
-      // Ring trails behind for the smooth effect, increased to 0.2 for tighter response
+      // Ring trails behind for the smooth effect
       ringX = lerp(ringX, mouseX, 0.2);
       ringY = lerp(ringY, mouseY, 0.2);
-      
+
       if (dotRef.current) {
-        // GPU accelerated transform for zero-lag dot
+        // GPU-accelerated transform for zero-lag dot
         dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       }
       if (ringRef.current) {
-        // GPU accelerated transform for the trailing ring
+        // GPU-accelerated transform for trailing ring
         ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
       }
       animFrame = requestAnimationFrame(animate);
@@ -60,7 +73,10 @@ const CustomCursor: React.FC = () => {
       document.removeEventListener('mouseout', handleMouseLeave);
       cancelAnimationFrame(animFrame);
     };
-  }, []);
+  }, [isTouch]);
+
+  // Don't render on touch devices
+  if (isTouch) return null;
 
   return (
     <>
@@ -68,11 +84,13 @@ const CustomCursor: React.FC = () => {
         ref={dotRef}
         className={`cursor-dot ${isHovering ? 'hovering' : ''}`}
         style={{ position: 'fixed', left: 0, top: 0, pointerEvents: 'none', zIndex: 9999 }}
+        aria-hidden="true"
       />
       <div
         ref={ringRef}
         className={`cursor-ring ${isHovering ? 'hovering' : ''}`}
         style={{ position: 'fixed', left: 0, top: 0, pointerEvents: 'none', zIndex: 9998 }}
+        aria-hidden="true"
       />
     </>
   );

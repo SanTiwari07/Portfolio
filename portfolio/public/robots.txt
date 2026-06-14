@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Disallow build artifacts and game-only routes
+Disallow: /dist/
+
+Sitemap: https://sanskartiwari.dev/sitemap.xml

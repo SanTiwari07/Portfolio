@@ -3,7 +3,6 @@ import create from 'zustand'
 import shallow from 'zustand/shallow'
 import type { RefObject } from 'react'
 import type { PublicApi, WheelInfoOptions } from '@react-three/cannon'
-import type { Session } from '@supabase/supabase-js'
 import type { Group } from 'three'
 import type { GetState, SetState, StateSelector } from 'zustand'
 
@@ -159,7 +158,8 @@ export interface IState extends BaseState {
   finished: number
   get: Getter
   level: RefObject<Group>
-  session: Session | null
+  // TODO: Migrate game leaderboard from Supabase v1 → v2 or remove auth feature
+  session: unknown | null
   set: Setter
   start: number
   vehicleConfig: VehicleConfig

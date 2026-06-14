@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 
 const ThemeToggle: React.FC = () => {
-  const { theme, setTheme, actualTheme } = useTheme();
+  const { actualTheme, setTheme } = useTheme();
 
-  // If theme is 'system', we'll just toggle to explicit 'light' or 'dark' on click.
   const isDark = actualTheme === 'dark';
 
   const toggleTheme = () => {
@@ -13,47 +12,76 @@ const ThemeToggle: React.FC = () => {
   };
 
   return (
-    <div 
-      className="relative flex items-center justify-center w-[48px] h-[48px] rounded-full bg-gradient-to-b from-[#e5e5e5] to-[#c0c0c0] dark:from-[#333] dark:to-[#1a1a1a] shadow-[0_2px_4px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] border border-[#fff] dark:border-[#444]"
-      title="Porsche Ignition Toggle"
+    <div
+      className="relative flex items-center justify-center w-[48px] h-[48px] rounded-full border"
+      style={{
+        background: isDark
+          ? 'linear-gradient(to bottom, #333, #1a1a1a)'
+          : 'linear-gradient(to bottom, #e5e5e5, #c0c0c0)',
+        boxShadow: isDark
+          ? '0 2px 4px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1)'
+          : '0 2px 4px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.4)',
+        borderColor: isDark ? '#444' : '#fff',
+      }}
+      title="Toggle light/dark theme"
     >
       {/* Deep socket */}
-      <div className="absolute inset-[4px] rounded-full bg-white dark:bg-[#050505] shadow-[inset_0_4px_8px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_4px_8px_rgba(0,0,0,0.8)] flex items-center justify-center border border-gray-200 dark:border-black">
-        
+      <div
+        className="absolute inset-[4px] rounded-full flex items-center justify-center border"
+        style={{
+          background: isDark ? '#050505' : '#ffffff',
+          boxShadow: isDark
+            ? 'inset 0 4px 8px rgba(0,0,0,0.8)'
+            : 'inset 0 4px 8px rgba(0,0,0,0.05)',
+          borderColor: isDark ? '#000' : '#e5e5e5',
+        }}
+      >
         {/* OFF Marker */}
-        <div className="absolute top-[8px] left-[8px] w-[3px] h-[3px] rounded-full bg-gray-400 shadow-[0_0_2px_rgba(255,255,255,0.3)]" />
-        
+        <div
+          className="absolute top-[8px] left-[8px] w-[3px] h-[3px] rounded-full"
+          style={{ background: '#9ca3af' }}
+          aria-hidden="true"
+        />
+
         {/* ON Marker */}
-        <div className={`absolute top-[8px] right-[8px] w-[4px] h-[4px] rounded-full bg-primary transition-all duration-500 ${isDark ? 'shadow-[0_0_8px_var(--color-primary)] opacity-100' : 'opacity-20'}`} />
+        <div
+          className="absolute top-[8px] right-[8px] w-[4px] h-[4px] rounded-full transition-opacity duration-500"
+          style={{
+            background: 'var(--primary)',
+            boxShadow: isDark ? '0 0 8px var(--primary)' : 'none',
+            opacity: isDark ? 1 : 0.2,
+          }}
+          aria-hidden="true"
+        />
 
         <button
           onClick={toggleTheme}
           data-cursor="hover"
-          className="w-full h-full flex items-center justify-center rounded-full outline-none"
-          aria-label="Toggle Theme"
+          className="w-full h-full flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-primary"
+          aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+          aria-pressed={isDark}
         >
-          {/* The Dummy Key */}
+          {/* Ignition Key */}
           <motion.div
-            className="relative w-[12px] h-[28px] bg-gradient-to-b from-primary to-primary-hover rounded-t-[6px] rounded-b-[4px] flex flex-col items-center py-[3px] shadow-[0_3px_6px_rgba(0,0,0,0.6),inset_0_1px_2px_rgba(255,255,255,0.4)] border border-red-800/50"
+            className="relative w-[12px] h-[28px] rounded-t-[6px] rounded-b-[4px] flex flex-col items-center py-[3px]"
+            style={{
+              background: 'linear-gradient(to bottom, var(--primary), var(--primary-hover))',
+              boxShadow: '0 3px 6px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.4)',
+              border: '1px solid rgba(139, 0, 20, 0.5)',
+            }}
             initial={false}
-            animate={{ 
-              rotate: isDark ? 60 : -40 
-            }}
+            animate={{ rotate: isDark ? 60 : -40 }}
             whileTap={{ scale: 0.95 }}
-            transition={{ 
-              type: "spring", 
-              stiffness: 400, 
-              damping: 25,
-              mass: 0.8
-            }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25, mass: 0.8 }}
+            aria-hidden="true"
           >
-            {/* Key Ridges (Grip) */}
-            <div className="w-[6px] h-[1px] bg-white/40 rounded-full mb-[2px] shadow-[0_1px_0_rgba(0,0,0,0.2)]" />
-            <div className="w-[6px] h-[1px] bg-white/40 rounded-full mb-[2px] shadow-[0_1px_0_rgba(0,0,0,0.2)]" />
-            <div className="w-[6px] h-[1px] bg-white/40 rounded-full mb-[2px] shadow-[0_1px_0_rgba(0,0,0,0.2)]" />
-            
+            {/* Key Ridges */}
+            <div className="w-[6px] h-[1px] bg-white/40 rounded-full mb-[2px]" />
+            <div className="w-[6px] h-[1px] bg-white/40 rounded-full mb-[2px]" />
+            <div className="w-[6px] h-[1px] bg-white/40 rounded-full mb-[2px]" />
+
             {/* Bottom crest */}
-            <div className="mt-auto w-[6px] h-[6px] rounded-full border border-white/30 flex items-center justify-center shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]">
+            <div className="mt-auto w-[6px] h-[6px] rounded-full border border-white/30 flex items-center justify-center">
               <div className="w-[2px] h-[2px] rounded-full bg-white/60" />
             </div>
           </motion.div>
