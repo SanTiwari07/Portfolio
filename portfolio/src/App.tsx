@@ -82,18 +82,17 @@ const App: React.FC = () => {
 
       <AnimatePresence mode="wait">
         {isGameRoute && loaderDone ? (
-          <motion.div 
-            key="game" 
-            className="fixed inset-0 z-50 bg-black"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-          >
-            <Suspense fallback={<div className="w-full h-full flex items-center justify-center bg-black text-white text-xs tracking-widest uppercase">Initializing Engine...</div>}>
+          <Suspense key="game" fallback={<div className="fixed inset-0 z-50 bg-black flex items-center justify-center text-white text-xs tracking-widest uppercase">Initializing Engine...</div>}>
+            <motion.div 
+              className="fixed inset-0 z-50 bg-black"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+            >
               <GamePage />
-            </Suspense>
-          </motion.div>
+            </motion.div>
+          </Suspense>
         ) : loaderDone ? (
           <motion.div 
             key="portfolio"
