@@ -285,7 +285,7 @@ const Hero: React.FC = () => {
             </MagneticButton>
             <MagneticButton>
               <a
-                href="/assets/resume/resume.pdf"
+                href={`${import.meta.env.BASE_URL}assets/resume/resume.pdf`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary transition-colors duration-700"

@@ -132,8 +132,8 @@ function InteractivePortrait() {
           aria-hidden="true"
         />
 
-        {/* Base Layer: Professional Portrait */}
-        <div className="absolute inset-0 z-10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-border-light/20 bg-background">
+        {/* Base Layer: Professional Portrait (Desktop Only) */}
+        <div className="hidden md:block absolute inset-0 z-10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-border-light/20 bg-background">
           <img
             src="/images/hero/portrait.png"
             alt="Sanskar Tiwari — Software Engineer and AI Systems Builder"
@@ -144,15 +144,15 @@ function InteractivePortrait() {
           />
         </div>
 
-        {/* Mobile Static Blend (Disabled on Desktop) */}
-        <div className="absolute inset-0 z-20 rounded-[2rem] overflow-hidden md:hidden opacity-40 mix-blend-overlay pointer-events-none" aria-hidden="true">
+        {/* Mobile Base Layer: Second Image Only */}
+        <div className="block md:hidden absolute inset-0 z-10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-border-light/20 bg-background" aria-hidden="true">
           <img
             src="/images/hero/background.png"
-            alt=""
+            alt="Sanskar Tiwari — Software Engineer and AI Systems Builder"
             className="w-full h-full object-cover"
             width={600}
             height={800}
-            loading="lazy"
+            fetchPriority="high"
           />
         </div>
 
@@ -173,7 +173,7 @@ function InteractivePortrait() {
         </motion.div>
 
         {/* Floating Badges */}
-        <FloatingBadge title="9.38 CGPA" top="15%" left="-5%" delay={0.2} />
+        <FloatingBadge title="9.3+ CGPA" top="15%" left="-5%" delay={0.2} />
         <FloatingBadge title="99.34% MHTCET" top="40%" right="-10%" delay={0.3} />
         <FloatingBadge title="Software Eng Intern" bottom="20%" left="-8%" delay={0.4} />
         <FloatingBadge title="4× Awardee" bottom="10%" right="-5%" delay={0.5} />
@@ -230,7 +230,7 @@ const PerformanceSpecs: React.FC = () => {
             </motion.p>
 
             <div className="grid grid-cols-2 gap-0">
-              <StatBlock value="9.38" label="CGPA" sublabel="ENTC · PICT" />
+              <StatBlock value="9.3+" label="CGPA" sublabel="ENTC · PICT" />
               <StatBlock value="12+" label="Systems Built" />
               <StatBlock value="4+" label="Hackathon Podiums" />
               <div className="group relative py-10 border-l border-border-light pl-8">

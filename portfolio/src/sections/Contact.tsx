@@ -36,7 +36,7 @@ const contactLinks = [
   },
   {
     label: 'Resume',
-    href: '/assets/resume/resume.pdf',
+    href: `${import.meta.env.BASE_URL}assets/resume/resume.pdf`,
     display: 'Download Resume',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
