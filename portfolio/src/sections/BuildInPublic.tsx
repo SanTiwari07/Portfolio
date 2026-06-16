@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { VelocityScroll } from '../components/animations/VelocityScroll';
 import { Parallax } from '../components/animations/Parallax';
 
@@ -99,6 +99,25 @@ type Repo = {
   url: string;
   stars: number;
 };
+
+function AnimatedMetricValue({ value, isInView }: { value: string; isInView: boolean }) {
+  const numericValue = parseFloat(value.replace(/[^0-9.]/g, '')) || 0;
+  const suffix = value.replace(/[0-9.]/g, '');
+  const count = useMotionValue(0);
+  const springCount = useSpring(count, { damping: 40, stiffness: 80 });
+  
+  const displayCount = useTransform(springCount, (v) =>
+    Math.round(v) + suffix
+  );
+
+  useEffect(() => {
+    if (isInView) {
+      count.set(numericValue);
+    }
+  }, [isInView, numericValue, count]);
+
+  return <motion.span>{displayCount}</motion.span>;
+}
 
 const LiveSystems: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -231,7 +250,9 @@ const LiveSystems: React.FC = () => {
                   transition={{ delay: 0.2 + i * 0.1 }}
                   role="listitem"
                 >
-                  <div className="text-3xl font-black text-text-primary tracking-tight mb-1" aria-label={`${m.value} ${m.label}`}>{m.value}</div>
+                  <div className="text-3xl font-black text-text-primary tracking-tight mb-1" aria-label={`${m.value} ${m.label}`}>
+                    <AnimatedMetricValue value={m.value} isInView={isInView} />
+                  </div>
                   <div className="text-[9px] tracking-[0.3em] uppercase text-text-secondary">{m.label}</div>
                 </motion.div>
               ))}
