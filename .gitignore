@@ -33,7 +33,8 @@ build/
 npm-debug.log*
 
 # Large media — tracked in assets/ only, not duplicated
-portfolio/public/assets/
+portfolio/public/assets/*
+!portfolio/public/assets/resume/
 
 # Temp / scratch
 *.tmp
