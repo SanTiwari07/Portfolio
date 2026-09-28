@@ -113,9 +113,7 @@ const App: React.FC = () => {
                 <Navbar activeSection={activeSection} />
 
                 <main>
-                  <section id="hero" className="w-full h-screen relative">
-                    <Hero />
-                  </section>
+                  <Hero />
                   <About />
                   <CurrentMission />
                   <Skills />

@@ -23,6 +23,7 @@ desktop.ini
 # Editor
 .vscode/settings.json
 .idea/
+.claude/
 *.swp
 *.swo
 
