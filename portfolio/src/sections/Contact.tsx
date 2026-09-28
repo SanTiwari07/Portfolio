@@ -82,7 +82,13 @@ const Contact: React.FC = () => {
 
         <footer className="mt-24 flex flex-col md:flex-row gap-2 justify-between font-mono text-xs text-text-secondary">
           <p>© 2026 Sanskar Tiwari</p>
-          <p>Built with React, Three.js and a 911 Turbo S model by SeKali (CC BY 4.0)</p>
+          <p className="md:text-right">
+            911 Turbo S model by{' '}
+            <a className="underline underline-offset-2 hover:text-text-primary" href="https://sketchfab.com/3d-models/porsche-911-turbo-s-68d8ef218d7e42adbd4425dc43629705" target="_blank" rel="noopener noreferrer">SeKali</a>
+            {' '}(CC BY 4.0) · Engine sound: 1967 Porsche 911R by{' '}
+            <a className="underline underline-offset-2 hover:text-text-primary" href="https://commons.wikimedia.org/wiki/File:Porsche_911R_(1967).ogg" target="_blank" rel="noopener noreferrer">Edvvc</a>
+            {' '}(CC BY-SA 3.0, edited)
+          </p>
         </footer>
       </div>
     </section>

@@ -1,0 +1,11 @@
+Engine sounds in this folder are edited excerpts of:
+
+  "Porsche 911R (1967).ogg" by Edvvc
+  https://commons.wikimedia.org/wiki/File:Porsche_911R_(1967).ogg
+  Licensed under CC BY-SA 3.0 — https://creativecommons.org/licenses/by-sa/3.0/
+
+Recorded at the Goodwood Festival of Speed hillclimb, 2009.
+
+Changes: trimmed, high/low-pass filtered, noise-reduced and loudness-normalised;
+911-loop.wav is a crossfaded loop cut from the acceleration run.
+These derived files are also released under CC BY-SA 3.0.
