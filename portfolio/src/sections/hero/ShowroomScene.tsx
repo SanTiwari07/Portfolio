@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Environment, Grid, Lightformer, MeshReflectorMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 import { PorscheCar } from './PorscheCar';
-import { drive, emitDriveFrame } from './driveState';
+import { drive } from './driveState';
 import { poseAt, type CameraPose } from './shots';
 
 export interface SceneTheme {
@@ -15,38 +15,8 @@ export interface SceneTheme {
   dark: boolean;
 }
 
-/** Scroll pixels/second → scene units/second. ~2000px/s reads as ~100 km/h on the HUD. */
-const SCROLL_TO_SPEED = 0.0125;
 const LANE_SPACING = 3;
 const LANE_COUNT = 24;
-
-// ─── Scroll → progress + speed ────────────────────────────────────
-function DriveController({ section }: { section: React.RefObject<HTMLElement | null> }) {
-  const last = useRef({ y: typeof window !== 'undefined' ? window.scrollY : 0 });
-
-  useFrame((_, rawDelta) => {
-    const dt = Math.min(Math.max(rawDelta, 1e-3), 1 / 20);
-    const el = section.current;
-    if (el) {
-      const rect = el.getBoundingClientRect();
-      const travel = Math.max(rect.height - window.innerHeight, 1);
-      drive.progress = THREE.MathUtils.clamp(-rect.top / travel, 0, 1);
-    }
-
-    const y = window.scrollY;
-    const dy = y - last.current.y;
-    last.current.y = y;
-    const target = THREE.MathUtils.clamp((dy / dt) * SCROLL_TO_SPEED, -40, 90);
-    // accelerate quickly, coast down gently — feels like a car, not a scrollbar
-    const rate = Math.abs(target) > Math.abs(drive.speed) ? 5 : 1.6;
-    drive.speed = THREE.MathUtils.damp(drive.speed, target, rate, dt);
-    if (Math.abs(drive.speed) < 0.01) drive.speed = 0;
-    drive.distance += drive.speed * dt;
-
-    emitDriveFrame();
-  });
-  return null;
-}
 
 // ─── Camera choreography ──────────────────────────────────────────
 function CameraRig() {
@@ -214,13 +184,12 @@ function Studio({ dark }: { dark: boolean }) {
 
 // ─── Scene root ───────────────────────────────────────────────────
 interface ShowroomSceneProps {
-  section: React.RefObject<HTMLElement | null>;
   theme: SceneTheme;
   onCarHover?: (hovering: boolean) => void;
   onCarClick?: () => void;
 }
 
-export function ShowroomScene({ section, theme, onCarHover, onCarClick }: ShowroomSceneProps) {
+export function ShowroomScene({ theme, onCarHover, onCarClick }: ShowroomSceneProps) {
   const { scene } = useThree();
   useEffect(() => {
     scene.fog = new THREE.Fog(theme.background, 11, 30);
@@ -231,7 +200,6 @@ export function ShowroomScene({ section, theme, onCarHover, onCarClick }: Showro
 
   return (
     <>
-      <DriveController section={section} />
       <CameraRig />
       <Studio dark={theme.dark} />
 

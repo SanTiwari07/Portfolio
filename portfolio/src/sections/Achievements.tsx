@@ -1,11 +1,12 @@
 import React, { useRef, useState, useCallback } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { VelocityScroll } from '../components/animations/VelocityScroll';
+import { motion, AnimatePresence } from 'framer-motion';
+import { SectionHeader } from '../components/ui/SectionHeader';
 
 const allImages = [
   { src: '/images/awards/techfiesta/tech (1).webp', alt: 'TechFiesta 2026 - Gold Award ceremony', event: 'TechFiesta' },
   { src: '/images/awards/techfiesta/tech (2).webp', alt: 'TechFiesta 2026 - Stage ceremony', event: 'TechFiesta' },
   { src: '/images/awards/techfiesta/tech (3).webp', alt: 'TechFiesta 2026 - Team photo', event: 'TechFiesta' },
+  { src: '/images/awards/hackventure/gramdrishti.webp', alt: 'GramDrishti - satellite village health dashboard (HackVenture 2026 winner)', event: 'HackVenture' },
   { src: '/images/awards/Pune Agri/pune (1).webp', alt: 'Pune Agri Hackathon - Award presentation', event: 'Pune Agri' },
   { src: '/images/awards/Pune Agri/pune (2).webp', alt: 'Pune Agri Hackathon - Award ceremony', event: 'Pune Agri' },
   { src: '/images/awards/Pune Agri/pune (3).webp', alt: 'Pune Agri Hackathon - Group photo', event: 'Pune Agri' },
@@ -15,15 +16,59 @@ const allImages = [
   { src: '/images/awards/vois/vois (4).webp', alt: 'VOIS Innovation Marathon - Winner announcement', event: 'VOIS Marathon' },
 ];
 
-const detailedAwards = [
+interface Award {
+  subtitle: string;
+  title: string;
+  description: string;
+  /** photo for the card; without one the card shows a typographic panel */
+  image?: string;
+  placeholder?: { big: string; small: string };
+  bullets: { text: string }[];
+  tags: string[];
+  modalTitle: string;
+  modalSubtitle: string;
+  modalDetails: string;
+}
+
+const detailedAwards: Award[] = [
+  {
+    subtitle: 'HACKVENTURE 2026 · NATIONAL HACKATHON BY SPONFEST',
+    title: 'GramDrishti',
+    description: 'AI Climate Intelligence & Geospatial Decision Support Platform',
+    image: '/images/awards/hackventure/gramdrishti.webp',
+    bullets: [
+      { text: '1st Place - Agritech Domain' },
+      { text: 'Satellite NDVI & NDWI monitoring' },
+      { text: 'National-level competition' },
+    ],
+    tags: ['AI', 'Geospatial', 'Satellite Analytics', 'Multilingual AI', 'Dashboards'],
+    modalTitle: 'Winner – HackVenture 2026 (Agritech Domain)',
+    modalSubtitle: 'Issued by SponFest · Jul 2026',
+    modalDetails: `Secured 1st Place in the Agritech Domain at HackVenture 2026, a national-level virtual hackathon organized by SponFest. Competing against innovative teams from across the country, our solution was recognized for combining artificial intelligence, geospatial intelligence, and practical engineering to address real-world agricultural challenges.
+
+Our team developed GramDrishti, an AI-powered climate intelligence and geospatial decision support platform designed to help farmers, village administrations, and government authorities make faster, data-driven decisions. The platform transforms satellite observations and environmental data into actionable insights for crop monitoring, water resource management, and rural planning.
+
+One of the key innovations of the platform was its ability to combine satellite analytics with AI-generated recommendations, enabling users to understand environmental conditions without requiring technical GIS expertise. The solution integrated:
+
+• AI-powered climate and environmental analysis
+• Satellite-based NDVI and NDWI monitoring
+• Interactive geospatial visualization and village insights
+• Multilingual AI assistance for rural accessibility
+• Government scheme recommendations based on local conditions
+• Real-time dashboards for environmental monitoring
+
+The project demonstrated how satellite intelligence, artificial intelligence, and modern web technologies can be combined into a practical platform that supports sustainable agriculture and climate-resilient rural development. The solution emphasized usability, scalability, and real-world impact for Indian villages.
+
+This achievement reflects innovation, teamwork, and the application of AI and geospatial technologies to solve meaningful agricultural and environmental challenges while contributing toward smarter, data-driven rural governance.`,
+  },
   {
     subtitle: 'VOIS INNOVATION MARATHON 2.0 BY VODAFONE IDEA',
     title: 'KrishiSaarthi',
     description: 'AI & Blockchain Powered Agricultural Intelligence Platform',
     image: '/images/awards/vois/vois (1).webp',
     bullets: [
-      { icon: '🏆', text: 'Top 3 among 630+ teams' },
-      { icon: '💰', text: '₹2,00,000 Cash Prize' },
+      { text: 'Top 3 among 630+ teams' },
+      { text: '₹2,00,000 Cash Prize' },
     ],
     tags: ['React', 'Node.js', 'Machine Learning', 'Blockchain', 'Smart Contracts'],
     modalTitle: 'Finalist (Top 3) – VOIS Innovation Marathon 2.0',
@@ -42,9 +87,9 @@ The program focused on emerging technologies, innovation, and practical problem-
     description: 'AI Farmer Advisory Platform',
     image: '/images/awards/techfiesta/tech (3).webp',
     bullets: [
-      { icon: '🏆', text: '1st Rank - Agriculture Domain' },
-      { icon: '💰', text: '₹50,000 Grand Prize' },
-      { icon: '🎯', text: 'Top of 700+ teams' },
+      { text: '1st Rank - Agriculture Domain' },
+      { text: '₹50,000 Grand Prize' },
+      { text: 'Top of 700+ teams' },
     ],
     tags: ['Python', 'FastAPI', 'Computer Vision', 'React', 'IoT'],
     modalTitle: "Winner – Agriculture Domain, TechFiesta'26 International Hackathon",
@@ -63,9 +108,9 @@ This achievement reflects our commitment to building meaningful technology solut
     description: 'Upgrade to current government Existing website',
     image: '/images/awards/Pune Agri/pune (2).webp',
     bullets: [
-      { icon: '🏆', text: 'National Runner-Up' },
-      { icon: '💰', text: '₹15 Lakhs from government for development' },
-      { icon: '🎯', text: 'Agriculture Innovation Category' },
+      { text: 'National Runner-Up' },
+      { text: '₹15 Lakhs from government for development' },
+      { text: 'Agriculture Innovation Category' },
     ],
     tags: ['Machine Learning', 'Scikit-Learn', 'IoT Sensors', 'Python'],
     modalTitle: 'Runner-Up – Pune Agri Hackathon 2026',
@@ -88,19 +133,13 @@ The project was presented before government officials including:
   },
 ];
 
-const metrics = [
-  { value: '4+', label: 'Hackathon Podiums' },
-  { value: '2', label: 'International Events' },
-  { value: '1', label: 'Industry Internship' },
-];
 
 const marqueeImages = [...allImages, ...allImages];
 
-type Award = typeof detailedAwards[0];
+
 
 const RaceRecord: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
   const [selectedAward, setSelectedAward] = useState<Award | null>(null);
   const modalTitleId = 'award-modal-title';
 
@@ -129,7 +168,7 @@ const RaceRecord: React.FC = () => {
   const closeModal = useCallback(() => setSelectedAward(null), []);
 
   return (
-    <section ref={ref} id="awards" className="relative w-full bg-background overflow-hidden py-28 md:py-40">
+    <section ref={ref} id="awards" className="relative w-full bg-background overflow-hidden">
 
       {/* Award Detail Modal */}
       <AnimatePresence>
@@ -150,7 +189,7 @@ const RaceRecord: React.FC = () => {
               aria-hidden="true"
             />
             <motion.div
-              className="relative w-full max-w-4xl max-h-[90vh] bg-card rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl flex flex-col z-10"
+              className="relative w-full max-w-4xl max-h-[90vh] bg-card rounded-md overflow-hidden shadow-2xl flex flex-col z-10"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -187,33 +226,12 @@ const RaceRecord: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mb-20">
-        <motion.div
-          className="flex items-center gap-4 mb-16"
-          initial={{ opacity: 0, x: -20 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="w-8 h-[1px] bg-primary" aria-hidden="true" />
-          <span className="text-[10px] tracking-[0.5em] uppercase text-text-secondary font-medium">05 / Race Record</span>
-        </motion.div>
-
-        <div className="overflow-hidden">
-          <VelocityScroll intensity={0.5}>
-            <motion.h2
-              className="text-[clamp(56px,8vw,120px)] font-display tracking-[-0.04em] text-text-primary leading-[0.85] uppercase"
-              initial={{ y: '100%' }}
-              animate={isInView ? { y: 0 } : {}}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Race Record.
-            </motion.h2>
-          </VelocityScroll>
-        </div>
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 pt-24 md:pt-32 border-t border-border-light">
+        <SectionHeader index="04" label="Awards" title="Four podiums, two first places." />
       </div>
 
       {/* Photo Marquee */}
-      <div className="w-full overflow-hidden mb-28 relative" aria-label="Award ceremony photos">
+      <div className="w-full overflow-hidden mb-20 relative" aria-label="Award ceremony photos">
         <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" aria-hidden="true" />
         <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" aria-hidden="true" />
 
@@ -221,19 +239,19 @@ const RaceRecord: React.FC = () => {
           {marqueeImages.map((img, i) => (
             <div
               key={i}
-              className="relative flex-shrink-0 w-[280px] sm:w-[320px] h-[200px] sm:h-[220px] mx-3 overflow-hidden group cursor-default rounded-xl"
+              className="relative flex-shrink-0 w-[280px] sm:w-[320px] h-[200px] sm:h-[220px] mx-2 overflow-hidden group cursor-default rounded-md"
             >
               <img
                 src={img.src}
                 alt={img.alt}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover"
                 loading="lazy"
                 width={320}
                 height={220}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" aria-hidden="true" />
               <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300" aria-hidden="true">
-                <span className="text-[9px] tracking-[0.4em] uppercase text-card font-semibold bg-primary px-2 py-1">
+                <span className="font-mono text-[11px] text-white bg-black/70 px-2 py-1 rounded-sm">
                   {img.event}
                 </span>
               </div>
@@ -243,55 +261,65 @@ const RaceRecord: React.FC = () => {
       </div>
 
       {/* Award Cards */}
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 space-y-16 mb-32">
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 space-y-8 pb-24 md:pb-32">
         {detailedAwards.map((award, i) => (
           <motion.article
             key={i}
-            className="flex flex-col lg:flex-row bg-card rounded-[2rem] overflow-hidden border border-border-light shadow-[0_8px_40px_rgba(0,0,0,0.04)] group/card"
-            initial={{ opacity: 0, y: 40 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2 + i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col lg:flex-row bg-card rounded-md overflow-hidden border border-border-light"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 0.6 }}
           >
             {/* Left Image */}
             <div className="lg:w-[45%] h-[280px] lg:h-auto relative overflow-hidden group" aria-hidden="true">
-              <img
-                src={award.image}
-                alt=""
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-                width={540}
-                height={400}
-              />
+              {award.image ? (
+                <img
+                  src={award.image}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  width={540}
+                  height={400}
+                />
+              ) : (
+                <div className="w-full h-full min-h-[280px] flex flex-col items-center justify-center bg-[#0b0b0b] blueprint-grid transition-transform duration-700 group-hover:scale-105">
+                  <span className="font-display text-[clamp(72px,9vw,140px)] leading-none tracking-tighter text-primary">
+                    {award.placeholder?.big}
+                  </span>
+                  <span className="mt-3 font-mono text-xs text-white/60">{award.placeholder?.small}</span>
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-card opacity-0 lg:opacity-100" aria-hidden="true" />
               <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-100 lg:opacity-0" aria-hidden="true" />
             </div>
 
             {/* Right Content */}
-            <div className="lg:w-[55%] p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-primary font-bold mb-3">
+            <div className="lg:w-[55%] p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+              <div className="font-mono text-xs text-primary mb-3">
                 {award.subtitle}
               </div>
-              <h3 className="text-3xl md:text-4xl font-display tracking-tight text-text-primary mb-2 group-hover/card:text-primary transition-colors duration-500">
+              <h3 className="text-2xl md:text-3xl text-text-primary mb-2">
                 {award.title}
               </h3>
               <p className="text-sm md:text-base text-text-secondary mb-8">
                 {award.description}
               </p>
 
-              <ul className="space-y-3 mb-10" aria-label="Achievement highlights">
+              <ul className="space-y-2.5 mb-8" aria-label="Achievement highlights">
                 {award.bullets.map((bullet, idx) => (
-                  <li key={idx} className="flex items-center gap-3 text-sm md:text-base text-text-primary font-medium">
-                    <span aria-hidden="true">{bullet.icon}</span>
+                  <li key={idx} className="flex items-center gap-3 text-sm md:text-base text-text-primary">
+                    <span className="h-px w-3 shrink-0 bg-primary" aria-hidden="true" />
                     <span>{bullet.text}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="flex flex-wrap gap-2 mb-10">
+              <div className="flex flex-wrap gap-1.5 mb-8">
                 {award.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="text-[10px] md:text-xs font-semibold px-3 py-1.5 rounded-full bg-background text-text-secondary border border-border-light"
+                    className="font-mono text-[11px] px-2 py-1 rounded-sm text-text-secondary border border-border-light"
                   >
                     {tag}
                   </span>
@@ -301,11 +329,10 @@ const RaceRecord: React.FC = () => {
               <div>
                 <button
                   onClick={() => setSelectedAward(award)}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-text-primary hover:bg-primary transition-colors duration-300 text-sm text-background font-semibold focus-visible:outline-2 focus-visible:outline-primary"
-                  data-cursor="hover"
-                  aria-label={`Know more about ${award.title}`}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-text-primary underline underline-offset-4 decoration-border-light hover:decoration-primary hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-primary"
+                  aria-label={`Read more about ${award.title}`}
                 >
-                  Know More
+                  Read the full story
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
@@ -316,27 +343,6 @@ const RaceRecord: React.FC = () => {
         ))}
       </div>
 
-      {/* Metrics */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
-        <div className="grid grid-cols-3 gap-0 border-t border-border-light">
-          {metrics.map((m, i) => (
-            <motion.div
-              key={i}
-              className="py-12 text-center border-r border-border-light last:border-r-0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.6 + i * 0.1, duration: 0.7 }}
-            >
-              <div className="text-[clamp(40px,5vw,72px)] font-display tracking-tighter text-text-primary leading-none mb-2" aria-label={`${m.value} ${m.label}`}>
-                {m.value}
-              </div>
-              <div className="text-[10px] tracking-[0.4em] uppercase text-text-secondary font-medium">
-                {m.label}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 };

@@ -3,13 +3,12 @@ import { Canvas } from '@react-three/fiber';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import { useLenis } from 'lenis/react';
 import gsap from 'gsap';
-import { Volume2, VolumeX, ArrowDown, ArrowUpRight } from 'lucide-react';
+import { Volume2, VolumeX, ArrowDown, ArrowUpRight, Gamepad2 } from 'lucide-react';
 
-import { MagneticButton } from '../components/animations/MagneticButton';
 import { useTheme } from '../context/ThemeContext';
 import { preloadGame } from '../App';
 import { ShowroomScene, type SceneTheme } from './hero/ShowroomScene';
-import { drive, onDriveFrame, PAINTS } from './hero/driveState';
+import { drive, onDriveFrame, PAINTS, startDriveLoop } from './hero/driveState';
 import { SHOTS, shotIndexAt } from './hero/shots';
 import { startEngine, stopEngine, honk } from './hero/engineAudio';
 
@@ -43,7 +42,7 @@ function ModelLoader() {
     <div className="absolute inset-0 flex items-center justify-center md:justify-end md:pr-[18vw]" aria-hidden="true">
       <div className="text-center">
         <div className="w-14 h-14 border border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-[10px] text-text-secondary tracking-[0.35em] uppercase">Warming up</p>
+        <p className="text-[11px] text-text-secondary font-mono">Warming up</p>
       </div>
     </div>
   );
@@ -75,33 +74,9 @@ function Stage({
 function Eyebrow({ index, center, children }: { index: string; center?: boolean; children: React.ReactNode }) {
   return (
     <div className={`flex items-center gap-4 mb-5 ${center ? 'justify-center' : ''}`}>
-      <span className="text-[10px] tracking-[0.4em] text-primary font-semibold">{index}</span>
+      <span className="text-[11px] text-primary font-semibold">{index}</span>
       <div className="w-10 h-[1px] bg-primary" aria-hidden="true" />
-      <span className="text-[10px] tracking-[0.4em] uppercase text-text-secondary font-medium">{children}</span>
-    </div>
-  );
-}
-
-// ─── Rotating title ticker ────────────────────────────────────────
-const titles = ['AI Systems Builder', 'Computer Vision Engineer', 'Embedded Systems Developer', 'Software Engineer Intern'];
-
-function AnimatedTitle() {
-  const [index, setIndex] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => setIndex((i) => (i + 1) % titles.length), 2200);
-    return () => clearInterval(interval);
-  }, []);
-  return (
-    <div className="h-8 overflow-hidden relative" aria-live="polite" aria-atomic="true">
-      <motion.div
-        key={index}
-        initial={{ y: 32, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="text-xs md:text-base tracking-[0.2em] md:tracking-[0.3em] uppercase text-primary font-semibold whitespace-nowrap"
-      >
-        {titles[index]}
-      </motion.div>
+      <span className="text-[11px] font-mono text-text-secondary font-medium">{children}</span>
     </div>
   );
 }
@@ -145,8 +120,8 @@ function Speedometer() {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span ref={valueRef} className="counter-number text-2xl font-black tracking-tight text-text-primary leading-none">000</span>
-        <span className="text-[8px] tracking-[0.35em] uppercase text-text-secondary mt-1">km/h</span>
+        <span ref={valueRef} className="counter-number text-2xl font-semibold tracking-tight text-text-primary leading-none">000</span>
+        <span className="text-[11px] font-mono text-text-secondary mt-1">km/h</span>
         <span ref={gearRef} className="mt-1.5 text-[11px] font-bold text-primary">N</span>
       </div>
     </div>
@@ -175,11 +150,10 @@ function ShotNav({ onJump }: { onJump: (at: number) => void }) {
         <button
           key={shot.id}
           onClick={() => onJump(shot.at)}
-          className={`flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase transition-colors ${
-            i === active ? 'text-text-primary font-semibold' : 'text-text-secondary hover:text-text-primary'
-          }`}
+          className={`flex items-center gap-2 text-[11px] font-mono transition-colors ${
+ i === active ? 'text-text-primary font-semibold' : 'text-text-secondary hover:text-text-primary'
+ }`}
           aria-current={i === active ? 'step' : undefined}
-          data-cursor="hover"
         >
           <span className="counter-number text-primary">{String(i + 1).padStart(2, '0')}</span>
           <span className="hidden lg:inline">{shot.label}</span>
@@ -193,7 +167,7 @@ function ShotNav({ onJump }: { onJump: (at: number) => void }) {
 function PaintPicker({ value, onChange }: { value: number; onChange: (i: number) => void }) {
   return (
     <div className="flex md:flex-col items-center gap-3" role="radiogroup" aria-label="Paint colour">
-      <span className="hidden md:block text-[9px] tracking-[0.35em] uppercase text-text-secondary [writing-mode:vertical-rl] rotate-180 mb-2">
+      <span className="hidden md:block text-[11px] font-mono text-text-secondary [writing-mode:vertical-rl] rotate-180 mb-2">
         {PAINTS[value].name}
       </span>
       {PAINTS.map((paint, i) => (
@@ -204,10 +178,9 @@ function PaintPicker({ value, onChange }: { value: number; onChange: (i: number)
           aria-label={paint.name}
           title={paint.name}
           onClick={() => onChange(i)}
-          data-cursor="hover"
           className={`relative w-5 h-5 rounded-full border transition-transform duration-300 hover:scale-125 ${
-            i === value ? 'scale-125 border-text-primary' : 'border-text-primary/25'
-          }`}
+ i === value ? 'scale-125 border-text-primary' : 'border-text-primary/25'
+ }`}
           style={{ background: `radial-gradient(circle at 30% 30%, #ffffff66, transparent 55%), ${paint.hex}` }}
         >
           {i === value && <span className="absolute -inset-1.5 rounded-full border border-primary/60" aria-hidden="true" />}
@@ -242,6 +215,7 @@ const Hero: React.FC = () => {
   const hudOpacity = useTransform(scrollYProgress, [0, 0.04, 0.97, 1], [0.55, 1, 1, 0]);
   const navOpacity = useTransform(scrollYProgress, [0.04, 0.1, 0.97, 1], [0, 1, 1, 0]);
   const navPointer = useTransform(navOpacity, (o) => (o > 0.5 ? 'auto' : 'none'));
+  const handoff = useTransform(scrollYProgress, [0.955, 1], [0, 1]);
   // legibility wash on the left, only while left-aligned copy is on screen (intro, details)
   const washOpacity = useTransform(scrollYProgress, [0, 0.08, 0.12, 0.53, 0.57, 0.65, 0.69], [1, 1, 0, 0, 1, 1, 0]);
 
@@ -275,16 +249,16 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('pointermove', onMove);
   }, []);
 
+  useEffect(() => startDriveLoop(() => sectionRef.current), []);
   useEffect(() => () => stopEngine(), []);
 
   // Intro entrance
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 1.7 });
+      const tl = gsap.timeline({ delay: 0.15 });
       tl.from('.hero-line-1', { yPercent: 110, duration: 1, ease: 'power4.out' })
         .from('.hero-line-2', { yPercent: 110, duration: 1, ease: 'power4.out' }, '-=0.7')
         .from('.hero-subtitle', { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, '-=0.4')
-        .from('.hero-tags', { opacity: 0, y: 16, duration: 0.6, ease: 'power2.out' }, '-=0.3')
         .from('.hero-cta', { opacity: 0, y: 16, stagger: 0.1, duration: 0.6, ease: 'power2.out' }, '-=0.2');
     }, introRef.current ?? undefined);
     return () => ctx.revert();
@@ -342,7 +316,6 @@ const Hero: React.FC = () => {
                 role="img"
               >
                 <ShowroomScene
-                  section={sectionRef}
                   theme={SCENE_THEMES[actualTheme]}
                   onCarHover={setCarHover}
                   onCarClick={onCarClick}
@@ -362,10 +335,10 @@ const Hero: React.FC = () => {
         {/* ── 00 · Intro ── */}
         <Stage progress={scrollYProgress} range={[-1, 0, 0.05, 0.1]} className="inset-x-0 top-[12%] md:top-0 md:bottom-0 md:flex md:items-center px-[var(--spacing-layout-x)]">
           <div ref={introRef} className="max-w-xl">
-            <div className="mb-6 overflow-hidden">
-              <AnimatedTitle />
-            </div>
-            <h1 className="text-text-primary uppercase tracking-tighter leading-[0.9]">
+            <p className="mb-6 font-mono text-xs md:text-sm text-primary">
+              Software Engineer Intern · AI, computer vision &amp; embedded systems
+            </p>
+            <h1 className="text-text-primary tracking-[-0.04em] leading-[0.95]">
               <div className="overflow-hidden mb-1">
                 <span className="hero-line-1 block text-[clamp(44px,7vw,110px)] font-display">Sanskar</span>
               </div>
@@ -374,46 +347,46 @@ const Hero: React.FC = () => {
               </div>
             </h1>
             <p className="hero-subtitle text-sm md:text-base text-text-secondary leading-relaxed max-w-[400px] mb-8">
-              Building intelligent systems across AI, Computer Vision, and Embedded Systems for the physical world.
+              Third-year ENTC student at PICT, Pune. I build AI and embedded systems that have to work outside the lab.
             </p>
-            <div className="hero-tags hidden sm:flex flex-wrap gap-3 mb-10">
-              {['ENTC @ PICT', 'Intern @ MindstriX', 'Hackathon Winner'].map((tag) => (
-                <span key={tag} className="px-3 py-1.5 border border-border-light bg-background/60 backdrop-blur-sm text-[10px] tracking-[0.25em] uppercase text-text-secondary font-medium">
-                  {tag}
-                </span>
-              ))}
-            </div>
             <div className="flex flex-wrap items-center gap-5">
-              <MagneticButton>
                 <a
                   href="#github"
-                  className="hero-cta group relative px-8 py-4 bg-text-primary text-background text-xs tracking-[0.25em] uppercase font-semibold overflow-hidden block"
-                  data-cursor="hover"
+                  className="hero-cta group relative px-8 py-4 bg-text-primary text-background text-sm font-medium overflow-hidden block"
+                 
                 >
                   <span className="absolute inset-0 bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" aria-hidden="true" />
                   <span className="relative z-10">View Work</span>
                 </a>
-              </MagneticButton>
-              <MagneticButton>
                 <a
                   href={`${import.meta.env.BASE_URL}assets/resume/resume.pdf`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hero-cta group flex items-center gap-3 text-xs tracking-[0.25em] uppercase font-semibold text-text-primary"
-                  data-cursor="hover"
+                  className="hero-cta group flex items-center gap-3 text-sm font-medium text-text-primary"
+                 
                 >
                   Resume
                   <span className="w-8 h-[1px] bg-text-primary group-hover:w-14 group-hover:bg-primary transition-all duration-300" aria-hidden="true" />
                 </a>
-              </MagneticButton>
             </div>
+            <button
+              id="dream-car-btn"
+              onClick={openGame}
+              onMouseEnter={() => preloadGame()}
+              onFocus={() => preloadGame()}
+              className="hero-cta hidden md:inline-flex mt-8 items-center gap-3 px-5 py-3 border border-primary/40 bg-background/60 backdrop-blur-sm text-sm font-medium text-text-primary hover:bg-primary hover:border-primary hover:text-white transition-colors"
+              aria-label="Experience my dream car — opens the 3D driving game"
+            >
+              <Gamepad2 size={15} />
+              Experience my dream car
+            </button>
           </div>
         </Stage>
 
         {/* scroll cue */}
         <Stage progress={scrollYProgress} range={[-1, 0, 0.02, 0.05]} className="bottom-8 left-1/2 -translate-x-1/2">
           <div className="flex flex-col items-center gap-3" aria-hidden="true">
-            <span className="text-[10px] tracking-[0.4em] uppercase text-text-secondary">Scroll to drive</span>
+            <span className="text-[11px] font-mono text-text-secondary">Scroll to drive</span>
             <div className="w-[1px] h-12 bg-border-light overflow-hidden">
               <motion.div className="w-full h-full bg-primary" animate={{ y: ['-100%', '100%'] }} transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }} />
             </div>
@@ -423,15 +396,15 @@ const Hero: React.FC = () => {
         {/* ── 01 · About ── */}
         <Stage progress={scrollYProgress} range={[0.13, 0.17, 0.24, 0.29]} className="inset-x-0 top-[13%] md:top-[15%] px-[var(--spacing-layout-x)] text-center">
           <Eyebrow index="01" center>About</Eyebrow>
-          <h2 className="font-display uppercase tracking-tighter leading-[0.92] text-text-primary text-[clamp(34px,5.4vw,84px)]">
+          <h2 className="font-display tracking-[-0.03em] leading-[1.02] text-text-primary text-[clamp(34px,5.4vw,84px)]">
             Built for the <span className="text-primary">physical world.</span>
           </h2>
           <p className="mt-5 text-sm md:text-base text-text-secondary max-w-lg mx-auto">
-            I build AI, computer vision and embedded systems that leave the lab — from edge devices in farm fields to production AI pipelines.
+            I build systems where software, hardware and machine learning meet — from production Gemini pipelines to dual-ESP32 computer vision rigs.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-            {['ENTC @ PICT', '9.3+ CGPA', 'SWE Intern @ MindstriX', '12+ Systems Built'].map((fact) => (
-              <span key={fact} className="px-3 py-1.5 border border-border-light bg-background/60 backdrop-blur-sm text-[10px] tracking-[0.2em] uppercase text-text-secondary font-medium">
+            {['ENTC @ PICT · 3rd year', '9.31 CGPA', 'SWE Intern @ MindstriX', '35 Public Repos'].map((fact) => (
+              <span key={fact} className="px-3 py-1.5 border border-border-light bg-background/60 backdrop-blur-sm text-[11px] font-mono text-text-secondary font-medium">
                 {fact}
               </span>
             ))}
@@ -441,23 +414,31 @@ const Hero: React.FC = () => {
         {/* ── 02 · Selected work (rear view) ── */}
         <Stage progress={scrollYProgress} range={[0.33, 0.37, 0.44, 0.49]} className="right-[var(--spacing-layout-x)] left-[var(--spacing-layout-x)] md:left-auto top-[12%] md:top-auto md:bottom-[16%] md:w-[min(480px,40vw)]">
           <Eyebrow index="02">Selected work</Eyebrow>
-          <h2 className="font-display uppercase tracking-tighter leading-[0.92] text-text-primary text-[clamp(30px,3.8vw,60px)] mb-6">
+          <h2 className="font-display tracking-[-0.03em] leading-[1.02] text-text-primary text-[clamp(30px,3.8vw,60px)] mb-6">
             Things I've <span className="text-primary">built.</span>
           </h2>
           <ul className="divide-y divide-border-light border-y border-border-light bg-background/50 backdrop-blur-md">
             {[
-              ['KrishiSaarthi', 'AI + blockchain agriculture platform', 'VOIS Top 3'],
-              ['IPDS', 'YOLOv8 + ESP32 real-time crop pest detection', 'Edge AI'],
-              ['Traffic Analyzer', 'Real-time traffic density with computer vision', 'CV'],
-              ['Text2Reel', 'LLM pipeline turning prompts into short video reels', 'LLM'],
-            ].map(([name, desc, tag]) => (
+              ['Aviro', 'AI finance controller · zero false auto-matches', 'Aviro'],
+              ['Sudarshan', 'Android banking-malware intelligence', 'Sudarshan'],
+              ['IPDS v2.0', 'YOLOv8 + dual ESP32 pothole detection · DOI', 'PotHoleDetection'],
+              ['InsureRoute', 'Predictive logistics + dynamic cargo pricing', 'InsureRoute'],
+            ].map(([name, desc, repo]) => (
               <li key={name}>
-                <a href="#github" className="group flex items-center justify-between gap-4 py-3 px-1" data-cursor="hover">
+                <a
+                  href={`https://github.com/SanTiwari07/${repo}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between gap-4 py-3 px-1"
+                 
+                >
                   <div className="min-w-0">
-                    <div className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">{name}</div>
+                    <div className="flex items-center gap-1.5 text-sm font-bold text-text-primary group-hover:text-primary transition-colors">
+                      {name}
+                      <ArrowUpRight size={13} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    </div>
                     <div className="text-xs text-text-secondary truncate">{desc}</div>
                   </div>
-                  <span className="shrink-0 text-[9px] tracking-[0.25em] uppercase text-primary font-semibold">{tag}</span>
                 </a>
               </li>
             ))}
@@ -467,15 +448,15 @@ const Hero: React.FC = () => {
         {/* ── 03 · Experience (wheel close-up) ── */}
         <Stage progress={scrollYProgress} range={[0.53, 0.57, 0.64, 0.69]} className="left-[var(--spacing-layout-x)] right-[var(--spacing-layout-x)] md:right-auto top-[12%] md:top-auto md:bottom-[18%] md:w-[min(440px,36vw)]">
           <Eyebrow index="03">Experience</Eyebrow>
-          <h2 className="font-display uppercase tracking-tighter leading-[0.92] text-text-primary text-[clamp(30px,3.8vw,60px)] mb-3">
+          <h2 className="font-display tracking-[-0.03em] leading-[1.02] text-text-primary text-[clamp(30px,3.8vw,60px)] mb-3">
             Software Engineer <span className="text-primary">Intern.</span>
           </h2>
-          <p className="text-[10px] tracking-[0.3em] uppercase text-text-secondary mb-5">MindstriX Technologies LLP · 2026 → Present</p>
+          <p className="text-[11px] font-mono text-text-secondary mb-5">MindstriX Technologies LLP · Mar 2026 → Present · Remote</p>
           <ul className="space-y-2.5">
             {[
-              'Building production-grade AI pipelines with large language models',
-              'Designing scalable REST APIs that power intelligent applications',
-              'Shipping AI features that run in real, live environments',
+              'LLM integration — production-grade Gemini pipelines',
+              'API development for AI-powered applications',
+              'AI R&D, now building AI-native Android systems on real sensor data',
             ].map((item) => (
               <li key={item} className="flex gap-3 text-sm text-text-secondary leading-relaxed">
                 <span className="mt-2.5 w-4 h-[1px] bg-primary shrink-0" aria-hidden="true" />
@@ -488,22 +469,23 @@ const Hero: React.FC = () => {
         {/* ── 04 · Awards (headlights) ── */}
         <Stage progress={scrollYProgress} range={[0.72, 0.76, 0.82, 0.86]} className="inset-x-0 top-[13%] md:top-[14%] px-[var(--spacing-layout-x)] text-center">
           <Eyebrow index="04" center>Awards</Eyebrow>
-          <h2 className="font-display uppercase tracking-tighter leading-[0.92] text-text-primary text-[clamp(34px,5.4vw,84px)]">
-            On the <span className="text-primary">podium.</span>
+          <h2 className="font-display tracking-[-0.03em] leading-[1.02] text-text-primary text-[clamp(34px,5.4vw,84px)]">
+            Four times on <span className="text-primary">the podium.</span>
           </h2>
         </Stage>
         <Stage progress={scrollYProgress} range={[0.72, 0.76, 0.82, 0.86]} className="inset-x-0 bottom-[15%] md:bottom-24 px-[var(--spacing-layout-x)]">
-          <ul className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
+          <ul className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
             {[
-              ['Winner', "TechFiesta '26 International Hackathon", 'KrishiSahAI'],
+              ['1st', "TechFiesta '26 · International", 'KrishiSahAI'],
+              ['1st', 'HackVenture 2026 · Agritech', 'GramDrishti'],
+              ['Runner-Up', 'Pune Agri Intl. Hackathon', 'Krishi Prabandh'],
               ['Top 3', 'VOIS Innovation Marathon 2.0', 'KrishiSaarthi'],
-              ['Runner-Up', 'Pune Agri International Hackathon', 'Krishi Prabandh'],
             ].map(([place, event, project]) => (
               <li key={event}>
-                <a href="#awards" className="group block h-full px-4 py-3 md:py-4 border border-border-light bg-background/60 backdrop-blur-md hover:border-primary transition-colors" data-cursor="hover">
-                  <div className="text-lg md:text-2xl font-black uppercase tracking-tight text-primary leading-none">{place}</div>
+                <a href="#awards" className="group block h-full px-4 py-3 md:py-4 border border-border-light bg-background/60 backdrop-blur-md hover:border-primary transition-colors">
+                  <div className="font-display text-xl md:text-2xl text-primary leading-none">{place}</div>
                   <div className="mt-1.5 text-xs font-semibold text-text-primary">{event}</div>
-                  <div className="text-[10px] tracking-[0.25em] uppercase text-text-secondary mt-0.5">{project}</div>
+                  <div className="text-[11px] font-mono text-text-secondary mt-0.5">{project}</div>
                 </a>
               </li>
             ))}
@@ -513,7 +495,7 @@ const Hero: React.FC = () => {
         {/* ── 05 · Drive ── */}
         <Stage progress={scrollYProgress} range={[0.88, 0.92, 1, 1.01]} className="inset-x-0 top-[14%] md:top-[16%] px-[var(--spacing-layout-x)] text-center">
           <Eyebrow index="05" center>Contact</Eyebrow>
-          <h2 className="font-display uppercase tracking-tighter leading-[0.92] text-text-primary text-[clamp(38px,6.2vw,100px)]">
+          <h2 className="font-display tracking-[-0.03em] leading-[1.02] text-text-primary text-[clamp(38px,6.2vw,100px)]">
             Let's build <span className="text-primary">what's next.</span>
           </h2>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -521,23 +503,20 @@ const Hero: React.FC = () => {
               onClick={openGame}
               onMouseEnter={() => preloadGame()}
               onFocus={() => preloadGame()}
-              className="group hidden md:inline-flex items-center gap-3 px-7 py-4 bg-text-primary text-background text-[11px] tracking-[0.25em] uppercase font-semibold hover:bg-primary transition-colors"
-              data-cursor="hover"
+              className="group hidden md:inline-flex items-center gap-3 px-7 py-4 bg-text-primary text-background text-sm font-medium hover:bg-primary transition-colors"
             >
               Take the 911 for a drive
               <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </button>
             <a
               href="#contact"
-              className="inline-flex items-center gap-3 px-7 py-4 bg-primary text-white text-[11px] tracking-[0.25em] uppercase font-semibold hover:bg-primary-hover transition-colors"
-              data-cursor="hover"
+              className="inline-flex items-center gap-3 px-7 py-4 bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors"
             >
               Get in touch <ArrowUpRight size={15} />
             </a>
             <a
               href="#specs"
-              className="inline-flex items-center gap-3 px-7 py-4 border border-text-primary/20 text-text-primary text-[11px] tracking-[0.25em] uppercase font-semibold hover:border-primary hover:text-primary transition-colors"
-              data-cursor="hover"
+              className="inline-flex items-center gap-3 px-7 py-4 border border-text-primary/20 text-text-primary text-sm font-medium hover:border-primary hover:text-primary transition-colors"
             >
               Continue <ArrowDown size={15} />
             </a>
@@ -554,9 +533,8 @@ const Hero: React.FC = () => {
           <div className="hidden md:flex absolute right-[var(--spacing-layout-x)] bottom-8 items-end gap-5 pointer-events-auto">
             <button
               onClick={toggleSound}
-              className="mb-3 inline-flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-text-secondary hover:text-text-primary transition-colors"
+              className="mb-3 inline-flex items-center gap-2 text-[11px] font-mono text-text-secondary hover:text-text-primary transition-colors"
               aria-pressed={soundOn}
-              data-cursor="hover"
             >
               {soundOn ? <Volume2 size={15} /> : <VolumeX size={15} />}
               Engine {soundOn ? 'on' : 'off'}
@@ -572,12 +550,19 @@ const Hero: React.FC = () => {
           <ShotNav onJump={jumpTo} />
         </motion.div>
 
+        {/* handoff: the road dissolves into the page as the car drives off */}
+        <motion.div
+          className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-background via-background/90 to-transparent pointer-events-none"
+          style={{ opacity: handoff }}
+          aria-hidden="true"
+        />
+
         {/* hover hint that trails the pointer over the car */}
         <div
           ref={hintRef}
-          className={`fixed left-0 top-0 z-50 pointer-events-none px-3 py-1.5 rounded-full bg-text-primary text-background text-[9px] tracking-[0.3em] uppercase font-semibold transition-opacity duration-300 ${
-            carHover ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`fixed left-0 top-0 z-50 pointer-events-none px-3 py-1.5 rounded-full bg-text-primary text-background text-[11px] font-mono transition-opacity duration-300 ${
+ carHover ? 'opacity-100' : 'opacity-0'
+ }`}
           aria-hidden="true"
         >
           {soundOn ? 'Click · Honk' : 'Click · Lights'}

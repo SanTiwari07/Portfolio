@@ -12,9 +12,10 @@
   --color-border-light: var(--border-light);
   --color-grid: var(--grid-color);
 
-  --font-heading: 'Space Grotesk', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
+  --font-heading: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   --spacing-section-y: 8rem;
   --spacing-comp-y: 4rem;
@@ -57,7 +58,7 @@
   --card: #0A0A0A;
   --text-primary: #F5F5F5;
   --text-secondary: #888888;
-  --border-light: rgba(255, 255, 255, 0.05);
+  --border-light: rgba(255, 255, 255, 0.1);
   --grid-color: rgba(255, 255, 255, 0.05);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -113,6 +114,8 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   /* Skip to content link */
@@ -151,55 +154,6 @@
     transition-duration: var(--transition-base);
     transition-timing-function: ease;
   }
-}
-
-/* ─── CURSOR ─────────────────────────────────────────────────────── */
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--primary);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  /* Only transition size/color — NOT position (handled by RAF) */
-  transition-property: width, height, background-color;
-  transition-duration: 0.2s;
-}
-
-.cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid var(--primary);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition-property: width, height, border-color;
-  transition-duration: 0.3s;
-}
-
-.cursor-dot.hovering {
-  width: 12px;
-  height: 12px;
-  background: var(--accent);
-}
-
-.cursor-ring.hovering {
-  width: 60px;
-  height: 60px;
-  border-color: var(--accent);
-}
-
-/* ─── MAGNETIC BUTTON ────────────────────────────────────────────── */
-.magnetic-btn {
-  display: inline-block;
-  cursor: none;
-  transition-property: transform;
-  transition-duration: 0.3s;
-  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* ─── MARQUEE ────────────────────────────────────────────────────── */
