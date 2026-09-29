@@ -94,9 +94,9 @@ const App: React.FC = () => {
             <ReactLenis
               root
               options={{
-                lerp: 0.08,
-                duration: 1.4,
+                lerp: 0.1,
                 smoothWheel: true,
+                anchors: true,
               }}
             >
               <div className="relative bg-background min-h-screen selection:bg-primary selection:text-card transition-colors duration-700">

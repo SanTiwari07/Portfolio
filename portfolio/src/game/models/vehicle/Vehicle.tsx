@@ -52,6 +52,7 @@ export function Vehicle({ angularVelocity, children, position, rotation }: Vehic
   let nextRecoveryState = 'none'
 
   useFrame((state, delta) => {
+    if (!chassisBody.current) return
     camera = getState().camera
     editor = getState().editor
     controls = getState().controls
@@ -112,7 +113,7 @@ export function Vehicle({ angularVelocity, children, position, rotation }: Vehic
     }
 
     // Fixed steady chassis visual alignment
-    chassisBody.current!.children[0].rotation.z = MathUtils.lerp(chassisBody.current!.children[0].rotation.z, MathUtils.clamp((-steeringValue * speed) / 200, -0.3, 0.3), delta * 4)
+    chassisBody.current.children[0].rotation.z = MathUtils.lerp(chassisBody.current.children[0].rotation.z, MathUtils.clamp((-steeringValue * speed) / 200, -0.3, 0.3), delta * 4)
 
     // Recovery Detection
     if (chassisBody.current) {

@@ -53,7 +53,9 @@ const About: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <picture>
+              <source media="(min-width: 768px)" type="image/webp" srcSet="/images/hero/portrait.webp" />
               <source media="(min-width: 768px)" srcSet="/images/hero/portrait.png" />
+              <source type="image/webp" srcSet="/images/hero/background.webp" />
               <img
                 src="/images/hero/background.png"
                 alt="Sanskar Tiwari"
@@ -61,6 +63,7 @@ const About: React.FC = () => {
                 width={600}
                 height={750}
                 loading="lazy"
+                decoding="async"
               />
             </picture>
           </motion.figure>

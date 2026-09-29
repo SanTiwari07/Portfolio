@@ -12,18 +12,27 @@ const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const saved = localStorage.getItem('portfolio-theme');
-    if (saved === 'light' || saved === 'dark' || saved === 'system') {
-      return saved as Theme;
+    try {
+      const saved = localStorage.getItem('portfolio-theme');
+      if (saved === 'light' || saved === 'dark' || saved === 'system') return saved;
+    } catch {
+      /* storage blocked (private mode, strict privacy settings) */
     }
     return 'system';
   });
 
-  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light');
+  // Resolve up front so the 3D scene doesn't render once in the wrong theme and rebuild.
+  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>(() =>
+    theme === 'dark' || (theme === 'system' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
+  );
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem('portfolio-theme', newTheme);
+    try {
+      localStorage.setItem('portfolio-theme', newTheme);
+    } catch {
+      /* theme just won't persist */
+    }
   };
 
   useEffect(() => {
@@ -48,8 +57,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       };
       
-      mediaQuery.addEventListener('change', listener);
-      return () => mediaQuery.removeEventListener('change', listener);
+      // Safari < 14 only has the legacy addListener API
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', listener);
+        return () => mediaQuery.removeEventListener('change', listener);
+      }
+      mediaQuery.addListener(listener);
+      return () => mediaQuery.removeListener(listener);
     } else {
       applyTheme(theme);
     }

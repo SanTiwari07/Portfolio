@@ -110,7 +110,7 @@ export type Controls = typeof controls
 type Control = keyof Controls
 export const isControl = (v: PropertyKey): v is Control => Object.hasOwnProperty.call(controls, v)
 
-export type BindableActionName = Control | ExclusiveBoolean | Extract<Booleans, 'editor' | 'map' | 'sound'> | 'camera'
+export type BindableActionName = Control | ExclusiveBoolean | Extract<Booleans, 'editor' | 'map' | 'sound'>
 
 export type ActionInputMap = Record<BindableActionName, string[]>
 

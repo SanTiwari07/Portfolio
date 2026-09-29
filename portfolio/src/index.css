@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Side-by-side hero layouts need width *and* a landscape screen; portrait tablets get the stacked phone layout. */
+@custom-variant wide (@media (min-width: 768px) and (orientation: landscape));
+
 @theme {
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
@@ -104,6 +107,7 @@
   }
 
   body {
+    -webkit-tap-highlight-color: transparent;
     background-color: var(--background);
     color: var(--text-primary);
     font-family: var(--font-body);
@@ -199,7 +203,8 @@
 }
 
 /* ─── CANVAS ─────────────────────────────────────────────────────── */
-canvas {
+/* Only the game captures touch; the hero canvas must let swipes scroll the page. */
+.game-root canvas {
   touch-action: none;
 }
 

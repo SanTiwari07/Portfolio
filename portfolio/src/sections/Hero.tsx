@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
+import { PerformanceMonitor } from '@react-three/drei';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import { useLenis } from 'lenis/react';
 import gsap from 'gsap';
@@ -11,6 +12,7 @@ import { ShowroomScene, type SceneTheme } from './hero/ShowroomScene';
 import { drive, onDriveFrame, PAINTS, startDriveLoop } from './hero/driveState';
 import { SHOTS, shotIndexAt } from './hero/shots';
 import { startEngine, stopEngine, honk } from './hero/engineAudio';
+import { isLowPower, isTouchDevice } from '../lib/device';
 
 const SCENE_THEMES: Record<'light' | 'dark', SceneTheme> = {
   light: { background: '#FAFAFA', floor: '#efefef', grid: '#dcc9cc', lane: '#7A1E2C', streak: '#7A1E2C', dark: false },
@@ -18,6 +20,10 @@ const SCENE_THEMES: Record<'light' | 'dark', SceneTheme> = {
 };
 
 const PAINT_KEY = 'portfolio-paint-v2';
+
+// Frosted panels are costly over a live WebGL canvas on phones; use a denser solid tint there instead.
+const GLASS = isLowPower ? 'bg-background/85' : 'bg-background/60 backdrop-blur-sm';
+const GLASS_MD = isLowPower ? 'bg-background/85' : 'bg-background/50 backdrop-blur-md';
 
 // ─── Error boundary for the WebGL layer ───────────────────────────
 class CanvasBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
@@ -39,7 +45,7 @@ class CanvasBoundary extends React.Component<{ children: React.ReactNode }, { ha
 
 function ModelLoader() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center md:justify-end md:pr-[18vw]" aria-hidden="true">
+    <div className="absolute inset-0 flex items-center justify-center wide:justify-end wide:pr-[18vw]" aria-hidden="true">
       <div className="text-center">
         <div className="w-14 h-14 border border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
         <p className="text-[11px] text-text-secondary font-mono">Warming up</p>
@@ -62,10 +68,11 @@ function Stage({
 }) {
   const opacity = useTransform(progress, range, [0, 1, 1, 0]);
   const y = useTransform(progress, range, [48, 0, 0, -48]);
+  // animated blur repaints the whole block every frame — desktop only
   const filter = useTransform(progress, range, ['blur(8px)', 'blur(0px)', 'blur(0px)', 'blur(8px)']);
   const pointerEvents = useTransform(opacity, (o) => (o > 0.6 ? 'auto' : 'none'));
   return (
-    <motion.div className={`absolute ${className}`} style={{ opacity, y, filter, pointerEvents }}>
+    <motion.div className={`absolute ${className}`} style={{ opacity, y, filter: isLowPower ? undefined : filter, pointerEvents }}>
       {children}
     </motion.div>
   );
@@ -166,8 +173,8 @@ function ShotNav({ onJump }: { onJump: (at: number) => void }) {
 // ─── Paint configurator ───────────────────────────────────────────
 function PaintPicker({ value, onChange }: { value: number; onChange: (i: number) => void }) {
   return (
-    <div className="flex md:flex-col items-center gap-3" role="radiogroup" aria-label="Paint colour">
-      <span className="hidden md:block text-[11px] font-mono text-text-secondary [writing-mode:vertical-rl] rotate-180 mb-2">
+    <div className="flex wide:flex-col items-center gap-3" role="radiogroup" aria-label="Paint colour">
+      <span className="hidden wide:block text-[11px] font-mono text-text-secondary [writing-mode:vertical-rl] rotate-180 mb-2">
         {PAINTS[value].name}
       </span>
       {PAINTS.map((paint, i) => (
@@ -201,6 +208,8 @@ const Hero: React.FC = () => {
   const [inView, setInView] = useState(true);
   const [carHover, setCarHover] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
+  // drops to 1 if the frame rate can't keep up
+  const [maxDpr, setMaxDpr] = useState(isLowPower ? 1.25 : 1.75);
   const [paint, setPaint] = useState(() => {
     try {
       const saved = Number(localStorage.getItem(PAINT_KEY));
@@ -215,6 +224,9 @@ const Hero: React.FC = () => {
   const hudOpacity = useTransform(scrollYProgress, [0, 0.04, 0.97, 1], [0.55, 1, 1, 0]);
   const navOpacity = useTransform(scrollYProgress, [0.04, 0.1, 0.97, 1], [0, 1, 1, 0]);
   const navPointer = useTransform(navOpacity, (o) => (o > 0.5 ? 'auto' : 'none'));
+  // on phones the paint picker sits where the award cards land — step aside for that stage
+  const pickerOpacity = useTransform(scrollYProgress, [0.68, 0.71, 0.87, 0.9], [1, 0, 0, 1]);
+  const pickerPointer = useTransform(pickerOpacity, (o) => (o > 0.5 ? 'auto' : 'none'));
   const handoff = useTransform(scrollYProgress, [0.955, 1], [0, 1]);
   // legibility wash on the left, only while left-aligned copy is on screen (intro, details)
   const washOpacity = useTransform(scrollYProgress, [0, 0.08, 0.12, 0.53, 0.57, 0.65, 0.69], [1, 1, 0, 0, 1, 1, 0]);
@@ -241,6 +253,8 @@ const Hero: React.FC = () => {
   // Pointer → camera parallax + hover hint position
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
+      // a finger dragging to scroll shouldn't swing the camera around
+      if (e.pointerType === 'touch') return;
       drive.pointerX = (e.clientX / window.innerWidth) * 2 - 1;
       drive.pointerY = (e.clientY / window.innerHeight) * 2 - 1;
       if (hintRef.current) hintRef.current.style.transform = `translate3d(${e.clientX + 22}px, ${e.clientY + 18}px, 0)`;
@@ -291,8 +305,9 @@ const Hero: React.FC = () => {
   const openGame = () => window.dispatchEvent(new CustomEvent('navigate', { detail: '/dream-car' }));
 
   return (
-    <section id="hero" ref={sectionRef} className="relative w-full h-[560vh] bg-background transition-colors duration-700">
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
+    <section id="hero" ref={sectionRef} className="relative w-full h-[560vh] supports-[height:100svh]:h-[560svh] bg-background transition-colors duration-700">
+      {/* svh: stays put when the mobile URL bar shows/hides, so the canvas isn't resized mid-scroll */}
+      <div className="sticky top-0 h-screen supports-[height:100svh]:h-[100svh] w-full overflow-hidden">
         {/* ── Backdrop: blueprint grid + giant outlined type drifting behind the car ── */}
         <div className="absolute inset-0 blueprint-grid opacity-40 pointer-events-none" aria-hidden="true" />
         <motion.div
@@ -310,15 +325,19 @@ const Hero: React.FC = () => {
               <Canvas
                 frameloop={inView ? 'always' : 'never'}
                 camera={{ position: [6, 1.5, 6], fov: 30, near: 0.1, far: 80 }}
-                gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-                dpr={[1, 1.75]}
+                gl={{ antialias: !isLowPower, alpha: true, powerPreference: 'high-performance' }}
+                dpr={[1, maxDpr]}
+                // let vertical swipes over the car scroll the page on touch screens
+                style={{ touchAction: 'pan-y' }}
                 aria-label="Interactive 3D Porsche 911 Turbo S. Scroll to drive it; click it to flash the headlights."
                 role="img"
               >
+                <PerformanceMonitor onDecline={() => setMaxDpr(1)} />
                 <ShowroomScene
                   theme={SCENE_THEMES[actualTheme]}
                   onCarHover={setCarHover}
                   onCarClick={onCarClick}
+                  lowPower={isLowPower}
                 />
               </Canvas>
             </Suspense>
@@ -327,13 +346,13 @@ const Hero: React.FC = () => {
 
         {/* keep the intro copy legible against the car */}
         <motion.div
-          className="absolute inset-y-0 left-0 w-full md:w-1/2 bg-gradient-to-b md:bg-gradient-to-r from-background/85 via-background/40 to-transparent pointer-events-none"
+          className="absolute inset-y-0 left-0 w-full wide:w-1/2 bg-gradient-to-b wide:bg-gradient-to-r from-background/85 via-background/40 to-transparent pointer-events-none"
           style={{ opacity: washOpacity }}
           aria-hidden="true"
         />
 
         {/* ── 00 · Intro ── */}
-        <Stage progress={scrollYProgress} range={[-1, 0, 0.05, 0.1]} className="inset-x-0 top-[12%] md:top-0 md:bottom-0 md:flex md:items-center px-[var(--spacing-layout-x)]">
+        <Stage progress={scrollYProgress} range={[-1, 0, 0.05, 0.1]} className="inset-x-0 top-[12%] wide:top-0 wide:bottom-0 wide:flex wide:items-center px-[var(--spacing-layout-x)]">
           <div ref={introRef} className="max-w-xl">
             <p className="mb-6 font-mono text-xs md:text-sm text-primary">
               Software Engineer Intern · AI, computer vision &amp; embedded systems
@@ -374,7 +393,7 @@ const Hero: React.FC = () => {
               onClick={openGame}
               onMouseEnter={() => preloadGame()}
               onFocus={() => preloadGame()}
-              className="hero-cta hidden md:inline-flex mt-8 items-center gap-3 px-5 py-3 border border-primary/40 bg-background/60 backdrop-blur-sm text-sm font-medium text-text-primary hover:bg-primary hover:border-primary hover:text-white transition-colors"
+              className={`hero-cta hidden ${isTouchDevice ? '' : 'md:inline-flex'} mt-8 items-center gap-3 px-5 py-3 border border-primary/40 ${GLASS} text-sm font-medium text-text-primary hover:bg-primary hover:border-primary hover:text-white transition-colors`}
               aria-label="Experience my dream car — opens the 3D driving game"
             >
               <Gamepad2 size={15} />
@@ -404,7 +423,7 @@ const Hero: React.FC = () => {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2.5">
             {['ENTC @ PICT · 3rd year', '9.31 CGPA', 'SWE Intern @ MindstriX', '35 Public Repos'].map((fact) => (
-              <span key={fact} className="px-3 py-1.5 border border-border-light bg-background/60 backdrop-blur-sm text-[11px] font-mono text-text-secondary font-medium">
+              <span key={fact} className={`px-3 py-1.5 border border-border-light ${GLASS} text-[11px] font-mono text-text-secondary font-medium`}>
                 {fact}
               </span>
             ))}
@@ -412,12 +431,12 @@ const Hero: React.FC = () => {
         </Stage>
 
         {/* ── 02 · Selected work (rear view) ── */}
-        <Stage progress={scrollYProgress} range={[0.33, 0.37, 0.44, 0.49]} className="right-[var(--spacing-layout-x)] left-[var(--spacing-layout-x)] md:left-auto top-[12%] md:top-auto md:bottom-[16%] md:w-[min(480px,40vw)]">
+        <Stage progress={scrollYProgress} range={[0.33, 0.37, 0.44, 0.49]} className="right-[var(--spacing-layout-x)] left-[var(--spacing-layout-x)] wide:left-auto top-[12%] wide:top-auto wide:bottom-[16%] wide:w-[min(480px,40vw)]">
           <Eyebrow index="02">Selected work</Eyebrow>
           <h2 className="font-display tracking-[-0.03em] leading-[1.02] text-text-primary text-[clamp(30px,3.8vw,60px)] mb-6">
             Things I've <span className="text-primary">built.</span>
           </h2>
-          <ul className="divide-y divide-border-light border-y border-border-light bg-background/50 backdrop-blur-md">
+          <ul className={`divide-y divide-border-light border-y border-border-light ${GLASS_MD}`}>
             {[
               ['Aviro', 'AI finance controller · zero false auto-matches', 'Aviro'],
               ['Sudarshan', 'Android banking-malware intelligence', 'Sudarshan'],
@@ -446,7 +465,7 @@ const Hero: React.FC = () => {
         </Stage>
 
         {/* ── 03 · Experience (wheel close-up) ── */}
-        <Stage progress={scrollYProgress} range={[0.53, 0.57, 0.64, 0.69]} className="left-[var(--spacing-layout-x)] right-[var(--spacing-layout-x)] md:right-auto top-[12%] md:top-auto md:bottom-[18%] md:w-[min(440px,36vw)]">
+        <Stage progress={scrollYProgress} range={[0.53, 0.57, 0.64, 0.69]} className="left-[var(--spacing-layout-x)] right-[var(--spacing-layout-x)] wide:right-auto top-[12%] wide:top-auto wide:bottom-[18%] wide:w-[min(440px,36vw)]">
           <Eyebrow index="03">Experience</Eyebrow>
           <h2 className="font-display tracking-[-0.03em] leading-[1.02] text-text-primary text-[clamp(30px,3.8vw,60px)] mb-3">
             Software Engineer <span className="text-primary">Intern.</span>
@@ -482,7 +501,7 @@ const Hero: React.FC = () => {
               ['Top 3', 'VOIS Innovation Marathon 2.0', 'KrishiSaarthi'],
             ].map(([place, event, project]) => (
               <li key={event}>
-                <a href="#awards" className="group block h-full px-4 py-3 md:py-4 border border-border-light bg-background/60 backdrop-blur-md hover:border-primary transition-colors">
+                <a href="#awards" className={`group block h-full px-4 py-3 md:py-4 border border-border-light ${GLASS_MD} hover:border-primary transition-colors`}>
                   <div className="font-display text-xl md:text-2xl text-primary leading-none">{place}</div>
                   <div className="mt-1.5 text-xs font-semibold text-text-primary">{event}</div>
                   <div className="text-[11px] font-mono text-text-secondary mt-0.5">{project}</div>
@@ -503,7 +522,7 @@ const Hero: React.FC = () => {
               onClick={openGame}
               onMouseEnter={() => preloadGame()}
               onFocus={() => preloadGame()}
-              className="group hidden md:inline-flex items-center gap-3 px-7 py-4 bg-text-primary text-background text-sm font-medium hover:bg-primary transition-colors"
+              className={`group hidden ${isTouchDevice ? '' : 'md:inline-flex'} items-center gap-3 px-7 py-4 bg-text-primary text-background text-sm font-medium hover:bg-primary transition-colors`}
             >
               Take the 911 for a drive
               <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -526,9 +545,12 @@ const Hero: React.FC = () => {
         {/* ── HUD ── */}
         <motion.div className="absolute inset-0 pointer-events-none" style={{ opacity: hudOpacity }}>
 
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-[132px] md:left-auto md:translate-x-0 md:right-[var(--spacing-layout-x)] md:bottom-auto md:top-1/2 md:-translate-y-1/2 pointer-events-auto">
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 bottom-[132px] wide:left-auto wide:translate-x-0 wide:right-[var(--spacing-layout-x)] wide:bottom-auto wide:top-1/2 wide:-translate-y-1/2 wide:!opacity-100 wide:!pointer-events-auto"
+            style={{ opacity: pickerOpacity, pointerEvents: pickerPointer }}
+          >
             <PaintPicker value={paint} onChange={setPaint} />
-          </div>
+          </motion.div>
 
           <div className="hidden md:flex absolute right-[var(--spacing-layout-x)] bottom-8 items-end gap-5 pointer-events-auto">
             <button

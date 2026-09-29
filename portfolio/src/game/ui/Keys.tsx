@@ -26,7 +26,6 @@ const isInputWithDisplayName = (v: PropertyKey): v is InputWithDisplayName => Ob
 
 const actionDisplayMap: Record<BindableActionName, { displayName: string; order: number }> = {
   backward: { displayName: 'Backward', order: 1 },
-  boost: { displayName: 'Turbo Boost', order: 6 },
   brake: { displayName: 'Drift', order: 4 },
   editor: { displayName: 'Editor', order: 8 },
   forward: { displayName: 'Forward', order: 0 },
@@ -34,7 +33,6 @@ const actionDisplayMap: Record<BindableActionName, { displayName: string; order:
   honk: { displayName: 'Honk', order: 5 },
   left: { displayName: 'Left', order: 2 },
   map: { displayName: 'Map', order: 11 },
-  reset: { displayName: 'Reset', order: 7 },
   right: { displayName: 'Right', order: 3 },
   sound: { displayName: 'Toggle Mute', order: 13 },
 }

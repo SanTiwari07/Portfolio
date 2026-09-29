@@ -55,6 +55,7 @@ const RoadRail: React.FC = () => {
   const [color, setColor] = useState(drive.paint);
 
   useEffect(() => {
+    const xl = window.matchMedia('(min-width: 1280px)');
     let range = { start: 0, end: 1 };
     let frame = 0;
 
@@ -76,6 +77,8 @@ const RoadRail: React.FC = () => {
 
     let facing = 0; // 0 = heading down the page, 180 = reversing
     const off = onDriveFrame(() => {
+      // rail is only shown at xl+; skip the per-frame work everywhere else
+      if (!xl.matches) return;
       if (++frame % 90 === 0) measure(); // sections lazy-load images and grow
       const y = window.scrollY;
       const p = (y - range.start) / (range.end - range.start);

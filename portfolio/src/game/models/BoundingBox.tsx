@@ -11,7 +11,8 @@ type Props = {
 }
 
 export const BoundingBox = ({ depth, height, position: [x, y, z], width }: Props) => {
-  const [onCollide] = useStore(({ actions: { reset } }) => [reset])
+  // leaving the map puts the car back at the last checkpoint
+  const [onCollide] = useStore(({ actions: { recoverVehicle } }) => [recoverVehicle])
 
   const sharedProps = {
     isTrigger: true,

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from '../ui/ThemeToggle';
+import { isLowPower } from '../../lib/device';
 
 interface NavbarProps {
   activeSection: string;
@@ -38,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
         aria-label="Main navigation"
         className={`fixed top-0 left-0 right-0 z-[100] transition-[padding,background-color,border-color,backdrop-filter] duration-500 ${
           isScrolled
-            ? 'py-4 bg-background/90 backdrop-blur-xl border-b border-border-light'
+            ? `py-4 ${isLowPower ? 'bg-background/95' : 'bg-background/90 backdrop-blur-xl'} border-b border-border-light`
             : 'py-7 bg-transparent'
         }`}
         initial={{ y: -100, opacity: 0 }}

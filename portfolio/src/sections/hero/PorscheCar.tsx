@@ -4,7 +4,7 @@ import { ContactShadows, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { drive } from './driveState';
 
-// Meshopt-compressed copy of /models/game/porsche_911_turbo_s.glb (58 MB → 4.9 MB).
+// Meshopt-compressed Porsche 911 Turbo S (4.9 MB, down from the 58 MB original). Also used by the game.
 export const HERO_MODEL_URL = '/models/porsche-hero.glb';
 useGLTF.preload(HERO_MODEL_URL);
 
@@ -179,6 +179,9 @@ function Lamps({ front, rear }: { front: React.MutableRefObject<number>; rear: R
   );
 }
 
+// Kept off scene.userData: Object3D.clone() JSON-copies userData, which would serialise the whole rig.
+const rigs = new WeakMap<THREE.Object3D, { pivots: THREE.Group[]; mats: CarMaterials }>();
+
 interface PorscheCarProps {
   shadowOpacity?: number;
   onPointerOver?: () => void;
@@ -197,7 +200,8 @@ export function PorscheCar({ shadowOpacity = 0.7, onPointerOver, onPointerOut, o
 
   // Rig once per loaded scene (useGLTF caches it, so remounts/HMR reuse the rig).
   const rig = useMemo(() => {
-    if (scene.userData.heroRig) return scene.userData.heroRig as { pivots: THREE.Group[]; mats: CarMaterials };
+    const cached = rigs.get(scene);
+    if (cached) return cached;
     // Measure in the model's own space, detached from any scaled parent.
     const parent = scene.parent;
     parent?.remove(scene);
@@ -206,7 +210,7 @@ export function PorscheCar({ shadowOpacity = 0.7, onPointerOver, onPointerOut, o
     const result = { mats: upgradeMaterials(scene), pivots: rigWheels(scene) };
     scene.position.copy(savedPosition);
     parent?.add(scene);
-    scene.userData.heroRig = result;
+    rigs.set(scene, result);
     return result;
   }, [scene]);
 
@@ -275,7 +279,8 @@ export function PorscheCar({ shadowOpacity = 0.7, onPointerOver, onPointerOut, o
         </group>
       </group>
       {/* lives on the chassis (not the body) so it follows the car but ignores pitch */}
-      <ContactShadows position={[0, 0.005, 0]} scale={[5, 8]} opacity={shadowOpacity} blur={2.2} far={1.6} resolution={512} color="#000000" />
+      {/* baked once: the car never moves relative to its own shadow, so re-rendering it every frame is wasted work */}
+      <ContactShadows position={[0, 0.005, 0]} scale={[5, 8]} opacity={shadowOpacity} blur={2.2} far={1.6} resolution={512} frames={1} color="#000000" />
     </group>
   );
 }

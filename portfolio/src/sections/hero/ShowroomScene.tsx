@@ -161,13 +161,13 @@ function SpeedStreaks({ color }: { color: string }) {
 }
 
 // ─── Lighting: studio lightformers (no HDR download) ──────────────
-function Studio({ dark }: { dark: boolean }) {
+function Studio({ dark, lowPower }: { dark: boolean; lowPower: boolean }) {
   return (
     <>
       <ambientLight intensity={dark ? 0.15 : 0.45} />
       <directionalLight position={[4, 8, 5]} intensity={dark ? 1.2 : 1.8} />
       <spotLight position={[-6, 6, -4]} angle={0.5} penumbra={1} intensity={dark ? 40 : 25} color="#ffffff" />
-      <Environment resolution={256} frames={1}>
+      <Environment resolution={lowPower ? 128 : 256} frames={1}>
         <color attach="background" args={[dark ? '#050505' : '#d8d8d8']} />
         {/* long overhead softbox — the signature highlight along the roofline */}
         <Lightformer form="rect" intensity={dark ? 3 : 4} position={[0, 5, 0]} rotation-x={Math.PI / 2} scale={[12, 2.5, 1]} />
@@ -187,9 +187,11 @@ interface ShowroomSceneProps {
   theme: SceneTheme;
   onCarHover?: (hovering: boolean) => void;
   onCarClick?: () => void;
+  /** skip the real-time floor reflection (a second full scene render every frame) */
+  lowPower?: boolean;
 }
 
-export function ShowroomScene({ theme, onCarHover, onCarClick }: ShowroomSceneProps) {
+export function ShowroomScene({ theme, onCarHover, onCarClick, lowPower = false }: ShowroomSceneProps) {
   const { scene } = useThree();
   useEffect(() => {
     scene.fog = new THREE.Fog(theme.background, 11, 30);
@@ -201,7 +203,7 @@ export function ShowroomScene({ theme, onCarHover, onCarClick }: ShowroomScenePr
   return (
     <>
       <CameraRig />
-      <Studio dark={theme.dark} />
+      <Studio dark={theme.dark} lowPower={lowPower} />
 
       <PorscheCar
         shadowOpacity={theme.dark ? 0.9 : 0.65}
@@ -215,19 +217,23 @@ export function ShowroomScene({ theme, onCarHover, onCarClick }: ShowroomScenePr
 
       <mesh rotation-x={-Math.PI / 2} position={[0, 0, 0]}>
         <planeGeometry args={[120, 120]} />
-        <MeshReflectorMaterial
-          color={theme.floor}
-          resolution={512}
-          mirror={theme.dark ? 0.6 : 0.35}
-          mixBlur={6}
-          mixStrength={theme.dark ? 3 : 1.4}
-          blur={[400, 120]}
-          roughness={0.9}
-          metalness={theme.dark ? 0.5 : 0.1}
-          depthScale={0.8}
-          minDepthThreshold={0.4}
-          maxDepthThreshold={1.2}
-        />
+        {lowPower ? (
+          <meshStandardMaterial color={theme.floor} roughness={0.85} metalness={theme.dark ? 0.4 : 0.05} />
+        ) : (
+          <MeshReflectorMaterial
+            color={theme.floor}
+            resolution={512}
+            mirror={theme.dark ? 0.6 : 0.35}
+            mixBlur={6}
+            mixStrength={theme.dark ? 3 : 1.4}
+            blur={[400, 120]}
+            roughness={0.9}
+            metalness={theme.dark ? 0.5 : 0.1}
+            depthScale={0.8}
+            minDepthThreshold={0.4}
+            maxDepthThreshold={1.2}
+          />
+        )}
       </mesh>
     </>
   );
