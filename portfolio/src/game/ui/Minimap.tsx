@@ -5,6 +5,7 @@ import { Box3, Matrix4, Scene, Vector2, Vector3 } from 'three'
 
 import type { OrthographicCamera, Sprite, WebGLRenderTarget } from 'three'
 
+import { isTouchDevice } from '../../lib/device'
 import { useStore, levelLayer } from '../store'
 
 const m = new Matrix4()
@@ -58,7 +59,7 @@ function MinimapTexture({ buffer }: { buffer: WebGLRenderTarget }): JSX.Element 
   return <OrthographicCameraComponent ref={camera} makeDefault={false} rotation={[-Math.PI / 2, 0, 0]} near={20} far={500} />
 }
 
-export function Minimap({ size = 200 }): JSX.Element {
+export function Minimap({ size = isTouchDevice ? 110 : 200 }): JSX.Element {
   const player = useRef<Sprite>(null)
   const miniMap = useRef<Sprite>(null)
   const miniMapCamera = useRef<OrthographicCamera>(null)
@@ -75,7 +76,14 @@ export function Minimap({ size = 200 }): JSX.Element {
   } = useThree()
   const [, levelCenter, levelDimensions] = useLevelGeometricProperties()
   const chassisBody = useStore((state) => state.chassisBody)
-  const screenPosition = useMemo(() => new Vector3(width / -2 - size / -2 + 30, height / -2 - size / -2 + 30, 0), [height, width, size])
+  // bottom-left on desktop; on touch screens the thumbs own the bottom edge, so it moves up under the help button
+  const screenPosition = useMemo(
+    () =>
+      isTouchDevice
+        ? new Vector3(width / 2 - size / 2 - 16, height / 2 - size / 2 - 70, 0)
+        : new Vector3(width / -2 - size / -2 + 30, height / -2 - size / -2 + 30, 0),
+    [height, width, size],
+  )
 
   useFrame(() => {
     if (!miniMap.current || !miniMapCamera.current) return

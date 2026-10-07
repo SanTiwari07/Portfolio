@@ -499,3 +499,210 @@
     opacity: 0;
   }
 }
+
+/* --------------- RECOVERY PROMPT --------------- */
+
+.recovery-overlay {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.recovery-container {
+  pointer-events: auto;
+  text-align: center;
+  padding: 1rem 1.4rem;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+}
+
+.recovery-container h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.recovery-desc {
+  margin: 0.35rem 0 0.9rem;
+  font-size: 0.8rem;
+  color: #b0b0b0;
+}
+
+.recovery-buttons {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.recovery-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.recovery-btn.primary {
+  background: #e32636;
+  border-color: #e32636;
+}
+
+.recovery-btn .key {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* --------------- TOUCH CONTROLS --------------- */
+
+.touch-controls {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 20px calc(24px + env(safe-area-inset-bottom));
+  z-index: 40;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.touch-group {
+  display: flex;
+  gap: 14px;
+  pointer-events: auto;
+}
+
+.touch-btn {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: white;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  touch-action: none;
+}
+
+.touch-btn.active {
+  background: rgba(227, 38, 54, 0.75);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* --------------- SMALL / TOUCH SCREENS --------------- */
+
+@media (max-width: 900px), (pointer: coarse) {
+  .clock {
+    top: 76px;
+    left: 20px;
+    font-size: 3em;
+    letter-spacing: -3px;
+  }
+
+  .help {
+    top: 24px;
+    right: 20px;
+  }
+
+  .speed {
+    bottom: 130px;
+    right: 16px;
+    font-size: 1.6em;
+  }
+
+  .speed-gauge {
+    width: 150px;
+  }
+
+  .checkpoint {
+    top: 22%;
+  }
+}
+
+/* --------------- PAINT PICKER --------------- */
+
+.paint-picker {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+}
+
+.paint-name {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.paint-swatch {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.paint-swatch:hover {
+  transform: scale(1.2);
+}
+
+.paint-swatch.active {
+  transform: scale(1.25);
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(227, 38, 54, 0.8);
+}
+
+.paint-hint {
+  margin-top: 4px;
+  font-size: 0.6rem;
+  font-family: ui-monospace, monospace;
+  padding: 1px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (pointer: coarse) {
+  .paint-hint {
+    display: none;
+  }
+
+  .paint-picker {
+    right: 12px;
+    top: 56%;
+  }
+}

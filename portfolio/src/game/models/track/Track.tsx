@@ -8,7 +8,6 @@ import type { GLTF } from 'three-stdlib'
 import type { Group, Mesh, MeshStandardMaterial } from 'three'
 
 import { useStore, levelLayer } from '../../store'
-import { useToggle } from '../../useToggle'
 
 interface TrackGLTF extends GLTF {
   nodes: {
@@ -46,6 +45,20 @@ function RoadCollider({ geometry }: { geometry: import('three').BufferGeometry }
   return null
 }
 
+// Defined at module level: declared inside Track it was a brand-new component type on every render,
+// so React tore down and re-created the water sound each time.
+function WaterAudio() {
+  const ref = useRef<import('three').PositionalAudio>(null)
+  const [ready, sound] = useStore((s) => [s.ready, s.sound])
+
+  useLayoutEffect(() => {
+    if (ref.current) ref.current.setVolume(0.1)
+  }, [ready, sound])
+
+  if (!ready || !sound) return null
+  return <PositionalAudio ref={ref} url="/sounds/game/water.mp3" loop autoplay distance={2} />
+}
+
 export function Track(): JSX.Element {
   const level = useStore((state) => state.level)
   // PATCHED: /models/ → /game/models/
@@ -59,20 +72,6 @@ export function Track(): JSX.Element {
     birds.current.children.forEach((bird, index) => (bird.rotation.y += delta / index))
     clouds.current.children.forEach((cloud, index) => (cloud.rotation.y += delta / 25 / index))
   })
-
-  const ToggledPositionalAudio = useToggle(PositionalAudio, ['ready', 'sound'])
-
-  function WaterAudio() {
-    const ref = useRef<import('three').PositionalAudio>(null)
-    const [ready, sound] = useStore((s) => [s.ready, s.sound])
-    
-    useLayoutEffect(() => {
-      if (ref.current) ref.current.setVolume(0.1)
-    }, [ready, sound])
-
-    if (!ready || !sound) return null
-    return <PositionalAudio ref={ref} url="/sounds/game/water.mp3" loop autoplay distance={2} />
-  }
 
   return (
     <group dispose={null}>

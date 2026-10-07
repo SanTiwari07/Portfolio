@@ -7,7 +7,8 @@ import gsap from 'gsap';
 import { Volume2, VolumeX, ArrowDown, ArrowUpRight, Gamepad2 } from 'lucide-react';
 
 import { useTheme } from '../context/ThemeContext';
-import { preloadGame } from '../App';
+import { preloadGame } from '../lib/game';
+import { useGithubData } from '../lib/github';
 import { ShowroomScene, type SceneTheme } from './hero/ShowroomScene';
 import { drive, onDriveFrame, PAINTS, startDriveLoop } from './hero/driveState';
 import { SHOTS, shotIndexAt } from './hero/shots';
@@ -199,6 +200,7 @@ function PaintPicker({ value, onChange }: { value: number; onChange: (i: number)
 
 // ─── Main Hero ────────────────────────────────────────────────────
 const Hero: React.FC = () => {
+  const github = useGithubData();
   const sectionRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
@@ -422,7 +424,7 @@ const Hero: React.FC = () => {
             I build systems where software, hardware and machine learning meet — from production Gemini pipelines to dual-ESP32 computer vision rigs.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-            {['ENTC @ PICT · 3rd year', '9.31 CGPA', 'SWE Intern @ MindstriX', '35 Public Repos'].map((fact) => (
+            {['ENTC @ PICT · 3rd year', '9.31 CGPA', 'SWE Intern @ MindstriX', ...(github ? [`${github.publicRepos} Public Repos`] : [])].map((fact) => (
               <span key={fact} className={`px-3 py-1.5 border border-border-light ${GLASS} text-[11px] font-mono text-text-secondary font-medium`}>
                 {fact}
               </span>

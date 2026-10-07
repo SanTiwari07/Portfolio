@@ -1,27 +1,22 @@
 import { forwardRef } from 'react'
-import { useGLTF } from '@react-three/drei'
 import { useCompoundBody } from '@react-three/cannon'
 
-import { useStore } from '../../store'
+import { getState, useStore } from '../../store'
+import { usePorscheRig } from './porscheRig'
 
 import type { CylinderProps } from '@react-three/cannon'
-import type { Group, Mesh, MeshStandardMaterial } from 'three'
-import type { GLTF } from 'three-stdlib'
-
-interface WheelGLTF extends GLTF {
-  nodes: { Mesh_14: Mesh; Mesh_14_1: Mesh }
-  materials: { 'Material.002': MeshStandardMaterial; 'Material.009': MeshStandardMaterial }
-}
+import type { Group } from 'three'
 
 interface WheelProps extends CylinderProps {
-  leftSide?: boolean
+  /** physics wheel index: 0/1 front left/right, 2/3 rear left/right */
+  index: number
 }
 
-export const Wheel = forwardRef<Group, WheelProps>(({ leftSide, ...props }, ref) => {
+// A physics wheel that wears the Porsche's real tyre, rim and brake disc. The raycast vehicle
+// moves, steers and spins this group, so the wheels roll with the car instead of being painted on.
+export const Wheel = forwardRef<Group, WheelProps>(({ index, ...props }, ref) => {
   const { radius } = useStore((state) => state.wheelInfo)
-  // PATCHED: /models/ → /game/models/
-  const { nodes, materials } = useGLTF('/models/game/wheel-draco.glb') as WheelGLTF
-  const scale = radius / 0.34
+  const rig = usePorscheRig(getState().color)
   useCompoundBody(
     () => ({
       mass: 50,
@@ -36,12 +31,7 @@ export const Wheel = forwardRef<Group, WheelProps>(({ leftSide, ...props }, ref)
   )
   return (
     <group ref={ref} dispose={null}>
-      <group scale={scale}>
-        <group scale={leftSide ? -1 : 1}>
-          <mesh castShadow geometry={nodes.Mesh_14.geometry} material={materials['Material.002']} />
-          <mesh castShadow geometry={nodes.Mesh_14_1.geometry} material={materials['Material.009']} />
-        </group>
-      </group>
+      <primitive object={rig.wheels[index]} dispose={null} />
     </group>
   )
 })

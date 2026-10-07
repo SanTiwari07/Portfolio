@@ -75,7 +75,7 @@ const RoadRail: React.FC = () => {
     measure();
     window.addEventListener('resize', measure);
 
-    let facing = 0; // 0 = heading down the page, 180 = reversing
+    let facing = 180; // sprite nose points up: 180 = heading down the page, 0 = reversing
     const off = onDriveFrame(() => {
       // rail is only shown at xl+; skip the per-frame work everywhere else
       if (!xl.matches) return;
@@ -87,8 +87,8 @@ const RoadRail: React.FC = () => {
         rootRef.current.style.opacity = String(visible);
         rootRef.current.style.pointerEvents = visible > 0.5 ? 'auto' : 'none';
       }
-      if (drive.speed < -0.5) facing = 180;
-      else if (drive.speed > 0.5) facing = 0;
+      if (drive.speed < -0.5) facing = 0;
+      else if (drive.speed > 0.5) facing = 180;
       if (carRef.current) {
         carRef.current.style.top = `${Math.min(Math.max(p, 0), 1) * 100}%`;
         carRef.current.style.transform = `translate(-50%, -50%) rotate(${facing}deg)`;

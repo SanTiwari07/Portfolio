@@ -20,10 +20,10 @@ export const Finished = (): JSX.Element => {
       zIndex: 1000
     }}>
       <div className="finished-header" style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <h1 style={{ color: 'var(--primary)', fontSize: '4rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, fontFamily: 'var(--font-heading)' }}>
+        <h1 style={{ color: 'var(--primary)', fontSize: '4rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, fontFamily: 'var(--font-display)' }}>
           Race Completed!
         </h1>
-        <p style={{ color: 'var(--text-primary)', fontSize: '2rem', marginTop: '1.5rem', fontWeight: '600', letterSpacing: '0.05em', fontFamily: 'var(--font-body)' }}>
+        <p style={{ color: 'var(--text-primary)', fontSize: '2rem', marginTop: '1.5rem', fontWeight: '600', letterSpacing: '0.05em', fontFamily: 'var(--font-sans, system-ui, sans-serif)' }}>
           Your time: <span style={{ color: 'var(--primary)' }}>{readableTime(time)}</span> seconds
         </p>
       </div>
@@ -43,7 +43,7 @@ export const Finished = (): JSX.Element => {
             fontWeight: 'bold',
             letterSpacing: '0.05em',
             borderRadius: '4px',
-            fontFamily: 'var(--font-body)'
+            fontFamily: 'var(--font-sans, system-ui, sans-serif)'
           }}
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--text-primary)'; e.currentTarget.style.color = 'var(--background)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--text-primary)'; }}
@@ -64,7 +64,7 @@ export const Finished = (): JSX.Element => {
             fontWeight: 'bold',
             letterSpacing: '0.05em',
             borderRadius: '4px',
-            fontFamily: 'var(--font-body)'
+            fontFamily: 'var(--font-sans, system-ui, sans-serif)'
           }}
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--primary-hover)'; e.currentTarget.style.borderColor = 'var(--primary-hover)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--primary)'; e.currentTarget.style.borderColor = 'var(--primary)'; }}

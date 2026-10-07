@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { ReactNode } from 'react'
 
 import { useStore } from '../store'
-import { setupSession } from '../data'
+import { isTouchDevice as isTouch } from '../../lib/device'
 
 const steps = [
   "Loading Vehicle",
@@ -16,15 +16,16 @@ const steps = [
 export function Intro({ children }: { children: ReactNode }): JSX.Element {
   const [clicked, setClicked] = useState(false)
   const [loading, setLoading] = useState(true)
-  const { progress } = useProgress()
-  const [session, set] = useStore((state) => [state.session, state.set])
+  const { progress, errors } = useProgress()
+  const [set, sceneReady] = useStore((state) => [state.set, state.sceneReady])
+  const [timedOut, setTimedOut] = useState(false)
 
   const [visualSequenceDone, setVisualSequenceDone] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
 
   useEffect(() => {
-    // 1.8s total sequence
-    const intervals = [600, 600, 600]; 
+    // brief title sequence — the real gate below is the asset loader, not this animation
+    const intervals = [350, 350, 350]; 
     let active = true;
     
     const runSequence = async () => {
@@ -41,26 +42,28 @@ export function Intro({ children }: { children: ReactNode }): JSX.Element {
     return () => { active = false };
   }, []);
 
+  // never trap the player on the loading screen: a slow or failed asset shouldn't block the game forever
   useEffect(() => {
-    if (visualSequenceDone && progress === 100) {
+    const t = setTimeout(() => setTimedOut(true), 25000)
+    return () => clearTimeout(t)
+  }, [])
+
+  useEffect(() => {
+    if (visualSequenceDone && ((progress === 100 && sceneReady) || errors.length > 0 || timedOut)) {
       setLoading(false);
       setStepIndex(3); // 100%
     }
-  }, [visualSequenceDone, progress]);
+  }, [visualSequenceDone, progress, sceneReady, errors.length, timedOut]);
 
   useEffect(() => {
     if (!loading) {
       const t = setTimeout(() => {
         setClicked(true);
         set({ ready: true });
-      }, 500); // Hold at 100% for 0.5s before dismissing
+      }, 250); // short hold at 100% before dismissing
       return () => clearTimeout(t);
     }
   }, [loading, set]);
-
-  useEffect(() => {
-    setupSession(set)
-  }, [set])
 
   return (
     <>
@@ -104,7 +107,7 @@ export function Intro({ children }: { children: ReactNode }): JSX.Element {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 1 }}
               >
-                Controls: W A S D / Arrows • Space to Brake • R to Reset
+                {isTouch ? 'Touch controls: steer left / right, gas and brake' : 'Controls: W A S D / Arrows • Space to Brake • R to Reset'}
               </motion.p>
             </div>
           </motion.div>

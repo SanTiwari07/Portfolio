@@ -1,11 +1,18 @@
 import React, { useEffect, useCallback } from 'react'
 import { App as GameApp } from './App'
+import { resetGameState } from './store'
 import { ArrowLeft } from 'lucide-react'
 import './styles.css'
 
 export default function GamePage() {
   const handleExit = useCallback(() => {
     window.dispatchEvent(new CustomEvent('navigate', { detail: '/' }))
+  }, [])
+
+  useEffect(() => {
+    // fresh run every time: the store outlives this page
+    resetGameState()
+    return () => resetGameState()
   }, [])
 
   useEffect(() => {

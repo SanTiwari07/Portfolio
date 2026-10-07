@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { SectionHeader } from '../components/ui/SectionHeader';
-
-const GITHUB_USER = 'SanTiwari07';
+import { GITHUB_USER, useGithubData } from '../lib/github';
 
 // Curated to match the featured projects on github.com/SanTiwari07.
 // Star counts are refreshed from the GitHub API on load.
@@ -94,48 +93,18 @@ type Repo = {
 };
 
 const LiveSystems: React.FC = () => {
-  const [repos, setRepos] = useState<Repo[]>(featuredRepos);
-  const [githubStats, setGithubStats] = useState({ repos: '35', stars: '2' });
+  const gh = useGithubData();
 
-  useEffect(() => {
-    const controller = new AbortController();
-    fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&type=owner`, {
-      signal: controller.signal,
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`GitHub API: ${res.status}`);
-        return res.json();
-      })
-      .then((data: unknown[]) => {
-        if (!Array.isArray(data)) return;
-
-        const publicRepos = data.length;
-        const totalStars = data.reduce((acc: number, repo: unknown) => {
-          const r = repo as { stargazers_count: number };
-          return acc + (r.stargazers_count || 0);
-        }, 0);
-        setGithubStats({ repos: publicRepos.toString(), stars: totalStars.toString() });
-
-        // Keep the curated order; only refresh live star counts.
-        const starsByUrl = new Map(
-          (data as Array<{ html_url: string; stargazers_count: number }>).map((r) => [r.html_url.toLowerCase(), r.stargazers_count]),
-        );
-        setRepos((current) =>
-          current.map((repo) => ({ ...repo, stars: starsByUrl.get(repo.url.toLowerCase()) ?? repo.stars })),
-        );
-      })
-      .catch((err: Error) => {
-        if (err.name !== 'AbortError') {
-          console.warn('GitHub API unavailable, using cached data');
-        }
-      });
-
-    return () => controller.abort();
-  }, []);
+  // Keep the curated order; only refresh live star counts.
+  const repos = useMemo<Repo[]>(() => {
+    if (!gh) return featuredRepos;
+    const starsByUrl = new Map(gh.repos.map((r) => [r.html_url.toLowerCase(), r.stargazers_count]));
+    return featuredRepos.map((repo) => ({ ...repo, stars: starsByUrl.get(repo.url.toLowerCase()) ?? repo.stars }));
+  }, [gh]);
 
   const stats = [
-    { value: githubStats.repos, label: 'public repos' },
-    { value: githubStats.stars, label: 'stars' },
+    { value: gh ? String(gh.publicRepos) : '—', label: 'public repos' },
+    { value: gh ? String(gh.stars) : '—', label: 'stars' },
   ];
 
   return (

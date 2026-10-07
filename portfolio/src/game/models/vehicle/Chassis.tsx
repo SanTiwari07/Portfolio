@@ -12,19 +12,25 @@ import type { CollideEvent } from '@react-three/cannon'
 
 import { Model as PorscheModel } from './Porsche'
 import { getState, setState, mutation, useStore } from '../../store'
+import { vehicleConfig, wheelInfo } from '../../store'
 
 const gears = 10
 const v = new Vector3()
 
-// We reduce the chassis physics box height to 0.1 (was 0.4) to increase ground clearance
-// for the rigid body, preventing it from snagging on sharp terrain bumps like the railway.
-export const Chassis = forwardRef<Group, PropsWithChildren<BoxProps>>(({ args = [1.4, 0.1, 2.45], mass = 1725, children, ...props }, ref) => {
+// Where the tyres touch the ground relative to the body's centre: wheel mount height, minus the
+// suspension's resting length (slightly compressed under the car's weight), minus the tyre radius.
+const GROUND_Y = vehicleConfig.height - (wheelInfo.suspensionRestLength - 0.08) - wheelInfo.radius
+
+// The collision box is a proper car-sized slab (its height gives the body real rotational inertia —
+// the old 0.1 m sliver flipped at the slightest bump) but sits well above the ground thanks to the
+// suspension, so it still clears the road's rough edges.
+export const Chassis = forwardRef<Group, PropsWithChildren<BoxProps>>(({ args = [1.75, 0.55, 4.0], mass = 1725, children, ...props }, ref) => {
   const crashAudio = useRef<PositionalAudioImpl>(null!)
   const [maxSpeed] = useStore((s) => [s.vehicleConfig.maxSpeed])
 
   const onCollide = useCallback(
     debounce<(e: CollideEvent) => void>((e) => {
-      if (e.body.userData.trigger) return
+      if (e.body?.userData?.trigger) return
 
       const impact = e.contact.impactVelocity
 
@@ -53,9 +59,11 @@ export const Chassis = forwardRef<Group, PropsWithChildren<BoxProps>>(({ args = 
     [maxSpeed],
   )
 
+  useLayoutEffect(() => api.angularVelocity.subscribe((w) => (mutation.angularVelocity = w)), [api])
+
   return (
     <group ref={ref} dispose={null}>
-      <group position={[0, -0.6, 0.4]} scale={0.55}>
+      <group position={[0, GROUND_Y, 0]}>
         <Suspense fallback={null}>
           <PorscheModel />
         </Suspense>

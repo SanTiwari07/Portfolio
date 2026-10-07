@@ -1,7 +1,9 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, Suspense } from 'react';
 import { ReactLenis } from 'lenis/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
+import { GAME_PATHS, GamePage, preloadGame } from './lib/game';
+import { isLowPower } from './lib/device';
 
 // Core
 import Navbar from './components/layout/Navbar';
@@ -17,8 +19,7 @@ import Journey from './sections/Journey';
 import BuildInPublic from './sections/BuildInPublic';
 import Contact from './sections/Contact';
 
-const GamePage = React.lazy(() => import('./game/GamePage'));
-export const preloadGame = () => import('./game/GamePage');
+export { preloadGame };
 
 const sections = [
   'hero', 'specs', 'mission', 'skills', 'projects', 'awards', 'journey', 'github', 'contact',
@@ -27,6 +28,7 @@ const sections = [
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const savedScroll = useRef(0);
 
   useEffect(() => {
     const handlePopState = () => setCurrentPath(window.location.pathname);
@@ -34,7 +36,9 @@ const App: React.FC = () => {
 
     const handleNavigate = (e: Event) => {
       const target = (e as CustomEvent).detail;
-      if (target) {
+      if (target && target !== window.location.pathname) {
+        // leaving the portfolio: remember where we were so "Return to Portfolio" lands back there
+        if (!GAME_PATHS.includes(window.location.pathname)) savedScroll.current = window.scrollY;
         window.history.pushState({}, '', target);
         setCurrentPath(target);
       }
@@ -47,7 +51,28 @@ const App: React.FC = () => {
     };
   }, []);
 
-  const isGameRoute = currentPath === '/dream-car' || currentPath === '/game';
+  const isGameRoute = GAME_PATHS.includes(currentPath);
+
+  // Warm the game chunk once the page has settled, so clicking the CTA is instant.
+  useEffect(() => {
+    if (isLowPower || isGameRoute) return;
+    const warm = () => void preloadGame();
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(warm, { timeout: 4000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = setTimeout(warm, 2500);
+    return () => clearTimeout(id);
+  }, [isGameRoute]);
+
+  // Coming back from the game: the page was unmounted (so the browser reset scroll to the top) — put it back.
+  useLayoutEffect(() => {
+    if (isGameRoute || !savedScroll.current) return;
+    const y = savedScroll.current;
+    savedScroll.current = 0;
+    window.scrollTo(0, y);
+    requestAnimationFrame(() => window.scrollTo(0, y));
+  }, [isGameRoute]);
 
   useEffect(() => {
     if (isGameRoute) return;
@@ -70,7 +95,7 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <AnimatePresence mode="wait">
+      <AnimatePresence initial={false}>
         {isGameRoute ? (
           <Suspense key="game" fallback={<div className="fixed inset-0 z-50 bg-black flex items-center justify-center text-white text-xs tracking-widest uppercase">Initializing Engine...</div>}>
             <motion.div 
@@ -78,7 +103,7 @@ const App: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1, ease: "easeInOut" }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
             >
               <GamePage />
             </motion.div>
@@ -88,8 +113,8 @@ const App: React.FC = () => {
             key="portfolio"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            exit={{ opacity: 0, transition: { duration: 0.25 } }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
             <ReactLenis
               root
