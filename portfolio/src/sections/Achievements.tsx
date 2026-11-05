@@ -329,7 +329,7 @@ const RaceRecord: React.FC = () => {
               <div>
                 <button
                   onClick={() => setSelectedAward(award)}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-text-primary underline underline-offset-4 decoration-border-light hover:decoration-primary hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-primary"
+                  className="inline-flex items-center gap-2 py-2 -my-2 text-sm font-medium text-text-primary underline underline-offset-4 decoration-border-light hover:decoration-primary hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-primary"
                   aria-label={`Read more about ${award.title}`}
                 >
                   Read the full story

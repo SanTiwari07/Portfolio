@@ -50,8 +50,8 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
           <a
             href="#hero"
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="group flex items-center gap-3"
-           
+            className="group flex items-center gap-3 py-3 -my-3"
+
             aria-label="Sanskar Tiwari — scroll to top"
           >
             <span className="font-semibold text-sm text-text-primary">

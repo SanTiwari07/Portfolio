@@ -186,7 +186,7 @@ function PaintPicker({ value, onChange }: { value: number; onChange: (i: number)
           aria-label={paint.name}
           title={paint.name}
           onClick={() => onChange(i)}
-          className={`relative w-5 h-5 rounded-full border transition-transform duration-300 hover:scale-125 ${
+          className={`relative w-5 h-5 rounded-full border transition-transform duration-300 hover:scale-125 before:absolute before:-inset-1.5 before:content-[''] ${
  i === value ? 'scale-125 border-text-primary' : 'border-text-primary/25'
  }`}
           style={{ background: `radial-gradient(circle at 30% 30%, #ffffff66, transparent 55%), ${paint.hex}` }}
@@ -383,7 +383,7 @@ const Hero: React.FC = () => {
                   href={`${import.meta.env.BASE_URL}assets/resume/resume.pdf`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hero-cta group flex items-center gap-3 text-sm font-medium text-text-primary"
+                  className="hero-cta group flex items-center gap-3 py-3 text-sm font-medium text-text-primary"
                  
                 >
                   Resume

@@ -53,7 +53,7 @@ const featuredRepos = [
     lang: 'Python',
     langColor: '#3572A5',
     topics: ['flask', 'langchain', 'ollama', 'tensorflow'],
-    url: `https://github.com/${GITHUB_USER}/KrishiSahAI`,
+    url: 'https://github.com/KrishiSahAI/KrishiSetu',
     stars: 0,
   },
   {
@@ -69,13 +69,19 @@ const featuredRepos = [
 ];
 
 function ContributionGraph() {
+  // On phones the full year is too small to read: keep it legible and let it scroll, starting at the latest weeks.
+  const scrollToLatest = (img: HTMLImageElement) => {
+    const box = img.parentElement;
+    if (box) box.scrollLeft = box.scrollWidth;
+  };
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full overflow-x-auto overscroll-x-contain">
       <img
         src={`https://ghchart.rshah.org/7A1E2C/${GITHUB_USER}`}
         alt={`${GITHUB_USER}'s GitHub contribution graph`}
-        className="w-full h-auto"
+        className="w-full min-w-[560px] h-auto"
         loading="lazy"
+        onLoad={(e) => scrollToLatest(e.currentTarget)}
       />
     </div>
   );
