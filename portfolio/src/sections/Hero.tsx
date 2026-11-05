@@ -379,16 +379,6 @@ const Hero: React.FC = () => {
                   <span className="absolute inset-0 bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" aria-hidden="true" />
                   <span className="relative z-10">View Work</span>
                 </a>
-                <a
-                  href={`${import.meta.env.BASE_URL}assets/resume/resume.pdf`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hero-cta group flex items-center gap-3 py-3 text-sm font-medium text-text-primary"
-                 
-                >
-                  Resume
-                  <span className="w-8 h-[1px] bg-text-primary group-hover:w-14 group-hover:bg-primary transition-all duration-300" aria-hidden="true" />
-                </a>
             </div>
             <button
               id="dream-car-btn"
