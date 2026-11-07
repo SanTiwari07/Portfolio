@@ -44,7 +44,7 @@ const timeline: Entry[] = [
   {
     date: 'Jul 2026',
     title: '1st place, HackVenture 2026 (Agritech)',
-    detail: 'GramDrishti, a satellite and AI climate-intelligence platform for villages.',
+    detail: 'GramDrishti, a satellite and AI climate-intelligence platform for villages, started by and built with Shweta Patil.',
     highlight: true,
   },
   {

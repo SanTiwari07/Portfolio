@@ -28,6 +28,8 @@ interface Award {
   modalTitle: string;
   modalSubtitle: string;
   modalDetails: string;
+  /** teammates credited on the card and in the modal */
+  team?: { name: string; role: string; github: string }[];
 }
 
 const detailedAwards: Award[] = [
@@ -38,15 +40,17 @@ const detailedAwards: Award[] = [
     image: '/images/awards/hackventure/gramdrishti.webp',
     bullets: [
       { text: '1st Place - Agritech Domain' },
+      { text: 'Started by Shweta Patil, built together' },
       { text: 'Satellite NDVI & NDWI monitoring' },
       { text: 'National-level competition' },
     ],
+    team: [{ name: 'Shweta Patil', role: 'Started GramDrishti and built it with me', github: 'https://github.com/Shwetapatil13' }],
     tags: ['AI', 'Geospatial', 'Satellite Analytics', 'Multilingual AI', 'Dashboards'],
     modalTitle: 'Winner – HackVenture 2026 (Agritech Domain)',
     modalSubtitle: 'Issued by SponFest · Jul 2026',
     modalDetails: `Secured 1st Place in the Agritech Domain at HackVenture 2026, a national-level virtual hackathon organized by SponFest. Competing against innovative teams from across the country, our solution was recognized for combining artificial intelligence, geospatial intelligence, and practical engineering to address real-world agricultural challenges.
 
-Our team developed GramDrishti, an AI-powered climate intelligence and geospatial decision support platform designed to help farmers, village administrations, and government authorities make faster, data-driven decisions. The platform transforms satellite observations and environmental data into actionable insights for crop monitoring, water resource management, and rural planning.
+GramDrishti was started by my teammate Shweta Patil, and her ideas, hard work and steady encouragement shaped what it became. We built it together: an AI-powered climate intelligence and geospatial decision support platform designed to help farmers, village administrations, and government authorities make faster, data-driven decisions. The platform transforms satellite observations and environmental data into actionable insights for crop monitoring, water resource management, and rural planning.
 
 One of the key innovations of the platform was its ability to combine satellite analytics with AI-generated recommendations, enabling users to understand environmental conditions without requiring technical GIS expertise. The solution integrated:
 
@@ -59,7 +63,7 @@ One of the key innovations of the platform was its ability to combine satellite 
 
 The project demonstrated how satellite intelligence, artificial intelligence, and modern web technologies can be combined into a practical platform that supports sustainable agriculture and climate-resilient rural development. The solution emphasized usability, scalability, and real-world impact for Indian villages.
 
-This achievement reflects innovation, teamwork, and the application of AI and geospatial technologies to solve meaningful agricultural and environmental challenges while contributing toward smarter, data-driven rural governance.`,
+Winning 1st place was a team effort, and GramDrishti would not exist without Shweta. This achievement reflects innovation, teamwork, and the application of AI and geospatial technologies to solve meaningful agricultural and environmental challenges while contributing toward smarter, data-driven rural governance.`,
   },
   {
     subtitle: 'VOIS INNOVATION MARATHON 2.0 BY VODAFONE IDEA',
@@ -220,6 +224,33 @@ const RaceRecord: React.FC = () => {
                 <div className="text-text-secondary text-sm md:text-base leading-relaxed space-y-6 whitespace-pre-wrap">
                   {selectedAward.modalDetails}
                 </div>
+
+                {selectedAward.team && (
+                  <div className="mt-10 pt-6 border-t border-border-light">
+                    <div className="font-mono text-xs text-primary mb-3">TEAMMATE</div>
+                    {selectedAward.team.map((m) => (
+                      <p key={m.name} className="text-sm md:text-base text-text-secondary">
+                        <a
+                          href={m.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-text-primary underline underline-offset-4 decoration-border-light hover:decoration-primary hover:text-primary transition-colors"
+                        >
+                          {m.name}
+                        </a>
+                        {' '}· {m.role} ·{' '}
+                        <a
+                          href={m.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-4 decoration-border-light hover:decoration-primary hover:text-primary transition-colors"
+                        >
+                          github.com/{m.github.split('/').pop()}
+                        </a>
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>
@@ -314,6 +345,23 @@ const RaceRecord: React.FC = () => {
                   </li>
                 ))}
               </ul>
+
+              {award.team && (
+                <p className="mb-8 text-sm text-text-secondary">
+                  Built with{' '}
+                  {award.team.map((m) => (
+                    <a
+                      key={m.name}
+                      href={m.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-text-primary underline underline-offset-4 decoration-border-light hover:decoration-primary hover:text-primary transition-colors"
+                    >
+                      {m.name} (@{m.github.split('/').pop()})
+                    </a>
+                  ))}
+                </p>
+              )}
 
               <div className="flex flex-wrap gap-1.5 mb-8">
                 {award.tags.map((tag, idx) => (

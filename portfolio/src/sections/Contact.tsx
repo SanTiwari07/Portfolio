@@ -4,6 +4,17 @@ import { SectionHeader } from '../components/ui/SectionHeader';
 
 const contactLinks = [
   {
+    label: 'Email',
+    href: 'mailto:sanskartiwari.work07@gmail.com',
+    display: 'sanskartiwari.work07@gmail.com',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </svg>
+    ),
+  },
+  {
     label: 'Instagram',
     href: 'https://www.instagram.com/sanskarmakesstuff/',
     display: 'instagram.com/sanskarmakesstuff',
@@ -53,7 +64,7 @@ const Contact: React.FC = () => {
           index="07"
           label="Contact"
           title="Let's build something."
-          intro="Open to internships, hackathon teams and interesting problems. The fastest way to reach me is LinkedIn."
+          intro="Open to internships, hackathon teams and interesting problems. The fastest way to reach me is LinkedIn or email."
         />
 
         <ul className="border-t border-border-light">

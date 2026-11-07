@@ -7,6 +7,26 @@ import { GITHUB_USER, useGithubData } from '../lib/github';
 // Star counts are refreshed from the GitHub API on load.
 const featuredRepos = [
   {
+    name: 'NarraReel',
+    fullName: 'Script to Reel',
+    description: 'Turns a script into a finished Reel, Short or YouTube video: a free AI voice or your cloned voice, exact length, and word-by-word animated captions. Runs on your own computer.',
+    lang: 'Python',
+    langColor: '#3572A5',
+    topics: ['fastapi', 'react', 'ffmpeg', 'voice-cloning'],
+    url: `https://github.com/${GITHUB_USER}/NarraReel`,
+    stars: 0,
+  },
+  {
+    name: 'Snipmint',
+    fullName: 'Long Video to Shorts',
+    description: 'Paste a YouTube link and get vertical Shorts: best-moment detection, speaker-tracking 9:16 crops and animated captions. Free by default, smarter with an optional Gemini key.',
+    lang: 'Python',
+    langColor: '#3572A5',
+    topics: ['whisper', 'gemini', 'youtube-shorts', 'docker'],
+    url: `https://github.com/${GITHUB_USER}/Snipmint`,
+    stars: 0,
+  },
+  {
     name: 'Aviro',
     fullName: 'AI Finance Controller',
     description: 'Invariant-governed AI finance controller: Gemini investigates, deterministic rules verify, zero false auto-matches. Razorpay AI Buildathon 2026.',
@@ -122,7 +142,7 @@ const LiveSystems: React.FC = () => {
           title="Selected projects."
           intro={
             <>
-              Six I'd point to first. Everything else is on{' '}
+              Eight I'd point to first. Everything else is on{' '}
               <a
                 href={`https://github.com/${GITHUB_USER}`}
                 target="_blank"
