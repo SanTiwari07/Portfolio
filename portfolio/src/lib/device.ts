@@ -20,3 +20,13 @@ export const isLowPower =
   mq('(max-width: 1023px)') ||
   (nav.hardwareConcurrency ?? 8) <= 4 ||
   (nav.deviceMemory ?? 8) <= 4;
+
+/**
+ * Whether the game should offer on-screen driving controls. Wider than `isTouchDevice` on purpose: some phones and
+ * tablets report a fine pointer or hover, and a narrow desktop window has no keyboard-friendly layout either.
+ * Evaluated when called, so it follows rotation and resizing.
+ */
+export const wantsTouchControls = (): boolean =>
+  isTouchDevice ||
+  (nav.maxTouchPoints ?? 0) > 0 ||
+  (typeof window !== 'undefined' && window.innerWidth <= 900);

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { ReactNode } from 'react'
 
 import { useStore } from '../store'
-import { isTouchDevice as isTouch } from '../../lib/device'
+import { wantsTouchControls } from '../../lib/device'
 
 const steps = [
   "Loading Vehicle",
@@ -107,7 +107,7 @@ export function Intro({ children }: { children: ReactNode }): JSX.Element {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 1 }}
               >
-                {isTouch ? 'Touch controls: steer left / right, gas and brake' : 'Controls: W A S D / Arrows • Space to Brake • R to Reset'}
+                {wantsTouchControls() ? 'Touch controls: steer left / right, gas and brake' : 'Controls: W A S D / Arrows • Space to Brake • R to Reset'}
               </motion.p>
             </div>
           </motion.div>
