@@ -9,7 +9,12 @@ function Pad({ control, label }: { control: keyof Controls; label: string }) {
   const [active, actions] = useStore((s) => [s.controls[control], s.actions])
   const press = (e: PointerEvent) => {
     e.preventDefault()
-    ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
+    // capturing keeps the control held while the finger slides; it can throw for a stale pointer, which must not eat the press
+    try {
+      ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
+    } catch {
+      /* ignore */
+    }
     actions[control](true)
   }
   const release = () => actions[control](false)

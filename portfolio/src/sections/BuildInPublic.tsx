@@ -118,6 +118,87 @@ const featuredRepos = [
   },
 ];
 
+// Every other public project whose README has a screenshot, shown as a compact grid under the main ten.
+const moreProjects = [
+  {
+    name: 'Bhumi',
+    summary: 'Crop-health investigation from satellite imagery, weather and verifiable field records, ending in the next best field check.',
+    tags: ['satellite-imagery', 'sentinel-2', 'agritech'],
+    image: '/images/projects/bhumi.webp',
+    url: `https://github.com/${GITHUB_USER}/Bhumi`,
+  },
+  {
+    name: 'Kounter',
+    summary: 'Offline-first shop audit concept that turns the iQOO 15 into a delivery counter, expiry gate and Hindi voice assistant.',
+    tags: ['offline-first', 'three.js', 'hackathon'],
+    image: '/images/projects/kounter.webp',
+    url: `https://github.com/${GITHUB_USER}/Kounter`,
+  },
+  {
+    name: 'Smaran',
+    summary: 'Offline-first memory for edge fleets: keeps working without a network and flags clashing field reports with version vectors.',
+    tags: ['edge-computing', 'vector-search', 'qdrant'],
+    image: '/images/projects/smaran.webp',
+    url: `https://github.com/${GITHUB_USER}/Smaran`,
+  },
+  {
+    name: 'Nova',
+    summary: 'The intelligence layer for everyday commerce and household autonomy, built from cooperating AI agents on AWS.',
+    tags: ['ai-agents', 'aws', 'strands-agents'],
+    image: '/images/projects/nova.webp',
+    url: `https://github.com/${GITHUB_USER}/Nova`,
+  },
+  {
+    name: 'LeetCode Tracker',
+    summary: 'Chrome extension that saves your LeetCode submissions to GitHub, sorts them by topic and shows a progress dashboard.',
+    tags: ['chrome-extension', 'github-api', 'javascript'],
+    image: '/images/projects/leetcodetracker.webp',
+    url: `https://github.com/${GITHUB_USER}/LeetCodeTracker`,
+  },
+  {
+    name: 'Electronics Component YOLO',
+    summary: 'Custom YOLO model that detects Arduino and IoT parts in real time, reaching 83.8% mAP@0.5.',
+    tags: ['yolo', 'object-detection', 'iot'],
+    image: '/images/projects/yolomodel.webp',
+    url: `https://github.com/${GITHUB_USER}/FirstCustomYOLOModel`,
+  },
+  {
+    name: 'Smart Solar Panel',
+    summary: 'Arduino solar tracker: two LDR sensors and a servo turn the panel to face the sun.',
+    tags: ['arduino', 'ldr', 'servo'],
+    image: '/images/projects/smartsolar.webp',
+    url: `https://github.com/${GITHUB_USER}/SmartSolarPanel`,
+  },
+  {
+    name: 'Smart Dustbin',
+    summary: 'A bin that sorts waste into wet and dry using a soil-moisture sensor and an ultrasonic sensor.',
+    tags: ['arduino', 'sensors', 'iot'],
+    image: '/images/projects/smartdustbin.webp',
+    url: `https://github.com/${GITHUB_USER}/SmartDustBin`,
+  },
+  {
+    name: 'Smart Pot',
+    summary: 'ESP32 plant monitor that reads temperature, humidity and soil moisture in real time, simulated on Wokwi.',
+    tags: ['esp32', 'dht22', 'wokwi'],
+    image: '/images/projects/smartpot.webp',
+    url: `https://github.com/${GITHUB_USER}/SmartPot`,
+  },
+  {
+    name: 'StockItUp',
+    summary: 'Responsive, theme-aware stock-tracking web app written in plain HTML, CSS and JavaScript.',
+    tags: ['vanilla-js', 'html-css', 'web-app'],
+    image: '/images/projects/stockitup.webp',
+    url: `https://github.com/${GITHUB_USER}/CodeZeroStockItUp`,
+  },
+  {
+    name: 'Resistor Color Code',
+    summary: 'Pick the colour bands on a resistor and read off its value, for 4, 5 and 6-band parts.',
+    tags: ['electronics', 'html', 'javascript'],
+    image: '/images/projects/resistor.webp',
+    url: `https://github.com/${GITHUB_USER}/ResistorColorCode`,
+  },
+];
+
 function ContributionGraph() {
   // On phones the full year is too small to read: keep it legible and let it scroll, starting at the latest weeks.
   const scrollToLatest = (img: HTMLImageElement) => {
@@ -174,7 +255,7 @@ const LiveSystems: React.FC = () => {
           title="Selected projects."
           intro={
             <>
-              Ten I'd point to first. Everything else is on{' '}
+              Ten I'd point to first, then every other project of mine that has a screenshot. The rest is on{' '}
               <a
                 href={`https://github.com/${GITHUB_USER}`}
                 target="_blank"
@@ -230,6 +311,44 @@ const LiveSystems: React.FC = () => {
             </motion.li>
           ))}
         </ul>
+
+        <div className="mt-16">
+          <div className="flex items-baseline justify-between gap-4 mb-6">
+            <h3 className="font-display text-2xl text-text-primary">More builds</h3>
+            <span className="font-mono text-xs text-text-secondary">{moreProjects.length} projects</span>
+          </div>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+            {moreProjects.map((p, i) => (
+              <motion.li
+                key={p.name}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-5%' }}
+                transition={{ duration: 0.5, delay: Math.min(i % 3, 2) * 0.05 }}
+              >
+                <a href={p.url} target="_blank" rel="noopener noreferrer" className="group block">
+                  <div className="aspect-[16/10] overflow-hidden rounded-sm border border-border-light bg-[#0b0b0b]" aria-hidden="true">
+                    <img
+                      src={p.image}
+                      alt=""
+                      width={960}
+                      height={600}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <h4 className="mt-4 text-lg text-text-primary group-hover:text-primary transition-colors">
+                    {p.name}
+                    <span className="inline-block ml-1.5 text-text-secondary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true">↗</span>
+                  </h4>
+                  <p className="mt-1.5 text-sm text-text-secondary leading-relaxed">{p.summary}</p>
+                  <p className="mt-2 font-mono text-[11px] text-text-secondary">{p.tags.join(' · ')}</p>
+                </a>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 items-start">
           <dl className="md:col-span-4 flex gap-10">

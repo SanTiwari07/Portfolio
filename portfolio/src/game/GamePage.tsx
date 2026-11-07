@@ -41,7 +41,7 @@ export default function GamePage() {
     <div className="game-root relative w-full h-full">
       <button 
         onClick={handleExit}
-        className="absolute top-6 left-6 z-[100] flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/80 text-white rounded-full backdrop-blur-sm transition-all duration-300 border border-white/10 group cursor-pointer"
+        className="game-exit absolute top-4 left-4 sm:top-6 sm:left-6 z-[100] flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/80 text-white rounded-full backdrop-blur-sm transition-all duration-300 border border-white/10 group cursor-pointer"
       >
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
         <span className="font-medium tracking-wide">Return to Portfolio</span>

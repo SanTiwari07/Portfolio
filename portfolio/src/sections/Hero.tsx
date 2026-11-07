@@ -13,7 +13,7 @@ import { ShowroomScene, type SceneTheme } from './hero/ShowroomScene';
 import { drive, onDriveFrame, PAINTS, startDriveLoop } from './hero/driveState';
 import { SHOTS, shotIndexAt } from './hero/shots';
 import { startEngine, stopEngine, honk } from './hero/engineAudio';
-import { isLowPower, isTouchDevice } from '../lib/device';
+import { isLowPower } from '../lib/device';
 
 const SCENE_THEMES: Record<'light' | 'dark', SceneTheme> = {
   light: { background: '#FAFAFA', floor: '#efefef', grid: '#dcc9cc', lane: '#7A1E2C', streak: '#7A1E2C', dark: false },
@@ -385,7 +385,7 @@ const Hero: React.FC = () => {
               onClick={openGame}
               onMouseEnter={() => preloadGame()}
               onFocus={() => preloadGame()}
-              className={`hero-cta hidden ${isTouchDevice ? '' : 'md:inline-flex'} mt-8 items-center gap-3 px-5 py-3 border border-primary/40 ${GLASS} text-sm font-medium text-text-primary hover:bg-primary hover:border-primary hover:text-white transition-colors`}
+              className={`hero-cta inline-flex mt-8 items-center gap-3 px-5 py-3 border border-primary/40 ${GLASS} text-sm font-medium text-text-primary hover:bg-primary hover:border-primary hover:text-white transition-colors`}
               aria-label="Experience my dream car — opens the 3D driving game"
             >
               <Gamepad2 size={15} />
@@ -516,7 +516,7 @@ const Hero: React.FC = () => {
               onClick={openGame}
               onMouseEnter={() => preloadGame()}
               onFocus={() => preloadGame()}
-              className={`group hidden ${isTouchDevice ? '' : 'md:inline-flex'} items-center gap-3 px-7 py-4 bg-text-primary text-background text-sm font-medium hover:bg-primary transition-colors`}
+              className={`group inline-flex items-center gap-3 px-7 py-4 bg-text-primary text-background text-sm font-medium hover:bg-primary transition-colors`}
             >
               Take the 911 for a drive
               <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

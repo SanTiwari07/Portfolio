@@ -329,6 +329,17 @@
   border: 1px dashed #999;
 }
 
+.game-root button.game-exit {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.game-root button.game-exit:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
 .game-root button {
   min-width: 32px;
   min-height: 32px;
@@ -589,7 +600,7 @@
   pointer-events: auto;
 }
 
-.touch-btn {
+.game-root .touch-btn {
   width: 74px;
   height: 74px;
   border-radius: 50%;
@@ -606,7 +617,7 @@
   touch-action: none;
 }
 
-.touch-btn.active {
+.game-root .touch-btn.active {
   background: rgba(227, 38, 54, 0.75);
   border-color: rgba(255, 255, 255, 0.6);
 }
@@ -627,7 +638,7 @@
   }
 
   .speed {
-    bottom: 130px;
+    bottom: 176px;
     right: 16px;
     font-size: 1.6em;
   }
@@ -700,9 +711,59 @@
   .paint-hint {
     display: none;
   }
+}
 
+/* On phones the paint chooser is a short row above the steering pads, not a column down the screen:
+   the column ran into the gas button and hid the road. */
+@media (max-width: 900px), (pointer: coarse) {
   .paint-picker {
-    right: 12px;
-    top: 56%;
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: calc(24px + 74px + 12px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+  }
+
+  /* the colour name stays in each swatch's label; on a phone the row has no room for it */
+  .paint-name {
+    display: none;
+  }
+
+  .paint-swatch {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+  }
+}
+
+/* Landscape phones: the steering pads own both bottom corners, so the paint row drops to the bottom centre
+   between them instead of floating over the car. */
+@media (max-height: 500px) and (max-width: 1000px) {
+  .paint-picker {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    padding: 4px 8px;
+    gap: 5px;
+  }
+
+  .paint-swatch {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    min-height: 22px;
+  }
+
+  .paint-hint {
+    display: none;
   }
 }
