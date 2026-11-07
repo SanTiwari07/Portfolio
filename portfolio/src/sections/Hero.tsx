@@ -430,6 +430,8 @@ const Hero: React.FC = () => {
           </h2>
           <ul className={`divide-y divide-border-light border-y border-border-light ${GLASS_MD}`}>
             {[
+              ['Snipmint', 'Long YouTube videos to captioned Shorts', 'Snipmint'],
+              ['NarraReel', 'Script to Reel · cloned voice, synced captions', 'NarraReel'],
               ['Aviro', 'AI finance controller · zero false auto-matches', 'Aviro'],
               ['Sudarshan', 'Android banking-malware intelligence', 'Sudarshan'],
               ['IPDS v2.0', 'YOLOv8 + dual ESP32 pothole detection · DOI', 'PotHoleDetection'],
