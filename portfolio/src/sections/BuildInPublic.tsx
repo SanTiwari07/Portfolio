@@ -8,6 +8,7 @@ import { GITHUB_USER, useGithubData } from '../lib/github';
 const featuredRepos = [
   {
     name: 'NarraReel',
+    image: '/images/projects/narrareel.webp',
     fullName: 'Script to Reel',
     description: 'Turns a script into a finished Reel, Short or YouTube video: a free AI voice or your cloned voice, exact length, and word-by-word animated captions. Runs on your own computer.',
     lang: 'Python',
@@ -18,6 +19,7 @@ const featuredRepos = [
   },
   {
     name: 'Snipmint',
+    image: '/images/projects/snipmint.webp',
     fullName: 'Long Video to Shorts',
     description: 'Paste a YouTube link and get vertical Shorts: best-moment detection, speaker-tracking 9:16 crops and animated captions. Free by default, smarter with an optional Gemini key.',
     lang: 'Python',
@@ -28,6 +30,7 @@ const featuredRepos = [
   },
   {
     name: 'Aviro',
+    image: '/images/projects/aviro.webp',
     fullName: 'AI Finance Controller',
     description: 'Invariant-governed AI finance controller: Gemini investigates, deterministic rules verify, zero false auto-matches. Razorpay AI Buildathon 2026.',
     lang: 'Python',
@@ -38,6 +41,7 @@ const featuredRepos = [
   },
   {
     name: 'Sudarshan',
+    image: '/images/projects/sudarshan.webp',
     fullName: 'Banking Malware Intelligence',
     description: 'Android banking-malware analysis: static analysis, Frida dynamic sandboxing, risk scoring and MITRE ATT&CK mapping. CyberShield Hackathon 2026, IIT Hyderabad.',
     lang: 'Python',
@@ -48,6 +52,7 @@ const featuredRepos = [
   },
   {
     name: 'IPDS v2.0',
+    image: '/images/projects/ipds.webp',
     fullName: 'Intelligent Pothole Detection System',
     description: 'Dual ESP32 pothole detection: YOLOv8-Nano (mAP 81.68%), MPU6050 sensor fusion and NEO-6M GPS mapping. Published with its own DOI.',
     lang: 'Python',
@@ -58,6 +63,7 @@ const featuredRepos = [
   },
   {
     name: 'InsureRoute',
+    initials: 'IR',
     fullName: 'Supply-Chain Intelligence',
     description: 'Predictive logistics: Isolation Forest anomaly detection, live weather rerouting and dynamic actuarial cargo pricing with a Gemini risk advisor.',
     lang: 'Python',
@@ -68,6 +74,7 @@ const featuredRepos = [
   },
   {
     name: 'KrishiSahAI',
+    image: '/images/projects/krishisahai.webp',
     fullName: 'AI Farmer Advisory',
     description: "AgriTech advisory platform bringing AI to the Indian farmhouse. 1st place, TechFiesta '26 International Hackathon.",
     lang: 'Python',
@@ -78,6 +85,7 @@ const featuredRepos = [
   },
   {
     name: 'Smart Traffic Flow Analyzer',
+    image: '/images/projects/traffic.webp',
     fullName: 'Adaptive Signal Control',
     description: 'YOLOv8 + SORT vehicle detection that retimes traffic signals from live density, interfaced with an ESP32 controller.',
     lang: 'Python',
@@ -109,6 +117,10 @@ function ContributionGraph() {
 
 type Repo = {
   name: string;
+  /** README screenshot; rows without one show a typographic panel */
+  image?: string;
+  /** letters for the typographic panel when there is no image */
+  initials?: string;
   fullName: string;
   description: string;
   lang: string;
@@ -169,17 +181,34 @@ const LiveSystems: React.FC = () => {
                 href={repo.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-12 py-7 border-b border-border-light"
+                className="group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 py-7 border-b border-border-light md:items-center"
               >
-                <div className="md:col-span-4">
+                <div className="md:col-span-4 aspect-[16/10] overflow-hidden rounded-sm border border-border-light bg-[#0b0b0b]" aria-hidden="true">
+                  {repo.image ? (
+                    <img
+                      src={repo.image}
+                      alt=""
+                      width={960}
+                      height={600}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center blueprint-grid">
+                      <span className="font-display text-5xl tracking-tighter text-primary">
+                        {repo.initials ?? repo.name.slice(0, 2).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="md:col-span-8 md:pl-2">
                   <h3 className="text-xl text-text-primary group-hover:text-primary transition-colors">
                     {repo.name}
                     <span className="inline-block ml-1.5 text-text-secondary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true">↗</span>
                   </h3>
                   <p className="mt-1 text-sm text-text-secondary">{repo.fullName}</p>
-                </div>
-                <div className="md:col-span-8">
-                  <p className="text-base text-text-secondary leading-relaxed">{repo.description}</p>
+                  <p className="mt-4 text-base text-text-secondary leading-relaxed">{repo.description}</p>
                   <p className="mt-3 font-mono text-xs text-text-secondary">
                     {repo.lang} · {repo.topics.join(' · ')}
                     {repo.stars > 0 && ` · ★ ${repo.stars}`}
