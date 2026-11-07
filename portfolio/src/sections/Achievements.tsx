@@ -5,12 +5,12 @@ import { SectionHeader } from '../components/ui/SectionHeader';
 const allImages = [
   { src: '/images/awards/techfiesta/tech (1).webp', alt: 'TechFiesta 2026 - Gold Award ceremony', event: 'TechFiesta' },
   { src: '/images/awards/techfiesta/tech (2).webp', alt: 'TechFiesta 2026 - Stage ceremony', event: 'TechFiesta' },
-  { src: '/images/awards/techfiesta/tech (3).webp', alt: 'TechFiesta 2026 - Team photo', event: 'TechFiesta' },
+  { src: '/images/awards/techfiesta/tech (3).webp', alt: 'TechFiesta 2026 - Team photo', event: 'TechFiesta', pos: 'center 20%' },
   { src: '/images/awards/hackventure/gramdrishti.webp', alt: 'GramDrishti - satellite village health dashboard (HackVenture 2026 winner)', event: 'HackVenture' },
   { src: '/images/awards/Pune Agri/pune (1).webp', alt: 'Pune Agri Hackathon - Award presentation', event: 'Pune Agri' },
-  { src: '/images/awards/Pune Agri/pune (2).webp', alt: 'Pune Agri Hackathon - Award ceremony', event: 'Pune Agri' },
+  { src: '/images/awards/Pune Agri/pune (2).webp', alt: 'Pune Agri Hackathon - Award ceremony', event: 'Pune Agri', pos: 'center 20%' },
   { src: '/images/awards/Pune Agri/pune (3).webp', alt: 'Pune Agri Hackathon - Group photo', event: 'Pune Agri' },
-  { src: '/images/awards/vois/vois (1).webp', alt: 'VOIS Innovation Marathon - Presenting solution', event: 'VOIS Marathon' },
+  { src: '/images/awards/vois/vois (1).webp', alt: 'VOIS Innovation Marathon - Presenting solution', event: 'VOIS Marathon', pos: 'center 20%' },
   { src: '/images/awards/vois/vois (2).webp', alt: 'VOIS Innovation Marathon - Trophy', event: 'VOIS Marathon' },
   { src: '/images/awards/vois/vois (3).webp', alt: 'VOIS Innovation Marathon - Team photo', event: 'VOIS Marathon' },
   { src: '/images/awards/vois/vois (4).webp', alt: 'VOIS Innovation Marathon - Winner announcement', event: 'VOIS Marathon' },
@@ -22,6 +22,10 @@ interface Award {
   description: string;
   /** photo for the card; without one the card shows a typographic panel */
   image?: string;
+  /** the photo is a tall portrait: give it a taller frame on phones and aim the crop at the faces */
+  tall?: boolean;
+  /** CSS object-position for the card photo */
+  imagePosition?: string;
   placeholder?: { big: string; small: string };
   bullets: { text: string }[];
   tags: string[];
@@ -70,6 +74,8 @@ Winning 1st place was a team effort, and GramDrishti would not exist without Shw
     title: 'KrishiSaarthi',
     description: 'AI & Blockchain Powered Agricultural Intelligence Platform',
     image: '/images/awards/vois/vois (1).webp',
+    tall: true,
+    imagePosition: 'center 20%',
     bullets: [
       { text: 'Top 3 among 630+ teams' },
       { text: '₹2,00,000 Cash Prize' },
@@ -90,6 +96,8 @@ The program focused on emerging technologies, innovation, and practical problem-
     title: 'KrishiSahAI',
     description: 'AI Farmer Advisory Platform',
     image: '/images/awards/techfiesta/tech (3).webp',
+    tall: true,
+    imagePosition: 'center 20%',
     bullets: [
       { text: '1st Rank - Agriculture Domain' },
       { text: '₹50,000 Grand Prize' },
@@ -111,6 +119,8 @@ This achievement reflects our commitment to building meaningful technology solut
     title: 'Krishi Prabandh',
     description: 'Upgrade to current government Existing website',
     image: '/images/awards/Pune Agri/pune (2).webp',
+    tall: true,
+    imagePosition: 'center 20%',
     bullets: [
       { text: 'National Runner-Up' },
       { text: '₹15 Lakhs from government for development' },
@@ -276,6 +286,7 @@ const RaceRecord: React.FC = () => {
                 src={img.src}
                 alt={img.alt}
                 className="w-full h-full object-cover"
+                style={img.pos ? { objectPosition: img.pos } : undefined}
                 loading="lazy"
                 width={320}
                 height={220}
@@ -303,12 +314,16 @@ const RaceRecord: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             {/* Left Image */}
-            <div className="lg:w-[45%] h-[280px] lg:h-auto relative overflow-hidden group" aria-hidden="true">
+            <div
+              className={`lg:w-[45%] ${award.tall ? 'h-[min(440px,118vw)]' : 'h-[280px]'} lg:h-auto relative overflow-hidden group`}
+              aria-hidden="true"
+            >
               {award.image ? (
                 <img
                   src={award.image}
                   alt=""
                   className="w-full h-full object-cover"
+                  style={award.imagePosition ? { objectPosition: award.imagePosition } : undefined}
                   loading="lazy"
                   width={540}
                   height={400}
@@ -322,7 +337,7 @@ const RaceRecord: React.FC = () => {
                 </div>
               )}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-card opacity-0 lg:opacity-100" aria-hidden="true" />
-              <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-100 lg:opacity-0" aria-hidden="true" />
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-card to-transparent lg:hidden" aria-hidden="true" />
             </div>
 
             {/* Right Content */}
