@@ -435,7 +435,7 @@ const Hero: React.FC = () => {
               ['Aviro', 'AI finance controller · zero false auto-matches', 'Aviro'],
               ['Sudarshan', 'Android banking-malware intelligence', 'Sudarshan'],
               ['IPDS v2.0', 'YOLOv8 + dual ESP32 pothole detection · DOI', 'PotHoleDetection'],
-              ['InsureRoute', 'Predictive logistics + dynamic cargo pricing', 'InsureRoute'],
+              ['HumSight', 'Machine vibration found from ordinary video', 'HumSight'],
             ].map(([name, desc, repo]) => (
               <li key={name}>
                 <a

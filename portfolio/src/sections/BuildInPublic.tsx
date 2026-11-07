@@ -51,6 +51,50 @@ const featuredRepos = [
     stars: 0,
   },
   {
+    name: 'HumSight',
+    image: '/images/projects/humsight.webp',
+    fullName: 'Vibration Inspection by Camera',
+    description: 'Finds machine vibration from ordinary video with OpenCV 5 and agentic vision, separates camera shake from real faults, and tells you what to check next.',
+    lang: 'Python',
+    langColor: '#3572A5',
+    topics: ['opencv', 'agentic-vision', 'signal-processing', 'aws'],
+    url: `https://github.com/${GITHUB_USER}/HumSight`,
+    stars: 0,
+  },
+  {
+    name: 'FieldDX',
+    image: '/images/projects/fielddx.webp',
+    fullName: 'Crop Diagnostics from Satellites',
+    description: 'Spots crop-health changes in satellite imagery, weighs the likely causes, rules out alternatives and recommends the cheapest field check to confirm the diagnosis.',
+    lang: 'Python',
+    langColor: '#3572A5',
+    topics: ['satellite-imagery', 'remote-sensing', 'agritech', 'crop-disease'],
+    url: `https://github.com/${GITHUB_USER}/FieldDX`,
+    stars: 0,
+  },
+  {
+    name: 'RailYatri',
+    image: '/images/projects/railyatri.webp',
+    fullName: 'Railway Reservation System',
+    description: 'Full-stack train booking where PostgreSQL itself guarantees a berth is sold once: real-time seat allocation, payments, cancellations and refunds, built on transactions, triggers and concurrency control.',
+    lang: 'Python',
+    langColor: '#3572A5',
+    topics: ['postgresql', 'fastapi', 'react', 'typescript'],
+    url: `https://github.com/${GITHUB_USER}/RailYatri`,
+    stars: 0,
+  },
+  {
+    name: 'AcousticMirror',
+    image: '/images/projects/acousticmirror.webp',
+    fullName: 'AR Room Acoustics',
+    description: 'An AR lens for Snap Spectacles that shows where each speaker’s sound bounces off the room and marks the exact points to treat, using real-time 3D geometry.',
+    lang: 'TypeScript',
+    langColor: '#3178C6',
+    topics: ['snap-spectacles', 'lens-studio', 'spatial-computing', 'ar'],
+    url: `https://github.com/${GITHUB_USER}/AcousticMirrorLens`,
+    stars: 0,
+  },
+  {
     name: 'IPDS v2.0',
     image: '/images/projects/ipds.webp',
     fullName: 'Intelligent Pothole Detection System',
@@ -59,28 +103,6 @@ const featuredRepos = [
     langColor: '#3572A5',
     topics: ['yolov8', 'esp32-cam', 'sensor-fusion', 'gps'],
     url: `https://github.com/${GITHUB_USER}/PotHoleDetection`,
-    stars: 0,
-  },
-  {
-    name: 'InsureRoute',
-    initials: 'IR',
-    fullName: 'Supply-Chain Intelligence',
-    description: 'Predictive logistics: Isolation Forest anomaly detection, live weather rerouting and dynamic actuarial cargo pricing with a Gemini risk advisor.',
-    lang: 'Python',
-    langColor: '#3572A5',
-    topics: ['ml', 'networkx', 'gemini', 'logistics'],
-    url: `https://github.com/${GITHUB_USER}/InsureRoute`,
-    stars: 0,
-  },
-  {
-    name: 'KrishiSahAI',
-    image: '/images/projects/krishisahai.webp',
-    fullName: 'AI Farmer Advisory',
-    description: "AgriTech advisory platform bringing AI to the Indian farmhouse. 1st place, TechFiesta '26 International Hackathon.",
-    lang: 'Python',
-    langColor: '#3572A5',
-    topics: ['flask', 'langchain', 'ollama', 'tensorflow'],
-    url: 'https://github.com/KrishiSahAI/KrishiSetu',
     stars: 0,
   },
   {
@@ -117,10 +139,8 @@ function ContributionGraph() {
 
 type Repo = {
   name: string;
-  /** README screenshot; rows without one show a typographic panel */
-  image?: string;
-  /** letters for the typographic panel when there is no image */
-  initials?: string;
+  /** README screenshot */
+  image: string;
   fullName: string;
   description: string;
   lang: string;
@@ -154,7 +174,7 @@ const LiveSystems: React.FC = () => {
           title="Selected projects."
           intro={
             <>
-              Eight I'd point to first. Everything else is on{' '}
+              Ten I'd point to first. Everything else is on{' '}
               <a
                 href={`https://github.com/${GITHUB_USER}`}
                 target="_blank"
@@ -184,23 +204,15 @@ const LiveSystems: React.FC = () => {
                 className="group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-10 py-7 border-b border-border-light md:items-center"
               >
                 <div className="md:col-span-4 aspect-[16/10] overflow-hidden rounded-sm border border-border-light bg-[#0b0b0b]" aria-hidden="true">
-                  {repo.image ? (
-                    <img
-                      src={repo.image}
-                      alt=""
-                      width={960}
-                      height={600}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center blueprint-grid">
-                      <span className="font-display text-5xl tracking-tighter text-primary">
-                        {repo.initials ?? repo.name.slice(0, 2).toUpperCase()}
-                      </span>
-                    </div>
-                  )}
+                  <img
+                    src={repo.image}
+                    alt=""
+                    width={960}
+                    height={600}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
                 </div>
                 <div className="md:col-span-8 md:pl-2">
                   <h3 className="text-xl text-text-primary group-hover:text-primary transition-colors">
